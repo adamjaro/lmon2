@@ -1,0 +1,84 @@
+
+#central Berylium section
+const cen_mid_zmin -800. # mm
+const cen_mid_zmax 670. # mm
+const cen_mid_r 63.5254/2. # mm, outer radius
+const cen_mid_wall_dr 0.757 # mm, thickness for Berylium middle section
+
+new ConeBeam cen_beam_mid
+
+  cen_beam_mid.rmin0 = cen_mid_r-cen_mid_wall_dr
+  cen_beam_mid.rmax0 = cen_mid_r
+  cen_beam_mid.rmin1 = cen_mid_r-cen_mid_wall_dr
+  cen_beam_mid.rmax1 = cen_mid_r
+  cen_beam_mid.dz = cen_mid_zmax-cen_mid_zmin
+  cen_beam_mid.zpos = (cen_mid_zmax+cen_mid_zmin)/2.
+  cen_beam_mid.wall_mat_name = G4_Be
+
+#section at negative z up to Q1
+const cen_neg_wall_dr 2. # mm
+
+new ConeBeam cen_beam_neg
+
+  cen_beam_neg.rmin0 = Q1eR_InnerRadius
+  cen_beam_neg.rmax0 = Q1eR_InnerRadius+2.
+  cen_beam_neg.rmin1 = cen_mid_r-cen_neg_wall_dr
+  cen_beam_neg.rmax1 = cen_mid_r
+  cen_beam_neg.dz = cen_mid_zmin-Q1eR_Start_Z
+  cen_beam_neg.zpos = (cen_mid_zmin+Q1eR_Start_Z)/2.
+
+#representation of backward Ecal
+const ecal_front_z -2100. # mm
+const ecal_front_rmin 42. # mm
+
+const ecal_middle_z -2300. # mm
+const ecal_middle_rmin 128. # mm
+
+const ecal_rear_z -2650. # mm
+const ecal_rmax 950. # mm
+
+#Ecal, part 1
+new CylSegment ecal1
+
+  ecal1.zpos = (ecal_front_z+ecal_middle_z)/2.
+  ecal1.dz = ecal_front_z-ecal_middle_z
+  ecal1.rmin = ecal_front_rmin
+  ecal1.rmax = ecal_rmax
+  ecal1.mat_name = G4_PbWO4
+
+#Ecal, part 2
+new CylSegment ecal2
+
+  ecal2.zpos = (ecal_middle_z+ecal_rear_z)/2.
+  ecal2.dz = ecal_middle_z-ecal_rear_z
+  ecal2.rmin = ecal_middle_rmin
+  ecal2.rmax = ecal_rmax
+  ecal2.mat_name = G4_PbWO4
+  ecal2.vis = 1:0:0:2
+
+#representation of Hcal
+const hcal_front_z -3550. # mm
+const rear_rear_z -4600. # mm
+const hcal_rmin 140. # mm
+const hcal_rmax 3300. # mm
+
+new CylSegment hcal
+
+  hcal.zpos = (hcal_front_z+rear_rear_z)/2.
+  hcal.dz = hcal_front_z-rear_rear_z
+  hcal.rmin = hcal_rmin
+  hcal.rmax = hcal_rmax
+  hcal.mat_name = G4_Fe
+  #hcal.vis = 1:0:0:3
+
+
+
+
+
+
+
+
+
+
+
+

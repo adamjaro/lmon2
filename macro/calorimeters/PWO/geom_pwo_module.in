@@ -1,0 +1,58 @@
+
+new top topv
+
+  topv.xsiz = 500 # mm
+  topv.ysiz = 500 # mm
+  topv.zsiz = 10000 # mm
+
+#calorimeter module by a matrix of CalPWO towers
+
+#outer volume to test placement in mother volume
+const lumiD_dxy 160. # mm, full size in x and y
+const lumiD_dz 355. # mm, full length along z
+
+#crystal tower
+const pwo_crystal_xy 22. # mm
+const pwo_crystal_z 100. # mm
+#const pwo_crystal_z 350. # mm
+const pwo_wrapping_thickness 0.3 # mm
+
+#optical detector at the tower
+const pwo_phot_xy 18. # mm
+const pwo_phot_z 2. # mm
+
+#number of towers along x and y
+const pwo_nxy 7
+
+const pwo_modz pwo_wrapping_thickness+pwo_crystal_z+pwo_phot_z
+const pwo_modxy pwo_nxy*(pwo_crystal_xy+2.*pwo_wrapping_thickness)
+
+#new CaloBuilder calo # set to create the calorimeters
+
+new CalPWO pwo
+
+  pwo.crystal_xy = pwo_crystal_xy
+  pwo.crystal_z = pwo_crystal_z
+  pwo.wrapping_thickness = pwo_wrapping_thickness
+  pwo.nx = pwo_nxy
+  pwo.ny = pwo_nxy
+  pwo.modx = pwo_modxy
+  pwo.mody = pwo_modxy
+  pwo.modz = pwo_modz
+  pwo.zpos = -pwo_modz/2.
+  pwo.crystal_vis = 1:0:0:0.3
+  pwo.wrapping_vis = 0:1:0:2
+  pwo.radius = pwo_phot_xy/2
+  pwo.dz = pwo_phot_z
+  pwo.cath_lay_vis = 1:0:0:2
+  pwo.cath_main_vis = 0:0:1:0.4
+  pwo.mod_vis = 0:0:1:3
+
+
+
+
+
+
+
+
+

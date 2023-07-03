@@ -1,0 +1,4 @@
+
+#starting z position for exit window
+const lumi_win_z -18700. # mm
+

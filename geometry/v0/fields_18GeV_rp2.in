@@ -1,0 +1,11 @@
+
+const Q1eR_grad 13.71866359725427 # T/m
+
+const Q2eR_grad -13.309114237184442 # T/m
+
+const B2eR_field 0.198 # T
+
+const Q3eR_grad -6.37062990591305 # T/m
+
+const lumi_mag_field 0.37 # T, 18 GeV
+

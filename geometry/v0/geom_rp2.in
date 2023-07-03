@@ -1,0 +1,28 @@
+
+#all components
+
+include fields_18GeV_rp2.in
+
+include beam_magnets_rp2.in
+
+include central_beampipe_rp2.in
+
+include lumi_rp2.in
+
+include vacuum_rp2.in
+
+include tag_maps_rp2.in
+
+include tag_ew_rp2.in
+
+include tag_pwo_rp2.in
+
+#common top volume
+new top topmain
+
+  topmain.xsiz = 2000 # mm
+  topmain.ysiz = 2000 # mm
+  topmain.zsiz = 40000 # mm
+  topmain.material = G4_AIR
+  #topmain.zsiz = 100000 # mm
+

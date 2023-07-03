@@ -1,0 +1,82 @@
+
+#PWO calorimeters for tagger detectors in RP2 layout
+
+#crystal tower
+const tag_pwo_crystal_xy 22. # mm
+const tag_pwo_crystal_z 350. # mm
+const tag_pwo_wrapping_thickness 0.2 # mm
+
+#optical detector at the tower
+const tag_pwo_phot_xy 18. # mm
+const tag_pwo_phot_z 2. # mm
+
+#number of towers along x and y in calorimeter module
+const tag_pwo_nxy 7
+
+#distance along z from last tagger plane to start of calorimeter module
+const tag_pwo_to_start_dz 100. # mm
+
+#size of calorimeter module in xy and z
+const tag_pwo_modz tag_pwo_wrapping_thickness+tag_pwo_crystal_z+tag_pwo_phot_z
+const tag_pwo_modxy tag_pwo_nxy*(tag_pwo_crystal_xy+2.*tag_pwo_wrapping_thickness)
+
+#local position in x for the calorimeters in their mother volume
+const tag_pwo_pos_x -0.5*tag_pwo_modxy+vac_dxQ-tag_dist_Q3
+
+#Tagger 1 calorimeter
+
+#local z position for calorimeter in tagger 1
+const tag_s1_pwo_zpos tag_s1_start_z-3.*tag_iz-tag_pwo_to_start_dz-0.5*tag_pwo_modz
+
+new CalPWO lowQ2_s1_pwo
+
+  lowQ2_s1_pwo.crystal_xy = tag_pwo_crystal_xy
+  lowQ2_s1_pwo.crystal_z = tag_pwo_crystal_z
+  lowQ2_s1_pwo.wrapping_thickness = tag_pwo_wrapping_thickness
+
+  lowQ2_s1_pwo.nx = tag_pwo_nxy
+  lowQ2_s1_pwo.ny = tag_pwo_nxy
+  lowQ2_s1_pwo.modx = tag_pwo_modxy
+  lowQ2_s1_pwo.mody = tag_pwo_modxy
+  lowQ2_s1_pwo.modz = tag_pwo_modz
+
+  lowQ2_s1_pwo.zpos = tag_s1_pwo_zpos
+  lowQ2_s1_pwo.xpos = tag_pwo_pos_x
+
+  lowQ2_s1_pwo.crystal_vis = 1:0:0:0.3
+  lowQ2_s1_pwo.wrapping_vis = 0:1:0:2
+
+  lowQ2_s1_pwo.radius = tag_pwo_phot_xy/2
+  lowQ2_s1_pwo.dz = tag_pwo_phot_z
+
+  lowQ2_s1_pwo.cath_lay_vis = 1:0:0:2
+  lowQ2_s1_pwo.cath_main_vis = 0:0:1:0.4
+  lowQ2_s1_pwo.mod_vis = 0:0:1:3
+
+  lowQ2_s1_pwo.place_into = vac_B2Q3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

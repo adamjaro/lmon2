@@ -1,0 +1,132 @@
+
+
+#drift section after B2eR
+#coupling to B2eR
+const vac_zBC B2eR_End_Z
+const vac_xBC B2eR_End_X
+const vac_TB B2eR_Theta
+const vac_rBI B2eR_InnerRadius
+const vac_rBO B2eR_OuterRadius
+
+#coupling to Q3eR
+const vac_TQ3 Q3eR_Theta
+const vac_zQ Q3eR_StartZ
+const vac_xQ Q3eR_StartX
+
+#lower point at B2eR outer radius
+const vac_zBO vac_zBC+vac_rBO*sin(vac_TB)
+const vac_xBO vac_xBC-vac_rBO*cos(vac_TB)
+
+#upper point at B2eR inner radius at larger z
+const vac_zB1T vac_zBC-vac_rBI*sin(vac_TB)
+const vac_xB1T vac_xBC+vac_rBI*cos(vac_TB)
+
+#upper point at B2eR at lower z
+const vac_zB0T vac_zBO-(vac_rBO+vac_rBI)*sin(vac_TQ3)
+const vac_xB0T vac_xBO+(vac_rBO+vac_rBI)*cos(vac_TQ3)
+
+#perpendicular length from B2eR to Q3eR
+const vac_LBQ (vac_zBO-vac_zQ+(vac_xBO-vac_xQ)*tan(vac_TQ3))*sin((TMath::Pi()/2.)-vac_TQ3)
+
+#drift section from B2eR to Q3eR
+const vac_dBQ 300. # mm
+const vac_TD vac_TQ3+atan(vac_dBQ/vac_LBQ)
+const vac_LD sqrt(vac_dBQ*vac_dBQ+vac_LBQ*vac_LBQ)
+const vac_zDC vac_zB0T-0.5*vac_LD*cos(vac_TD)
+const vac_xDC vac_xB0T-0.5*vac_LD*sin(vac_TD)
+
+#Q3eR axis in drift local coordinates
+const vac_dxQ 0.5*vac_dBQ-sqrt((vac_zB0T-vac_zQ)*(vac_zB0T-vac_zQ)+(vac_xB0T-vac_xQ)*(vac_xB0T-vac_xQ)-vac_LBQ*vac_LBQ)
+
+#element for drift section after B2eR
+new BeamDrift vac_B2
+
+  vac_B2.ysiz = 2.*vac_rBI
+  vac_B2.delta = 0. # mm
+
+  vac_B2.z0TO = vac_zB0T
+  vac_B2.x0TO = vac_xB0T
+  vac_B2.z0BO = vac_zBO
+  vac_B2.x0BO = vac_xBO
+
+  vac_B2.z0TI = vac_zB0T
+  vac_B2.x0TI = vac_xB0T
+  vac_B2.z0BI = vac_zBO
+  vac_B2.x0BI = vac_xBO
+
+  vac_B2.z1TO = vac_zB1T
+  vac_B2.x1TO = vac_xB1T
+  vac_B2.z1BO = vac_zBO
+  vac_B2.x1BO = vac_xBO
+
+  vac_B2.x1TI = vac_xB1T
+  vac_B2.z1BI = vac_zBO
+  vac_B2.x1BI = vac_xBO
+
+  vac_B2.vis = 0:0:0:3
+  vac_B2.vis_inout = 0:0:1:2
+  #vac_B2.vis_inout = 1:0:0:3
+
+#element for drift section from B2eR to Q3eR
+new BoxSegment vac_B2Q3
+
+  vac_B2Q3.dx = vac_dBQ
+  vac_B2Q3.dy = 2.*vac_rBI
+  vac_B2Q3.dz = vac_LBQ
+  vac_B2Q3.zpos = vac_zDC
+  vac_B2Q3.xpos = vac_xDC
+  vac_B2Q3.theta = vac_TQ3
+  #vac_B2Q3.vis = 0:0:0:3
+
+#coupling to luminosity exit window
+const vac_zW lumi_win_z
+
+#lower x at the exit window
+const vac_xW vac_xB0T-(vac_zB0T-vac_zW)*TMath::Tan(vac_TQ3)
+
+#element in front of exit window
+new BeamDrift vac_win
+
+  vac_win.ysiz = 2.*vac_rBI
+  vac_win.delta = 0. # mm
+
+  vac_win.z0TO = vac_zW
+  vac_win.x0TO = vac_xB0T
+  vac_win.z0BO = vac_zW
+  vac_win.x0BO = vac_xW
+
+  vac_win.z0TI = vac_zW
+  vac_win.x0TI = vac_xB0T
+  vac_win.z0BI = vac_zW
+  vac_win.x0BI = vac_xW
+
+  vac_win.z1TO = vac_zB0T
+  vac_win.x1TO = vac_xB0T
+  vac_win.z1BO = vac_zB0T
+  vac_win.x1BO = vac_xB0T
+
+  vac_win.x1TI = vac_xB0T
+  vac_win.z1BI = vac_zB0T
+  vac_win.x1BI = vac_xB0T
+
+  vac_win.vis = 0:0:0:3
+  vac_win.vis_inout = 0:0:1:2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,34 @@
+
+#detector
+/lmon/construct/geometry geom.in
+
+#input
+#/lmon/input/type gun
+#/gun/energy 18 GeV
+#/gun/energy 12 GeV
+#/gun/energy 14 GeV
+#/gun/particle e-
+#/gun/particle gamma
+#/gun/direction 0 0 -1
+
+/lmon/input/type hepmc_ascii
+#/lmon/input/hepmc_ascii/name lgen_18x275.hepmc
+#/lmon/input/hepmc_ascii/name qr_example.hepmc
+#/lmon/input/hepmc_ascii/name lbx_18x275.hepmc
+/lmon/input/hepmc_ascii/name /home/jaroslav/sim/GETaLM/cards/qr_bx.hepmc
+#/lmon/input/hepmc_ascii/name /home/jaroslav/sim/GETaLM/cards/gen_uni.hepmc
+
+#/lmon/input/type tparticle
+#/lmon/input/tparticle/name /home/jaroslav/sim/GETaLM/cards/qr_bx.root
+
+#output
+#/lmon/output/name rp2.root
+#/lmon/output/name uni.root
+
+#initialize and run
+/run/initialize
+
+#/process/optical/boundary/setInvokeSD true
+
+/run/beamOn 1
+

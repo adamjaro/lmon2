@@ -1,0 +1,15 @@
+build/
+*.log
+*.py~
+*.pyc
+*.pdf
+*.txt
+*.so
+*.d
+*.pcm
+*.mp3
+*.root
+*.hepmc
+G4History.macro
+*.csv
+*.h5

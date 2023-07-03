@@ -1,0 +1,31 @@
+
+<main>
+
+  <!-- top volume -->
+  <detector
+    name="topv" type="top"
+    xsiz = "500" ysiz="500" zsiz = "10000"> <!-- mm -->
+  </detector>
+
+  <const name="crystal_xy" value="25"/>
+  <const name="crystal_z" value="100"/>
+  <const name="wrapping_thickness" value="0.3"/>
+
+  <const name="phot_xy" value="23"/>
+  <const name="phot_z" value="2"/>
+
+  <const name="modz" value="wrapping_thickness+crystal_z+phot_z"/>
+  <const name="modxy" value="crystal_xy+2.*wrapping_thickness"/>
+
+  <detector
+    type="CalPWO" name="pwo"
+    crystal_xy="crystal_xy" crystal_z="crystal_z" wrapping_thickness="wrapping_thickness"
+    nx="1" ny="1"
+    modx="modxy" mody="modxy" modz="modz" zpos="-modz/2."
+    crystal_vis="1:0:0:0.3" wrapping_vis="0:1:0:2"
+    radius="phot_xy/2." dz="phot_z"
+    cath_lay_vis="1:0:0:2" cath_main_vis="0:0:1:0.4" mod_vis="0:0:1:3">
+  </detector>
+
+</main>
+

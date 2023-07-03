@@ -1,0 +1,5 @@
+
+include_directory ../../geometry/v0
+
+include geom_rp2.in
+

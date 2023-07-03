@@ -1,0 +1,99 @@
+
+#exit windows for taggers, center positions are in local coordinates of vac_B2Q3
+
+const tag_ew_dx 2 # mm, plate thickenss
+const tag_ew_theta TMath::Pi()/4 # window plate angle relative to beam axis
+const tag_ew_length tag_size_xy/TMath::Sin(tag_ew_theta)
+
+#offset along z in front of counting planes
+const tag_ew_ofs_z 3 # mm
+
+#center position for the window plate for tagger 1, correction for counter in front
+const tag_ew_s1_zpos tag_s1_start_z+tag_cnt_ofs_z+tag_ew_ofs_z+0.5*tag_size_xy/TMath::Tan(tag_ew_theta)
+
+#center position for the window plate for tagger 2, correction for counter in front
+const tag_ew_s2_zpos tag_s2_start_z+tag_cnt_ofs_z+tag_ew_ofs_z+0.5*tag_size_xy/TMath::Tan(tag_ew_theta)
+
+#exit window plate for tagger 1
+new BoxSegment tag_ew_s1
+
+  tag_ew_s1.dx = tag_ew_dx
+  tag_ew_s1.dy = 2.*vac_rBI # same height as vac_B2Q3
+  tag_ew_s1.dz = tag_ew_length
+  tag_ew_s1.theta = -tag_ew_theta
+  tag_ew_s1.xpos = tag_pos_x
+  tag_ew_s1.zpos = tag_ew_s1_zpos
+  tag_ew_s1.place_into = vac_B2Q3
+  #tag_ew_s1.mat_name = G4_Be
+  tag_ew_s1.mat_name = CarbonFiber
+  tag_ew_s1.vis = 1:0:0:1
+
+#exit window plate for tagger 2
+new BoxSegment tag_ew_s2
+
+  tag_ew_s2.dx = tag_ew_dx
+  tag_ew_s2.dy = 2.*vac_rBI # same height as vac_B2Q3
+  tag_ew_s2.dz = tag_ew_length
+  tag_ew_s2.theta = -tag_ew_theta
+  tag_ew_s2.xpos = tag_pos_x
+  tag_ew_s2.zpos = tag_ew_s2_zpos
+  tag_ew_s2.place_into = vac_B2Q3
+  #tag_ew_s2.mat_name = G4_Be
+  tag_ew_s2.mat_name = CarbonFiber
+  tag_ew_s2.vis = 1:0:0:1
+
+#Aluminum plates along taggers and beam pipe
+const tag_ew_beam_dx 2 # mm, plate thickness
+
+#plate length along z, including overlaps for counters
+const tag_ew_beam_dz 3*tag_iz+2*tag_cnt_ofs_z+tag_cnt_size_z
+
+#plate position in x along the tagger planes
+const tag_ew_beam_xpos tag_pos_x+0.5*tag_size_xy+0.5*tag_ew_beam_dx
+
+#plate in z for tagger 1 in the middle of tagger layers
+const tag_ew_s1_beam_zpos tag_s1_start_z-1.5*tag_iz
+
+#plate along tagger 1
+new BoxSegment tag_ew_beam_s1
+
+  tag_ew_beam_s1.dx = tag_ew_beam_dx
+  tag_ew_beam_s1.dy = 2.*vac_rBI # same height as vac_B2Q3
+  tag_ew_beam_s1.dz = tag_ew_beam_dz
+  tag_ew_beam_s1.xpos = tag_ew_beam_xpos
+  tag_ew_beam_s1.zpos = tag_ew_s1_beam_zpos
+  tag_ew_beam_s1.place_into = vac_B2Q3
+  tag_ew_beam_s1.mat_name = G4_Al
+  tag_ew_beam_s1.vis = 0:1:0:1
+
+#plate in z for tagger 2 in the middle of tagger layers
+const tag_ew_s2_beam_zpos tag_s2_start_z-1.5*tag_iz
+
+#plate along tagger 2
+new BoxSegment tag_ew_beam_s2
+
+  tag_ew_beam_s2.dx = tag_ew_beam_dx
+  tag_ew_beam_s2.dy = 2.*vac_rBI # same height as vac_B2Q3
+  tag_ew_beam_s2.dz = tag_ew_beam_dz
+  tag_ew_beam_s2.xpos = tag_ew_beam_xpos
+  tag_ew_beam_s2.zpos = tag_ew_s2_beam_zpos
+  tag_ew_beam_s2.place_into = vac_B2Q3
+  tag_ew_beam_s2.mat_name = G4_Al
+  tag_ew_beam_s2.vis = 0:1:0:1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

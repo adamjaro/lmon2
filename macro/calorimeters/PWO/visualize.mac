@@ -1,0 +1,136 @@
+
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+
+#detectors and components
+#/lmon/construct/geometry geom_pwo_cell.xml
+/lmon/construct/geometry geom_pwo_module.in
+
+#input
+#/lmon/input/type gun
+#/gun/energy 511 keV
+#/gun/energy 180 keV
+#/gun/particle gamma
+#/gun/energy 10 MeV
+#/gun/particle e-
+#/gun/position 0 0 1 mm
+#/gun/direction 0 0 -1
+
+#input by gps
+/lmon/input/type gps
+/gps/particle e-
+/gps/number 1
+/gps/ene/type Gauss
+#/gps/ene/mono 1 MeV
+/gps/ene/mono 511 keV
+/gps/ene/sigma 0.0 GeV
+/gps/pos/type Point
+/gps/pos/centre 0 0 1 mm
+/gps/ang/type iso
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2  0 0 1
+
+#/gps/source/add 1
+#/gps/particle e-
+#/gps/number 1
+#/gps/ene/type Gauss
+#/gps/ene/mono 1 MeV
+#/gps/ene/sigma 0.0 GeV
+#/gps/pos/type Point
+#/gps/pos/centre -44 22 1 mm
+#/gps/ang/type iso
+#/gps/ang/rot1 0 0 1
+#/gps/ang/rot2  0 0 1
+
+#/gps/source/multiplevertex true
+
+#output
+#/lmon/output/name pwo.root
+
+#only with optics turned on
+#/process/optical/boundary/setInvokeSD true
+
+# Initialize kernel
+/run/initialize
+
+/vis/open OGL 800x600-0+0
+
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+#/vis/viewer/set/background 1 1 1 0.
+#/vis/viewer/set/lightsThetaPhi 120. 135. deg
+/vis/viewer/set/lightsThetaPhi -45 -45 deg
+#
+# Draw geometry:
+/vis/drawVolume
+#
+# Specify view angle:
+#/vis/viewer/set/viewpointThetaPhi 90. 180.
+/vis/viewer/set/viewpointThetaPhi -45 -45
+#/vis/viewer/set/viewpointThetaPhi 45 45 deg
+
+#/vis/viewer/set/targetPoint 185 10 12 mm
+
+# Specify zoom value:
+#/vis/viewer/zoom 2.
+
+# Draw coordinate axes:
+#/vis/scene/add/axes 185 10 12 10. mm
+#/vis/scene/add/axes 0 0 0 12.5 mm
+/vis/scene/add/axes 0 0 0 79.1 mm
+
+# Draw smooth trajectories at end of event, showing trajectory points
+# as markers 2 pixels wide:
+/vis/scene/add/trajectories smooth
+#/vis/scene/add/trajectories rich
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 1
+#/vis/modeling/trajectories/drawByCharge-0/default/setLineWidth 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+
+# To superimpose all of the events from a given run:
+/vis/scene/endOfEventAction accumulate
+#
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+
+#set the gui
+/control/execute gui.mac
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

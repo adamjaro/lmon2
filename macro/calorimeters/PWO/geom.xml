@@ -1,0 +1,9 @@
+
+<main>
+
+  <include_directory name="/home/jaroslav/sim/lmon2/macro/calorimeters/PWO"/>
+
+  <include ref="geom_pwo_cell.xml"/>
+
+</main>
+

@@ -180,7 +180,7 @@ template<class U, class S=std::vector<U>> class DetectorData {
           if( !tree->FindBranch( (base_nam+attr_nam).c_str() ) ) return;
           tree->SetBranchAddress((base_nam+attr_nam).c_str(), &vec);
         }
-        unsigned long GetN() { return vec->size(); } // number of attribute values for a given event
+        unsigned long GetN() { if(vec) return vec->size(); else return 0; } // number of attribute values for a given event
         void LoadVal(unsigned long i) {
           //load the value at position i via reference val
           val = 0;

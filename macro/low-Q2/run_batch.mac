@@ -22,7 +22,7 @@
 #/lmon/input/tparticle/name /home/jaroslav/sim/GETaLM/cards/qr_bx.root
 
 #output
-#/lmon/output/name rp2.root
+/lmon/output/name rp2.root
 #/lmon/output/name uni.root
 
 #initialize and run
@@ -30,5 +30,5 @@
 
 #/process/optical/boundary/setInvokeSD true
 
-/run/beamOn 1
+/run/beamOn 12
 

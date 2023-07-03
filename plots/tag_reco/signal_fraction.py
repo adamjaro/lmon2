@@ -22,11 +22,11 @@ def main():
     rmin = 1e-3
     rmax = 1e5
 
-    #inp = "/home/jaroslav/sim/lmon/data/taggers/tag5dx6/maps_basic_v2.root"
-    inp = "../../macro/rp2/trk.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx12/trk_v1.root"
+    #inp = "../../macro/rp2/trk.root"
 
-    det = "s1_tracks"
-    #det = "s2_tracks"
+    #det = "s1_tracks"
+    det = "s2_tracks"
 
     #18x275 GeV
     sigma_qr = 0.053266 # mb, quasi-real cross section, qr_bx_18x275_T3p3_10Mevt.log

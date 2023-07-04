@@ -21,7 +21,7 @@ const tag_pwo_modz tag_pwo_wrapping_thickness+tag_pwo_crystal_z+tag_pwo_phot_z
 const tag_pwo_modxy tag_pwo_nxy*(tag_pwo_crystal_xy+2.*tag_pwo_wrapping_thickness)
 
 #local position in x for the calorimeters in their mother volume
-const tag_pwo_pos_x -0.5*tag_pwo_modxy+vac_dxQ-tag_dist_Q3
+const tag_pwo_pos_x   -0.5*tag_pwo_modxy + vac_dxQ - tag_dist_Q3
 
 #Tagger 1 calorimeter
 
@@ -55,14 +55,38 @@ new CalPWO lowQ2_s1_pwo
 
   lowQ2_s1_pwo.place_into = vac_B2Q3
 
+#shielding block after the PWO in tagger 1
 
+#local x for the shielding block
+const tag_shield_pos_x    vac_dxQ - tag_dist_Q3 - 0.5*tag_pwo_modxy
 
+#shield length along z
+const tag_shield_dz  500 # mm
 
+#shield distance from the end of pwo
+const tag_shield_dz_from_pwo    200 # mm
 
+#local z position for the shield after tagger 1
+const tag_shield_zpos_s1  tag_s1_pwo_zpos - 0.5*tag_pwo_modz - tag_shield_dz_from_pwo - 0.5*tag_shield_dz
 
+#shield size in x, same as the pwo
+const tag_shield_dx  tag_pwo_modxy
 
+#shield size in y, same as for drift section vac_B2Q3
+const tag_shield_dy  2*vac_rBI
 
+#shield block implementation, tagger 1
+new BoxSegment lowQ2_s1_shield
 
+  lowQ2_s1_shield.dx = tag_shield_dx
+  lowQ2_s1_shield.dy = tag_shield_dy
+  lowQ2_s1_shield.dz = tag_shield_dz
+
+  lowQ2_s1_shield.zpos = tag_shield_zpos_s1
+  lowQ2_s1_shield.xpos = tag_shield_pos_x
+  lowQ2_s1_shield.mat_name = G4_Fe
+  lowQ2_s1_shield.vis = 1:0:0:2
+  lowQ2_s1_shield.place_into = vac_B2Q3
 
 
 

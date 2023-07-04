@@ -4,7 +4,7 @@
 /run/verbose 2
 
 #detectors and components
-/lmon/construct/geometry geom_rp2.in
+/lmon/construct/geometry geom.in
 
 #input
 /lmon/input/type gun
@@ -42,7 +42,8 @@
 /vis/viewer/set/viewpointThetaPhi -45 -45
 #/vis/viewer/set/viewpointThetaPhi 45 45 deg
 
-/vis/viewer/set/targetPoint -238 100 -20000 mm  # Tagger 1
+#/vis/viewer/set/targetPoint -238 100 -20000 mm  # Tagger 1
+/vis/viewer/set/targetPoint -238 100 -21000 mm
 
 # Specify zoom value:
 #/vis/viewer/zoom 2.

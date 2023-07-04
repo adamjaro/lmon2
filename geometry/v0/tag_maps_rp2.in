@@ -146,7 +146,7 @@ const tag_cnt_size_z 1. # mm
 const tag_cnt_ofs_z 2. # mm
 
 #counter before tagger 1, plane 2
-new ParticleCounter lowQ2_cnt_s1_2
+#new ParticleCounter lowQ2_cnt_s1_2
 
   lowQ2_cnt_s1_2.zpos = tag_s1_start_z+tag_cnt_ofs_z
   lowQ2_cnt_s1_2.xpos = tag_pos_x
@@ -157,7 +157,7 @@ new ParticleCounter lowQ2_cnt_s1_2
   lowQ2_cnt_s1_2.vis = 0:0:1:0.3
 
 #counter after tagger 1, plane 1
-new ParticleCounter lowQ2_cnt_s1_1
+#new ParticleCounter lowQ2_cnt_s1_1
 
   lowQ2_cnt_s1_1.zpos = tag_s1_start_z-3.*tag_iz-tag_cnt_ofs_z
   lowQ2_cnt_s1_1.xpos = tag_pos_x
@@ -168,7 +168,7 @@ new ParticleCounter lowQ2_cnt_s1_1
   lowQ2_cnt_s1_1.vis = 0:0:1:0.3
 
 #counter before tagger 2, plane 2
-new ParticleCounter lowQ2_cnt_s2_2
+#new ParticleCounter lowQ2_cnt_s2_2
 
   lowQ2_cnt_s2_2.zpos = tag_s2_start_z+tag_cnt_ofs_z
   lowQ2_cnt_s2_2.xpos = tag_pos_x
@@ -179,7 +179,7 @@ new ParticleCounter lowQ2_cnt_s2_2
   lowQ2_cnt_s2_2.vis = 0:0:1:0.3
 
 #counter after tagger 2, plane 1
-new ParticleCounter lowQ2_cnt_s2_1
+#new ParticleCounter lowQ2_cnt_s2_1
 
   lowQ2_cnt_s2_1.zpos = tag_s2_start_z-3.*tag_iz-tag_cnt_ofs_z
   lowQ2_cnt_s2_1.xpos = tag_pos_x

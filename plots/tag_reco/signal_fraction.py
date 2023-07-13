@@ -14,7 +14,7 @@ import plot_utils as ut
 def main():
 
     #log_10(GeV^2)
-    qbin = 0.1
+    qbin = 0.2
     qmin = -10
     qmax = -0.5
 
@@ -22,7 +22,8 @@ def main():
     rmin = 1e-3
     rmax = 1e5
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx12/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx12/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx13/trk_v1.root"
     #inp = "../../macro/rp2/trk.root"
 
     #det = "s1_tracks"

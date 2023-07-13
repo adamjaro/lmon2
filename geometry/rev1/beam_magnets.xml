@@ -1,0 +1,125 @@
+
+<main>
+
+  <!-- Q1eR quadrupole -->
+  <!-- mm -->
+  <const name="Q1eR_Start_Z" value="-5300."/>
+  <const name="Q1eR_End_Z" value="-7100."/>
+  <const name="Q1eR_InnerRadius" value="55.5"/>
+
+  <detector
+    type="BeamQuadrupole" name="Q1eR"
+    zpos="(Q1eR_Start_Z+Q1eR_End_Z)/2."
+    r1="Q1eR_InnerRadius" r2="Q1eR_InnerRadius"
+    length="Q1eR_Start_Z-Q1eR_End_Z" grad="Q1eR_grad"
+    angle="TMath::Pi()/2." vis="0:0:1:1">
+  </detector>
+
+  <!-- Q2eR quadrupole -->
+  <!-- mm -->
+  <const name="Q2eR_Start_Z" value="-7600."/>
+  <const name="Q2eR_End_Z" value="-9000."/>
+  <const name="Q2eR_InnerRadius" value="64.5"/>
+
+  <detector
+    type="BeamQuadrupole" name="Q2eR"
+    zpos="(Q2eR_Start_Z+Q2eR_End_Z)/2."
+    r1="Q2eR_InnerRadius" r2="Q2eR_InnerRadius"
+    length="Q2eR_Start_Z-Q2eR_End_Z" grad="Q2eR_grad"
+    angle="TMath::Pi()/2." vis="0:0:1:1">
+  </detector>
+
+  <!-- B2eR dipole -->
+  <!-- mm, rad -->
+  <const name="B2eR_Start_Z" value="-9500."/>
+  <const name="B2eR_End_Z" value="-14999.773830630378"/>
+
+  <const name="B2eR_Start_X" value="0"/>
+  <const name="B2eR_End_X" value="-49.87797021981341"/>
+
+  <const name="B2eR_Theta" value="atan((B2eR_Start_X-B2eR_End_X)/(B2eR_Start_Z-B2eR_End_Z))"/>
+  <const name="B2eR_Length"
+    value="sqrt((B2eR_Start_X-B2eR_End_X)*(B2eR_Start_X-B2eR_End_X)+(B2eR_Start_Z-B2eR_End_Z)*(B2eR_Start_Z-B2eR_End_Z))"/>
+
+  <const name="B2eR_InnerRadius" value="64.5"/>
+  <const name="B2eR_OuterRadius" value="2.*B2eR_InnerRadius"/>
+
+  <detector
+    type="BeamDipole" name="B2eR"
+    zpos="(B2eR_Start_Z+B2eR_End_Z)/2." xpos="(B2eR_Start_X+B2eR_End_X)/2."
+    theta="B2eR_Theta"
+    r1="Q2eR_InnerRadius" r2="B2eR_InnerRadius" r3="B2eR_OuterRadius"
+    length="B2eR_Length" field="B2eR_field"
+    vis="0:1:0:1">
+  </detector>
+
+  <!-- Q3eR quadrupole -->
+  <!-- mm, rad -->
+  <const name="Q3eR_StartZ" value="-37696.0400567176"/>
+  <const name="Q3eR_EndZ" value="-38295.941366658234"/>
+
+  <const name="Q3eR_StartX" value="-461.58101195330387"/>
+  <const name="Q3eR_EndX" value="-472.46303067756573"/>
+
+  <const name="Q3eR_Theta" value="atan((Q3eR_StartX-Q3eR_EndX)/(Q3eR_StartZ-Q3eR_EndZ))"/>
+  <const name="Q3eR_Length"
+    value="sqrt((Q3eR_StartX-Q3eR_EndX)*(Q3eR_StartX-Q3eR_EndX)+(Q3eR_StartZ-Q3eR_EndZ)*(Q3eR_StartZ-Q3eR_EndZ))"/>
+
+  <const name="Q3eR_InnerRadius" value="50"/>
+
+  <detector
+    type="BeamQuadrupole" name="Q3eR"
+    zpos="(Q3eR_StartZ+Q3eR_EndZ)/2." xpos="(Q3eR_StartX+Q3eR_EndX)/2."
+    r1="Q3eR_InnerRadius" r2="Q3eR_InnerRadius"
+    length="Q3eR_Length" grad="Q3eR_grad"
+    theta="Q3eR_Theta" angle="TMath::Pi()/2"
+    vis="0:0:1:1">
+  </detector>
+
+  <!-- beam section from Q1eR to Q2eR -->
+  <detector
+    type="ConeBeam" name="beam_Q1Q2"
+    dz="Q1eR_End_Z-Q2eR_Start_Z" zpos="(Q1eR_End_Z+Q2eR_Start_Z)/2."
+    rmin0="Q2eR_InnerRadius" rmax0="Q2eR_InnerRadius+2."
+    rmin1="Q1eR_InnerRadius" rmax1="Q1eR_InnerRadius+2."
+    vis="0.5:0.5:0.5:0.9">
+  </detector>
+
+  <!-- beam section from Q2eR to B2eR -->
+  <detector
+    type="CylBeam" name="beam_Q2B2"
+    dz="Q2eR_End_Z-B2eR_Start_Z" zpos="(Q2eR_End_Z+B2eR_Start_Z)/2."
+    rmin="B2eR_InnerRadius" rmax="B2eR_InnerRadius+2." theta0="B2eR_Theta"
+    vis="0.5:0.5:0.5:1">
+  </detector>
+
+
+
+
+
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

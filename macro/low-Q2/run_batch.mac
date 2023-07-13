@@ -1,6 +1,7 @@
 
 #detector
-/lmon/construct/geometry geom.in
+#/lmon/construct/geometry geom.in
+/lmon/construct/geometry geom.xml
 
 #input
 /lmon/input/type gun
@@ -30,5 +31,5 @@
 
 #/process/optical/boundary/setInvokeSD true
 
-/run/beamOn 1
+#/run/beamOn 1
 

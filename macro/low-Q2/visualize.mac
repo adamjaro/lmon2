@@ -4,7 +4,8 @@
 /run/verbose 2
 
 #detectors and components
-/lmon/construct/geometry geom.in
+#/lmon/construct/geometry geom.in
+/lmon/construct/geometry geom.xml
 
 #input
 /lmon/input/type gun
@@ -42,14 +43,20 @@
 /vis/viewer/set/viewpointThetaPhi -45 -45
 #/vis/viewer/set/viewpointThetaPhi 45 45 deg
 
-#/vis/viewer/set/targetPoint -238 100 -20000 mm  # Tagger 1
-/vis/viewer/set/targetPoint -238 100 -21000 mm
+#/vis/viewer/set/targetPoint -50 0 -15000 mm # B2eR end
+
+#/vis/viewer/set/targetPoint -181 0 -20000 mm  # Tagger 1
+#/vis/viewer/set/targetPoint -238 100 -21000 mm
+
+/vis/viewer/set/targetPoint -480 0 -36500 mm  # Tagger 2
+
+#/vis/viewer/set/targetPoint -460 0 -37696 mm # Q3eR
 
 # Specify zoom value:
 #/vis/viewer/zoom 2.
 
 # Draw coordinate axes:
-#/vis/scene/add/axes 185 10 12 10. mm
+#/vis/scene/add/axes -501.574 0 -37695.3 10. mm
 #/vis/scene/add/axes 0 0 0 12.5 mm
 #/vis/scene/add/axes 0 0 0 79.1 mm
 

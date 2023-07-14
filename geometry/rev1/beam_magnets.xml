@@ -41,7 +41,7 @@
   <const name="B2eR_Length"
     value="sqrt((B2eR_Start_X-B2eR_End_X)*(B2eR_Start_X-B2eR_End_X)+(B2eR_Start_Z-B2eR_End_Z)*(B2eR_Start_Z-B2eR_End_Z))"/>
 
-  <const name="B2eR_InnerRadius" value="64.5"/>
+  <const name="B2eR_InnerRadius" value="98"/>
   <const name="B2eR_OuterRadius" value="2.*B2eR_InnerRadius"/>
 
   <detector

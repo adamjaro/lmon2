@@ -16,8 +16,9 @@
 
   <include ref="vacuum_B2Q3.xml"/>
 
+  <include ref="tagger_det.xml"/>
 
-
+  <include ref="tagger_pwo.xml"/>
 
 </main>
 

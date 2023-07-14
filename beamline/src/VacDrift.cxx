@@ -73,12 +73,20 @@ VacDrift::VacDrift(G4String nam, GeoParser *geo, G4LogicalVolume *top):
   G4double ypos=0;
   geo->GetOptD(fNam, "ypos", ypos, GeoParser::Unit(mm));
 
-  //placement in top
+  //placement in mother volume
   G4ThreeVector pos(0, ypos, 0);
   G4RotationMatrix rot(G4ThreeVector(1, 0, 0), TMath::Pi()/2); //CLHEP::HepRotation
   G4Transform3D transform(rot, pos); //HepGeom::Transform3D
 
-  new G4PVPlacement(transform, vol, fNam, top, false, 0);
+  //get the mother volume
+  G4LogicalVolume *mother_vol = top;
+  G4String mother_nam;
+  if( geo->GetOptS(fNam, "place_into", mother_nam) ) {
+    mother_vol = GetMotherVolume(mother_nam, top);
+  }
+
+  //make the placement
+  new G4PVPlacement(transform, vol, fNam, mother_vol, false, 0);
 
 }//VacDrift
 
@@ -110,6 +118,22 @@ G4GenericTrap *VacDrift::MakeGT(
   return new G4GenericTrap(nam, ysiz/2, ver);
 
 }//MakeGT
+
+//_____________________________________________________________________________
+G4LogicalVolume* VacDrift::GetMotherVolume(G4String mother_nam, G4LogicalVolume *top) {
+
+  for(size_t i=0; i<top->GetNoDaughters(); i++) {
+
+    G4LogicalVolume *dv = top->GetDaughter(i)->GetLogicalVolume();
+
+    if( dv->GetName() == mother_nam ) {
+      return dv;
+    }
+  }
+
+  return 0x0;
+
+}//GetMotherVolume
 
 
 

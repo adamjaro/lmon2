@@ -23,6 +23,7 @@
 //lmon2 base
 #include "GeoParser.h"
 #include "LoadIN.h"
+#include "LoadXML.h"
 
 //local classes
 #include "TagTrackBasicMakeResp.h"
@@ -89,8 +90,10 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
 
   //geometry
   GeoParser geo;
-  LoadIN in(geo);
-  in.ReadInput( GetStr(opt_map, "main.geo") );
+  //LoadIN in(geo);
+  //in.ReadInput( GetStr(opt_map, "main.geo") );
+  LoadXML xml(geo);
+  xml.ReadInput( GetStr(opt_map, "main.geo") );
   //geo.PrintAll();
 
   //output

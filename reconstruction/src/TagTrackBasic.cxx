@@ -24,6 +24,7 @@
 //lmon2 base
 #include "GeoParser.h"
 #include "LoadIN.h"
+#include "LoadXML.h"
 #include "MCParticles.h"
 
 //local classes
@@ -60,8 +61,10 @@ void TagTrackBasic::Run(const char *conf) {
 
   //geometry
   GeoParser geo;
-  LoadIN in(geo);
-  in.ReadInput( GetStr(opt_map, "main.geo") );
+  //LoadIN in(geo);
+  //in.ReadInput( GetStr(opt_map, "main.geo") );
+  LoadXML xml(geo);
+  xml.ReadInput( GetStr(opt_map, "main.geo") );
   //geo.PrintAll();
 
   //beam energy
@@ -204,6 +207,8 @@ void TagTrackBasic::Run(const char *conf) {
 
 //_____________________________________________________________________________
 void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiReco *rec) {
+
+  if( !rec ) return;
 
   //track loop
   for(TagTrackFindBasic::Track& i: tag->GetTracks()) {

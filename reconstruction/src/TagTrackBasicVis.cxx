@@ -19,6 +19,7 @@
 #include "TagTrackFindBasic.h"
 #include "GeoParser.h"
 #include "LoadIN.h"
+#include "LoadXML.h"
 //#include "RefCounter.h"
 #include "TagClustersBasic.h"
 #include "TagTrackBasicVis.h"
@@ -69,8 +70,10 @@ TagTrackBasicVis::TagTrackBasicVis(const char *conf): iev(-1), min_ntrk(0),
   string geo_nam = GetStr(opt_map, "main.geo");
   //cout << "Geometry: " << geo_nam << endl;
   GeoParser geo;
-  LoadIN in(geo);
-  in.ReadInput(geo_nam);
+  //LoadIN in(geo);
+  //in.ReadInput(geo_nam);
+  LoadXML xml(geo);
+  xml.ReadInput( GetStr(opt_map, "main.geo") );
 
   //outputs
   //string outfile = GetStr(opt_map, "main.outfile");

@@ -29,7 +29,7 @@ TagClustersBasic::TagClustersBasic(std::string nam) {
 //_____________________________________________________________________________
 void TagClustersBasic::SetGeometry(GeoParser *geo) {
 
-  G4String geo_nam = "vac_B2Q3";
+  G4String geo_nam = "vac_S1";
 
   //plane position
   geo->GetOptD(geo_nam, "xpos", fXpos, GeoParser::Unit(mm));

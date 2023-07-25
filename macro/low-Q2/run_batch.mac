@@ -1,7 +1,7 @@
 
 #detector
 #/lmon/construct/geometry geom.in
-/lmon/construct/geometry geom.xml
+/lmon/construct/geometry geom_pwo_module.xml
 
 #input
 #/lmon/input/type gun
@@ -19,13 +19,12 @@
 #/lmon/input/hepmc_ascii/name /home/jaroslav/sim/GETaLM/cards/qr_bx.hepmc
 #/lmon/input/hepmc_ascii/name /home/jaroslav/sim/GETaLM/cards/gen_uni.hepmc
 
-/lmon/input/type tparticle
+#/lmon/input/type tparticle
 #/lmon/input/tparticle/name /home/jaroslav/sim/GETaLM/cards/qr_bx.root
-/lmon/input/tparticle/name /home/jaroslav/sim/GETaLM_data/qr/qr_18x275_T3p3_5Mevt.root
+#/lmon/input/tparticle/name /home/jaroslav/sim/GETaLM_data/qr/qr_18x275_T3p3_5Mevt.root
 
 #output
-/lmon/output/name rev1.root
-#/lmon/output/name uni.root
+/lmon/output/name pwo.root
 
 #initialize and run
 /run/initialize

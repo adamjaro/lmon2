@@ -1,15 +1,13 @@
 
 #detector
 #/lmon/construct/geometry geom_pwo_cell.xml
-/lmon/construct/geometry geom_pwo_cell.in
-#/lmon/construct/geometry geom.in
-#/lmon/construct/geometry geom.xml
-/lmon/construct/geometry geom_pwo_module.in
+#/lmon/construct/geometry geom_pwo_cell.in
+/lmon/construct/geometry geom_pwo_module.xml
 
 #input
 /lmon/input/type gun
 #/gun/energy 511 keV
-/gun/energy 1 GeV
+/gun/energy 5 GeV
 #/gun/energy 200 MeV
 /gun/particle gamma
 #/gun/particle e-
@@ -34,5 +32,5 @@
 
 #/process/optical/boundary/setInvokeSD true
 
-/run/beamOn 4
+/run/beamOn 1
 

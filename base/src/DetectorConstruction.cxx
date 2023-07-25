@@ -117,7 +117,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
   geo.GetOptS(topnam, "material", top_mat_name);
   G4Material* top_m = G4NistManager::Instance()->FindOrBuildMaterial(top_mat_name);
   G4LogicalVolume *top_l = new G4LogicalVolume(top_s, top_m, topnam+"_l");
-  //top_l->SetVisAttributes( G4VisAttributes::GetInvisible() );
+  top_l->SetVisAttributes( G4VisAttributes::GetInvisible() );
   //G4VisAttributes *vis = new G4VisAttributes();
   //vis->SetForceAuxEdgeVisible(false);
   //vis->SetLineStyle(G4VisAttributes::dotted);

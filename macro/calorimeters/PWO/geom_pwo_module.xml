@@ -1,0 +1,52 @@
+
+<main>
+
+  <!-- calorimeter module by a matrix of CalPWO cells -->
+
+  <!-- top volume, mm -->
+  <detector
+    name="topv" type="top"
+    xsiz = "500" ysiz="500" zsiz = "10000"
+    top_mat_name="G4_Air">
+  </detector>
+
+  <!-- crystal cell, mm -->
+  <const name="pwo_crystal_xy" value="25"/>
+  <const name="pwo_crystal_z" value="300"/>
+  <const name="pwo_wrapping_thickness" value="0.3"/>
+
+  <!-- optical detector at the cell, mm -->
+  <const name="pwo_phot_xy" value="18"/>
+  <const name="pwo_phot_z" value="2"/>
+
+  <!-- number of cells along x and y -->
+  <const name="pwo_nxy" value="7"/>
+
+  <!-- module size -->
+  <const name="pwo_modz" value="pwo_wrapping_thickness + pwo_crystal_z + pwo_phot_z"/>
+  <const name="pwo_modxy" value="pwo_nxy*(pwo_crystal_xy + 2*pwo_wrapping_thickness)"/>
+
+  <!-- make the PWO calorimeter -->
+  <detector type="CalPWO" name="pwo"
+    crystal_xy="pwo_crystal_xy" crystal_z="pwo_crystal_z"
+    wrapping_thickness="pwo_wrapping_thickness"
+    nx="pwo_nxy" ny="pwo_nxy"
+    modx="pwo_modxy" mody="pwo_modxy" modz="pwo_modz" zpos="-pwo_modz/2."
+    crystal_vis="1:0:0:0.3" wrapping_vis="0:1:0:2"
+    radius="pwo_phot_xy/2." dz="pwo_phot_z"
+    cath_lay_vis="1:0:0:2" cath_main_vis="0:0:1:0.4" mod_vis="0:0:1:3">
+  </detector>
+
+</main>
+
+
+
+
+
+
+
+
+
+
+
+

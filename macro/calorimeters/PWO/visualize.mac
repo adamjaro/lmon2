@@ -5,31 +5,31 @@
 
 #detectors and components
 #/lmon/construct/geometry geom_pwo_cell.xml
-/lmon/construct/geometry geom_pwo_module.in
+/lmon/construct/geometry geom_pwo_module.xml
 
 #input
-#/lmon/input/type gun
-#/gun/energy 511 keV
+/lmon/input/type gun
 #/gun/energy 180 keV
-#/gun/particle gamma
+/gun/particle gamma
 #/gun/energy 10 MeV
+/gun/energy 1 GeV
 #/gun/particle e-
-#/gun/position 0 0 1 mm
-#/gun/direction 0 0 -1
+/gun/position 0 0 1 mm
+/gun/direction 0 0 -1
 
 #input by gps
-/lmon/input/type gps
-/gps/particle e-
-/gps/number 1
-/gps/ene/type Gauss
+#/lmon/input/type gps
+#/gps/particle e-
+#/gps/number 1
+#/gps/ene/type Gauss
 #/gps/ene/mono 1 MeV
-/gps/ene/mono 511 keV
-/gps/ene/sigma 0.0 GeV
-/gps/pos/type Point
-/gps/pos/centre 0 0 1 mm
-/gps/ang/type iso
-/gps/ang/rot1 0 0 1
-/gps/ang/rot2  0 0 1
+#/gps/ene/mono 511 keV
+#/gps/ene/sigma 0.0 GeV
+#/gps/pos/type Point
+#/gps/pos/centre 0 0 1 mm
+#/gps/ang/type iso
+#/gps/ang/rot1 0 0 1
+#/gps/ang/rot2  0 0 1
 
 #/gps/source/add 1
 #/gps/particle e-

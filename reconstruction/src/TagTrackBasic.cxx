@@ -123,6 +123,17 @@ void TagTrackBasic::Run(const char *conf) {
   //interaction (event) output tree
   TTree otree("event", "event");
 
+  //true event kinematics in output tree
+  otree.Branch("true_el_E", &fTrueEn, "true_el_E/D");
+  otree.Branch("true_el_theta", &fTrueTheta, "true_el_theta/D");
+  otree.Branch("true_el_phi", &fTruePhi, "true_el_phi/D");
+  otree.Branch("true_Q2", &fTrueQ2, "true_Q2/D");
+
+  //event counters
+  Int_t evt_s1_ntrk=0, evt_s2_ntrk=0;
+  otree.Branch("s1_ntrk", &evt_s1_ntrk, "s1_ntrk/I");
+  otree.Branch("s2_ntrk", &evt_s2_ntrk, "s2_ntrk/I");
+
   TagTrackFindBasic s1("s1");
   TagTrackFindBasic s2("s2");
 
@@ -157,6 +168,7 @@ void TagTrackBasic::Run(const char *conf) {
     s2.SetClsLimMdist(min_cls_dist);
   }
 
+  //total reconstruction counters
   Long64_t ncls_s1=0, ncls_s2=0, ntrk_s1=0, ntrk_s2=0;
 
   //event loop
@@ -173,8 +185,10 @@ void TagTrackBasic::Run(const char *conf) {
 
     //cout << "Next event" << endl;
 
+    //load the mc
     fMC->LoadInput();
 
+    //run the reconstruction
     s1.ProcessEvent();
     s2.ProcessEvent();
 
@@ -183,6 +197,10 @@ void TagTrackBasic::Run(const char *conf) {
 
     s1.FinishEvent();
     s2.FinishEvent();
+
+    //set the event counters
+    evt_s1_ntrk = s1.GetTracks().size();
+    evt_s2_ntrk = s2.GetTracks().size();
 
     //fill event tree
     otree.Fill();

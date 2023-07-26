@@ -12,13 +12,14 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 3
+    iplot = 4
 
     func = {}
     func[0] = theta_x
     func[1] = theta_y
     func[2] = xy
     func[3] = chi2
+    func[4] = lQ2_resolution
 
     func[iplot]()
 
@@ -159,6 +160,46 @@ def chi2():
     can.SaveAs("01fig.pdf")
 
 #chi2
+
+#_____________________________________________________________________________
+def lQ2_resolution():
+
+    #track resolution in log_10(Q^2)
+
+    #GeV^2
+    xbin = 0.1
+    xmin = -8
+    xmax = 1
+
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v3.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax1/trk_v1.root"
+
+    #det = "s1_tracks"
+    det = "s2_tracks"
+
+    infile = TFile.Open(inp)
+    tree = infile.Get("event")
+
+    can = ut.box_canvas()
+
+    hxy = ut.prepare_TH2D("hxy", xbin, xmin, xmax, xbin, xmin, xmax)
+
+    #tree.Draw("TMath::Log10("+det+"_rec_Q2):TMath::Log10("+det+"_true_Q2) >> hxy")
+    tree.Draw("TMath::Log10("+det+"_rec_Q2):TMath::Log10("+det+"_mcp_Q2) >> hxy")
+
+    ut.put_yx_tit(hxy, "rec", "gen", 1.9, 1.3)
+
+    ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.11)
+
+    hxy.SetMinimum(0.98)
+    hxy.SetContour(300)
+
+    gPad.SetGrid()
+
+    ut.invert_col(rt.gPad)
+    can.SaveAs("01fig.pdf")
+
+#lQ2_resolution
 
 #_____________________________________________________________________________
 if __name__ == "__main__":

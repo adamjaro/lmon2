@@ -70,21 +70,21 @@ def energy_pitheta():
 
     #reconstruction efficiency in energy (GeV) and pi - theta (mrad)
 
-    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
-    #inp = "/home/jaroslav/sim/lmon/data/taggers/tag4ax5/tag_rec_pass5.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v3.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax1/trk_v1.root"
 
     #tagger 1 or 2
     tag = 1
 
-    #bins in theta, mrad
-    xbin = 0.2
-    xmin = 0
-    xmax = 12
-
     #bins in energy, GeV
-    ybin = 0.3
-    ymin = 1
-    ymax = 20
+    xbin = 0.3
+    xmin = 1
+    xmax = 20
+
+    #bins in theta, mrad
+    ybin = 0.2
+    ymin = 0
+    ymax = 12
 
     if tag == 1:
         sel = "s1_ntrk>0"
@@ -101,18 +101,19 @@ def energy_pitheta():
     hTag = ut.prepare_TH2D("hTag", xbin, xmin, xmax, ybin, ymin, ymax)
     hAll = ut.prepare_TH2D("hAll", xbin, xmin, xmax, ybin, ymin, ymax)
 
-    form = "true_el_E:(TMath::Pi()-true_el_theta)*1e3" # mrad
+    #form = "true_el_E:(TMath::Pi()-true_el_theta)*1e3" # convert to mrad
+    form = "(TMath::Pi()-true_el_theta)*1e3:true_el_E" # convert to mrad
     tree.Draw(form+" >> hTag", sel)
     tree.Draw(form+" >> hAll")
 
     hTag.Divide(hAll)
 
-    ytit = "Electron energy #it{E} (GeV)"
-    xtit = "Electron polar angle #it{#pi}-#it{#theta} (mrad)"
+    xtit = "Electron energy #it{E} (GeV)"
+    ytit = "Electron polar angle #it{#pi}-#it{#theta} (mrad)"
     ut.put_yx_tit(hTag, ytit, xtit, 1.4, 1.3)
 
     hTag.SetTitleOffset(1.4, "Z")
-    hTag.SetZTitle("Reconstruction efficiency")
+    hTag.SetZTitle("Acceptance")
 
     ut.set_margin_lbtr(gPad, 0.1, 0.1, 0.015, 0.15)
 

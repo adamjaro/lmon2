@@ -216,3 +216,14 @@ string TagTrackBasicMakeResp::GetStr(program_options::variables_map& opt_map, st
 
 }//GetStr
 
+//_____________________________________________________________________________
+extern "C" {
+
+  TagTrackBasicMakeResp* make_TagTrackBasicMakeResp() { return new TagTrackBasicMakeResp(); }
+
+  void run_TagTrackBasicMakeResp(void *task, const char *conf) {
+    reinterpret_cast<TagTrackBasicMakeResp*>(task)->Run(conf);
+  }
+
+}//extern
+

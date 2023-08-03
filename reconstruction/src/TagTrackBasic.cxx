@@ -293,3 +293,15 @@ string TagTrackBasic::GetStr(program_options::variables_map& opt_map, std::strin
 
 }//GetStr
 
+//_____________________________________________________________________________
+extern "C" {
+
+  TagTrackBasic* make_TagTrackBasic() { return new TagTrackBasic(); }
+
+  void run_TagTrackBasic(void *task, const char *conf) {
+    reinterpret_cast<TagTrackBasic*>(task)->Run(conf);
+  }
+
+}//extern
+
+

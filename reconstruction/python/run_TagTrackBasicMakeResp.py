@@ -3,7 +3,10 @@
 # reconstruction response creation by TagTrackBasicMakeResp
 
 import sys
-from ctypes import CDLL, c_char_p, c_void_p
+import os
+
+import ROOT as rt
+from ROOT import gSystem, gInterpreter
 
 #_____________________________________________________________________________
 def main():
@@ -12,14 +15,16 @@ def main():
     config = get_config()
 
     #analysis library
-    lib = CDLL("liblmon2Reco.so")
+    gSystem.Load("liblmon2Reco.so")
+
+    #includes
+    gInterpreter.Declare('#include <boost/program_options.hpp>')
+    gInterpreter.AddIncludePath( os.path.dirname(os.path.abspath(__file__))+"/../include/" )
+    gInterpreter.Declare('#include "TagTrackBasicMakeResp.h"')
 
     #analysis task
-    lib.make_TagTrackBasicMakeResp.restype = c_void_p
-    task = c_void_p(lib.make_TagTrackBasicMakeResp())
-
-    #run the task    
-    lib.run_TagTrackBasicMakeResp( task, c_char_p(bytes(config, "utf-8")) )
+    task = rt.TagTrackBasicMakeResp()
+    task.Run(config)
 
 #main
 

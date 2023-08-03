@@ -5,6 +5,7 @@
 // Task to create reconstruction response by EThetaPhiReco
 
 class EThetaPhiReco;
+class EThetaPhiRecoV2;
 class TagTrackFindBasic;
 
 class TagTrackBasicMakeResp {
@@ -17,7 +18,8 @@ class TagTrackBasicMakeResp {
 
   private:
 
-    void AddInput(TagTrackFindBasic *tag, EThetaPhiReco *rec);
+    //void AddInput(TagTrackFindBasic *tag, EThetaPhiReco *rec);
+    void AddInput(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec);
 
     std::string GetStr(boost::program_options::variables_map& opt_map, std::string par);
 

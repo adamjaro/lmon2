@@ -32,6 +32,7 @@
 #include "TagTrackFindBasic.h"
 #include "TrkPlaneBasicHits.h"
 #include "EThetaPhiReco.h"
+#include "EThetaPhiRecoV2.h"
 
 using namespace std;
 using namespace boost;
@@ -93,15 +94,17 @@ void TagTrackBasic::Run(const char *conf) {
   fMC->ConnectInput("mcp", &tree);
 
   //electron reconstruction
-  EThetaPhiReco *s1_rec = 0x0;
-  EThetaPhiReco *s2_rec = 0x0;
+  EThetaPhiRecoV2 *s1_rec = 0x0;
+  EThetaPhiRecoV2 *s2_rec = 0x0;
   if( opt_map.find("main.input_resp") != opt_map.end() ) {
     string input_resp = GetStr(opt_map, "main.input_resp");
     cout << "Response input: " << input_resp << endl;
 
     //create the response for both taggers
-    s1_rec = new EThetaPhiReco("s1");
-    s2_rec = new EThetaPhiReco("s2");
+    //s1_rec = new EThetaPhiReco("s1");
+    //s2_rec = new EThetaPhiReco("s2");
+    s1_rec = new EThetaPhiRecoV2("s1");
+    s2_rec = new EThetaPhiRecoV2("s2");
 
     //initialize the response from trained input
     TFile in_resp(input_resp.c_str(), "read");
@@ -224,7 +227,8 @@ void TagTrackBasic::Run(const char *conf) {
 }//Run
 
 //_____________________________________________________________________________
-void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiReco *rec) {
+//void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiReco *rec) {
+void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
 
   if( !rec ) return;
 
@@ -258,8 +262,10 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiReco *rec) {
     //reconstruction for the track
     Double_t quant[4]{i.x, i.y, i.theta_x, i.theta_y}; // input tagger quantity
     Double_t rec_en=0, rec_theta=0, rec_phi=0; // reconstructed electron by reference
-    Int_t ninp=0;
-    Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, &ninp); // perform the reconstruction
+    //Int_t ninp=0;
+    Int_t ipar[2];
+    //Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, &ninp); // perform the reconstruction
+    Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, ipar); // perform the reconstruction
     if( !stat ) continue;
 
     //set the track parameters
@@ -267,7 +273,8 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiReco *rec) {
     i.rec_en = rec_en;
     i.rec_theta = rec_theta;
     i.rec_phi = rec_phi;
-    i.ninp = ninp;
+    i.ninp = ipar[0]; // at index 0 from Reconstruct
+    i.ilay = ipar[1]; // at index 1
 
     //reconstructed electron Q^2 by beam energy, electron energy and polar angle
     i.rec_Q2 = 2*fBeamEn*i.rec_en*(1-TMath::Cos(TMath::Pi()-i.rec_theta));
@@ -285,15 +292,4 @@ string TagTrackBasic::GetStr(program_options::variables_map& opt_map, std::strin
   return res;
 
 }//GetStr
-
-//_____________________________________________________________________________
-extern "C" {
-
-  TagTrackBasic* make_TagTrackBasic() { return new TagTrackBasic(); }
-
-  void run_TagTrackBasic(void *task, const char *conf) {
-    reinterpret_cast<TagTrackBasic*>(task)->Run(conf);
-  }
-
-}//extern
 

@@ -29,6 +29,7 @@
 #include "TagTrackBasicMakeResp.h"
 #include "TagTrackFindBasic.h"
 #include "EThetaPhiReco.h"
+#include "EThetaPhiRecoV2.h"
 
 using namespace std;
 using namespace boost;
@@ -50,26 +51,32 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
   ;
 
   //reconstruction for tagger stations
-  EThetaPhiReco s1_rec("s1", &opt);
-  EThetaPhiReco s2_rec("s2", &opt);
+  //EThetaPhiReco *s1_rec = new EThetaPhiReco("s1", &opt);
+  //EThetaPhiReco *s2_rec = new EThetaPhiReco("s2", &opt);
+  EThetaPhiRecoV2 *s1_rec = new EThetaPhiRecoV2("s1", &opt);
+  EThetaPhiRecoV2 *s2_rec = new EThetaPhiRecoV2("s2", &opt);
 
   //quantities measured by the taggers
-  s1_rec.MakeQuantity("x"); // x position, mm
-  s1_rec.MakeQuantity("y"); // y position, mm
-  s1_rec.MakeQuantity("tx", 1e-3); // theta_x angle, range set in mrad, conversion to rad
-  s1_rec.MakeQuantity("ty", 1e-3); // theta_y angle, mrad conversion to rad
-  s2_rec.MakeQuantity("x");
-  s2_rec.MakeQuantity("y");
-  s2_rec.MakeQuantity("tx", 1e-3);
-  s2_rec.MakeQuantity("ty", 1e-3);
+  s1_rec->MakeQuantity("x"); // x position, mm
+  s1_rec->MakeQuantity("y"); // y position, mm
+  //s1_rec->MakeQuantity("tx", 1e-3); // theta_x angle, range set in mrad, conversion to rad
+  //s1_rec->MakeQuantity("ty", 1e-3); // theta_y angle, mrad conversion to rad
+  s1_rec->MakeQuantity("theta_x"); // theta_x angle, range set in mrad, conversion to rad
+  s1_rec->MakeQuantity("theta_y"); // theta_y angle, mrad conversion to rad
+  s2_rec->MakeQuantity("x");
+  s2_rec->MakeQuantity("y");
+  //s2_rec->MakeQuantity("tx", 1e-3);
+  //s2_rec->MakeQuantity("ty", 1e-3);
+  s2_rec->MakeQuantity("theta_x");
+  s2_rec->MakeQuantity("theta_y");
 
   //load the configuration file
   variables_map opt_map;
   store(parse_config_file(conf, opt), opt_map);
 
   //initialize the reconstruction
-  s1_rec.Initialize(&opt_map);
-  s2_rec.Initialize(&opt_map);
+  s1_rec->Initialize(&opt_map);
+  s2_rec->Initialize(&opt_map);
 
   //inputs
   string input = GetStr(opt_map, "main.input");
@@ -133,7 +140,7 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
 
   //event loop
   Long64_t nev = tree.GetEntries();
-  //Long64_t nev = 12;
+  //Long64_t nev = 120;
   Long64_t iprint = nev/12;
   for(Long64_t iev=0; iev<nev; iev++) {
 
@@ -148,8 +155,8 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
     s1.ProcessEvent();
     s2.ProcessEvent();
 
-    AddInput(&s1, &s1_rec);
-    AddInput(&s2, &s2_rec);
+    AddInput(&s1, s1_rec);
+    AddInput(&s2, s2_rec);
 
     s1.FinishEvent();
     s2.FinishEvent();
@@ -165,10 +172,13 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
 
   }//event loop
 
+  s1_rec->Finalize();
+  s2_rec->Finalize();
+
   otree.Write(0, TObject::kOverwrite);
 
-  s1_rec.Export();
-  s2_rec.Export();
+  s1_rec->Export();
+  s2_rec->Export();
 
   out.Close();
 
@@ -179,7 +189,8 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
 }//Run
 
 //_____________________________________________________________________________
-void TagTrackBasicMakeResp::AddInput(TagTrackFindBasic *tag, EThetaPhiReco *rec) {
+//void TagTrackBasicMakeResp::AddInput(TagTrackFindBasic *tag, EThetaPhiReco *rec) {
+void TagTrackBasicMakeResp::AddInput(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
 
   //event with just one track
   if( tag->GetTracks().size() != 1 ) return;
@@ -204,15 +215,4 @@ string TagTrackBasicMakeResp::GetStr(program_options::variables_map& opt_map, st
   return res;
 
 }//GetStr
-
-//_____________________________________________________________________________
-extern "C" {
-
-  TagTrackBasicMakeResp* make_TagTrackBasicMakeResp() { return new TagTrackBasicMakeResp(); }
-
-  void run_TagTrackBasicMakeResp(void *task, const char *conf) {
-    reinterpret_cast<TagTrackBasicMakeResp*>(task)->Run(conf);
-  }
-
-}//extern
 

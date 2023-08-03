@@ -70,11 +70,11 @@ def energy_pitheta():
 
     #reconstruction efficiency in energy (GeV) and pi - theta (mrad)
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v3.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax1/trk_v1.root"
 
     #tagger 1 or 2
-    tag = 1
+    tag = 3
 
     #bins in energy, GeV
     xbin = 0.3
@@ -89,9 +89,12 @@ def energy_pitheta():
     if tag == 1:
         sel = "s1_ntrk>0"
         lab_sel = "Tagger 1"
-    else:
+    elif tag == 2:
         sel = "s2_ntrk>0"
         lab_sel = "Tagger 2"
+    elif tag == 3:
+        sel = "s1_ntrk>0 || s2_ntrk>0"
+        lab_sel = ""
 
     infile = TFile.Open(inp)
     tree = infile.Get("event")

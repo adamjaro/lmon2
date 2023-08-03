@@ -285,6 +285,7 @@ TagTrackFindBasic::Coll::Coll() {
   DATA_ADD_UNIT_ATTR( rec_phi )
   DATA_ADD_UNIT_ATTR( rec_Q2 )
   DATA_ADD_UNIT_ATTR( ninp )
+  DATA_ADD_UNIT_ATTR( ilay )
 
   DATA_ADD_UNIT_ATTR( has_mcp )
   DATA_ADD_UNIT_ATTR( mcp_en )

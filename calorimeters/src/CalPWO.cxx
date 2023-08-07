@@ -174,21 +174,21 @@ void CalPWO::SetCrystalOptics(G4Material *mat) {
 
   //scintillation and optical properties for the crystal
 
-  std::vector<G4double> scin_lam = {414, 428}; // nm, scintillation wavelength
+  std::vector<G4double> scin_lam = {428, 414}; // nm, scintillation wavelength
   std::vector<G4double> scin_fast = {1., 1.};
 
   G4MaterialPropertiesTable *tab = new G4MaterialPropertiesTable();
-  tab->AddProperty("FASTCOMPONENT", LambdaNMtoEV(scin_lam), scin_fast);
-  tab->AddProperty("SLOWCOMPONENT", LambdaNMtoEV(scin_lam), scin_fast);
+  tab->AddProperty("FASTCOMPONENT", LambdaNMtoEV(scin_lam), scin_fast, true);
+  tab->AddProperty("SLOWCOMPONENT", LambdaNMtoEV(scin_lam), scin_fast, true);
   //tab->AddConstProperty("FASTTIMECONSTANT", 1*ps);
-  tab->AddConstProperty("FASTTIMECONSTANT", 1.67*ns);
-  tab->AddConstProperty("SLOWTIMECONSTANT", 6.6*ns);
-  tab->AddConstProperty("YIELDRATIO", 0.5);
+  tab->AddConstProperty("FASTTIMECONSTANT", 1.67*ns, true);
+  tab->AddConstProperty("SLOWTIMECONSTANT", 6.6*ns, true);
+  tab->AddConstProperty("YIELDRATIO", 0.5, true);
   tab->AddConstProperty("SCINTILLATIONYIELD", 300/MeV);
   tab->AddConstProperty("RESOLUTIONSCALE", 1.);
 
   //uniform optical properties
-  std::vector<G4double> opt_lam = {350, 800}; // nm
+  std::vector<G4double> opt_lam = {800, 350}; // nm
   std::vector<G4double> opt_r = {2.2, 2.2};
   std::vector<G4double> opt_abs = {200*cm, 200*cm};
 
@@ -214,7 +214,7 @@ void CalPWO::SetCrystalSurface(G4LogicalVolume *vol) {
   new G4LogicalSkinSurface("CrystalSurfaceL", vol, surface);
 
   //surface material
-  std::vector<G4double> opt_lam = {350, 800}; // nm
+  std::vector<G4double> opt_lam = {800, 350}; // nm
   std::vector<G4double> reflectivity = {0.9, 0.9};
   std::vector<G4double> efficiency = {1., 1.};
   G4MaterialPropertiesTable *surfmat = new G4MaterialPropertiesTable();
@@ -238,7 +238,7 @@ void CalPWO::SetCrystalBoundary(G4VPhysicalVolume *crystal, G4VPhysicalVolume *g
 
   new G4LogicalBorderSurface("CrytalGlassB", crystal, glass, surf);
 
-  std::vector<G4double> opt_lam = {350, 800}; // nm
+  std::vector<G4double> opt_lam = {800, 350}; // nm
   std::vector<G4double> reflectivity = {1., 1.};
   std::vector<G4double> efficiency = {1., 1.};
 

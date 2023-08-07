@@ -90,7 +90,7 @@ void PhotoCathPMT::SetOptics(G4Material *mat, G4LogicalVolume *glass_vol, G4Mate
 
   //optical properties for the glass and photocathode
 
-  std::vector<G4double> opt_lam = {350, 800}; // nm
+  std::vector<G4double> opt_lam = {800, 350}; // nm
   std::vector<G4double> opt_r = {1.52, 1.52};
   std::vector<G4double> reflectivity = {0.9, 0.9};
   std::vector<G4double> efficiency = {1., 1.};
@@ -145,7 +145,7 @@ void PhotoCathPMT::SetBoundary(G4VPhysicalVolume *cath_phys) {
 
   new G4LogicalBorderSurface("GlassCathB", fGlassPhysVol, cath_phys, surf);
 
-  std::vector<G4double> opt_lam = {350, 800}; // nm
+  std::vector<G4double> opt_lam = {800, 350}; // nm
   std::vector<G4double> reflectivity = {0.9, 0.9};
   std::vector<G4double> efficiency = {1., 1.};
 

@@ -53,13 +53,17 @@ void LoadXML::ReadPTree(const ptree::key_type& key, const ptree& tree) {
   if( key == "comment" ) return;
 
   //next subbranch
-  const ptree& tree_child = tree.get_child_optional( xml_parser::xmlattr<ptree::key_type>() ).get();
+  boost::optional<const ptree&> tree_child_opt = tree.get_child_optional( xml_parser::xmlattr<ptree::key_type>() );
 
   //test individual load functions for attributes for the subbranch
-  LoadDetector(key, tree_child); //'detector' token, next detector or component
-  LoadInclude(key, tree_child); //'include' token, include command
-  LoadIncludeDir(key, tree_child); //'include_directory' token, path to include files
-  LoadConstant(key, tree_child); //'const' token, constant in geometry
+  if( tree_child_opt.is_initialized() ) {
+    const ptree& tree_child = tree_child_opt.get();
+
+    LoadDetector(key, tree_child); //'detector' token, next detector or component
+    LoadInclude(key, tree_child); //'include' token, include command
+    LoadIncludeDir(key, tree_child); //'include_directory' token, path to include files
+    LoadConstant(key, tree_child); //'const' token, constant in geometry
+  }
 
   //call for next subbranch
   for(ptree::const_iterator it = tree.begin(); it != tree.end(); it++) {

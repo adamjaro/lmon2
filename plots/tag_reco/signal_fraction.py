@@ -38,7 +38,7 @@ def signal_fraction():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx12/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx13/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax5/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax5/trk_v3.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"

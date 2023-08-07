@@ -7,8 +7,8 @@ import sys
 
 from ctypes import CDLL, c_char_p, c_void_p
 
-#import ROOT as rt
-#from ROOT import gSystem, gInterpreter
+import ROOT as rt
+from ROOT import gSystem, gInterpreter
 
 #_____________________________________________________________________________
 def main():

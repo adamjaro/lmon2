@@ -96,7 +96,7 @@ void LoadIN::Include(token_it &it) {
   G4String infile = *(++it);
 
   //directory for include files, if set
-  if( !fIncludeDir.isNull() ) {
+  if( !fIncludeDir.empty() ) {
     infile = fIncludeDir + "/" + infile;
   }
 

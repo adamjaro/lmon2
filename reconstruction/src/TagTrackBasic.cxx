@@ -297,6 +297,21 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
       nnInput[LowQ2NNIndexIn::DirY] = globalVec.y();
 
       auto values = m_method->GetRegressionValues();
+
+      double momx = fBeamEn*values[LowQ2NNIndexOut::MomX];
+      double momy = fBeamEn*values[LowQ2NNIndexOut::MomY];
+      double momz = fBeamEn*values[LowQ2NNIndexOut::MomZ];
+      ROOT::Math::XYZVector momentum = ROOT::Math::XYZVector(momx,momy,momz);
+
+
+
+      i.rec2_theta = momentum.Theta();
+      i.rec2_phi   = momentum.Phi();
+      i.rec2_en    = momx*momx+momy*momy+momz*momz+m_electron*m_electron;
+      
+      i.rec2_Q2 = 2*fBeamEn*i.rec2_en*(1-TMath::Cos(TMath::Pi()-i.rec2_theta));
+
+
     }
 
     //set the track parameters

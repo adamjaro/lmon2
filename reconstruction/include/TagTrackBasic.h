@@ -47,6 +47,7 @@ class TagTrackBasic {
     std::string m_method_name{"DNN_CPU"};
     std::string m_file_path{"/home/simon/geant4/lmon2/reconstruction/python/LowQ2_DNN_CPU.weights.xml"};
     bool useTMVA = true;
+    float m_electron{0.000510998928}; //TODO: Link to constant elsewhere?
 
 
     MCParticles::Coll *fMC=0x0;

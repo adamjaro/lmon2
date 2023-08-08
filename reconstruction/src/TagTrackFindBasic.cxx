@@ -57,7 +57,7 @@ void TagTrackFindBasic::SetGeometry(GeoParser *geo) {
   
   setOffset(x,y,z);
 
-  setAngle(geo->GetD("lowQ2_"+fNam+"_1", "theta"));
+  setAngle(geo->GetD("vac_S1", "theta"));
 
 }//SetGeometry
 
@@ -292,6 +292,10 @@ TagTrackFindBasic::Coll::Coll() {
   DATA_ADD_UNIT_ATTR( rec_theta )
   DATA_ADD_UNIT_ATTR( rec_phi )
   DATA_ADD_UNIT_ATTR( rec_Q2 )
+  DATA_ADD_UNIT_ATTR( rec2_en )
+  DATA_ADD_UNIT_ATTR( rec2_theta )
+  DATA_ADD_UNIT_ATTR( rec2_phi )
+  DATA_ADD_UNIT_ATTR( rec2_Q2 )
   DATA_ADD_UNIT_ATTR( ninp )
   DATA_ADD_UNIT_ATTR( ilay )
 

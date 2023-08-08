@@ -242,7 +242,7 @@ void TagTrackBasic::Run(const char *conf) {
 //void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiReco *rec) {
 void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
 
-  if( !rec ) return;
+//   if( !rec ) return;
 
   //track loop
   for(TagTrackFindBasic::Track& i: tag->GetTracks()) {
@@ -271,25 +271,18 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
 
     }//MC loop
 
-    //reconstruction for the track
-    Double_t quant[4]{i.x, i.y, i.theta_x, i.theta_y}; // input tagger quantity
-    Double_t rec_en=0, rec_theta=0, rec_phi=0; // reconstructed electron by reference
-    //Int_t ninp=0;
-    Int_t ipar[2];
-    //Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, &ninp); // perform the reconstruction
-    Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, ipar); // perform the reconstruction
-    if( !stat ) continue;
-
     //TMVA reconstruction
     if(useTMVA){
       ROOT::Math::XYZPoint    localPos(i.x,i.y,0);
       ROOT::Math::XYZPoint    globalPos = localPos+tag->getOffset();
       
       ROOT::Math::XYZVector   localVec(0,0,1);
-      ROOT::Math::RotationZYX rot(0,i.theta_y,i.theta_x);
+      ROOT::Math::RotationZYX rot(0,i.theta_y+tag->getAngle(),i.theta_x);
       ROOT::Math::XYZVector   globalVec = rot(localVec);
       
-      ROOT::Math::XYZPoint    interceptPos =  globalPos-(globalPos.x()/globalPos.x())*globalVec;
+      std::cout << i.theta_y << " " << tag->getAngle() << " " << i.theta_x << std::endl;
+
+      ROOT::Math::XYZPoint    interceptPos =  globalPos-(globalPos.x()/globalVec.x())*globalVec;
       
       nnInput[LowQ2NNIndexIn::PosY] = interceptPos.y();
       nnInput[LowQ2NNIndexIn::PosZ] = interceptPos.z();
@@ -303,16 +296,29 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
       double momz = fBeamEn*values[LowQ2NNIndexOut::MomZ];
       ROOT::Math::XYZVector momentum = ROOT::Math::XYZVector(momx,momy,momz);
 
-
+      std::cout << globalVec << std::endl;
+      std::cout << interceptPos << std::endl << std::endl;
 
       i.rec2_theta = momentum.Theta();
       i.rec2_phi   = momentum.Phi();
-      i.rec2_en    = momx*momx+momy*momy+momz*momz+m_electron*m_electron;
+      i.rec2_en    = sqrt(momx*momx+momy*momy+momz*momz+m_electron*m_electron);
       
       i.rec2_Q2 = 2*fBeamEn*i.rec2_en*(1-TMath::Cos(TMath::Pi()-i.rec2_theta));
 
 
     }
+
+    if(rec){
+    //reconstruction for the track
+    Double_t quant[4]{i.x, i.y, i.theta_x, i.theta_y}; // input tagger quantity
+    Double_t rec_en=0, rec_theta=0, rec_phi=0; // reconstructed electron by reference
+    //Int_t ninp=0;
+    Int_t ipar[2];
+    //Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, &ninp); // perform the reconstruction
+    Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, ipar); // perform the reconstruction
+    if( !stat ) continue;
+
+
 
     //set the track parameters
     i.is_rec = kTRUE;
@@ -325,6 +331,7 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
     //reconstructed electron Q^2 by beam energy, electron energy and polar angle
     i.rec_Q2 = 2*fBeamEn*i.rec_en*(1-TMath::Cos(TMath::Pi()-i.rec_theta));
 
+    }
   }//tracks loop
 
 }//ElectronRec

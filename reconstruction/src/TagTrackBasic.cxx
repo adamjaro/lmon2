@@ -179,11 +179,11 @@ void TagTrackBasic::Run(const char *conf) {
   Long64_t ncls_s1=0, ncls_s2=0, ntrk_s1=0, ntrk_s2=0;
 
   if(useTMVA){
-    m_method = dynamic_cast<TMVA::MethodBase*>(m_reader.BookMVA( m_method_name, m_file_path ));
     m_reader.AddVariable( "LowQ2Tracks[0].loc.a", &nnInput[LowQ2NNIndexIn::PosY] );
     m_reader.AddVariable( "LowQ2Tracks[0].loc.b", &nnInput[LowQ2NNIndexIn::PosZ] );
     m_reader.AddVariable( "sin(LowQ2Tracks[0].phi)*sin(LowQ2Tracks[0].theta)", &nnInput[LowQ2NNIndexIn::DirX] );
     m_reader.AddVariable( "cos(LowQ2Tracks[0].phi)*sin(LowQ2Tracks[0].theta)", &nnInput[LowQ2NNIndexIn::DirY] );
+    m_method = dynamic_cast<TMVA::MethodBase*>(m_reader.BookMVA( m_method_name, m_file_path ));
   }
 
   //event loop

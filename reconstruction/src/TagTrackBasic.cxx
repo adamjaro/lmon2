@@ -21,6 +21,7 @@
 #include "TFile.h"
 #include "TMath.h"
 #include "Math/Vector3D.h" 
+#include "Math/RotationZYX.h" 
 
 //lmon2 base
 #include "GeoParser.h"
@@ -34,6 +35,8 @@
 #include "TrkPlaneBasicHits.h"
 #include "EThetaPhiReco.h"
 #include "EThetaPhiRecoV2.h"
+#include <TMVA/MethodBase.h>
+#include <TMVA/Reader.h>
 
 using namespace std;
 using namespace boost;
@@ -175,6 +178,14 @@ void TagTrackBasic::Run(const char *conf) {
   //total reconstruction counters
   Long64_t ncls_s1=0, ncls_s2=0, ntrk_s1=0, ntrk_s2=0;
 
+  if(useTMVA){
+    m_method = dynamic_cast<TMVA::MethodBase*>(m_reader.BookMVA( m_method_name, m_file_path ));
+    m_reader.AddVariable( "LowQ2Tracks[0].loc.a", &nnInput[LowQ2NNIndexIn::PosY] );
+    m_reader.AddVariable( "LowQ2Tracks[0].loc.b", &nnInput[LowQ2NNIndexIn::PosZ] );
+    m_reader.AddVariable( "sin(LowQ2Tracks[0].phi)*sin(LowQ2Tracks[0].theta)", &nnInput[LowQ2NNIndexIn::DirX] );
+    m_reader.AddVariable( "cos(LowQ2Tracks[0].phi)*sin(LowQ2Tracks[0].theta)", &nnInput[LowQ2NNIndexIn::DirY] );
+  }
+
   //event loop
   Long64_t nev = tree.GetEntries();
   //Long64_t nev = 4;
@@ -270,11 +281,23 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
     if( !stat ) continue;
 
     //TMVA reconstruction
-    ROOT::Math::XYZPoint  localPos(i.x,i.y,0);
-    ROOT::Math::XYZPoint  globalPos = localPos+tag->getOffset();
-    ROOT::Math::XYZVector localVec(0,0,1);
-    localVec.RotateY(i.theta_x);
-    localVec.RotateX(i.theta_y+tag->getAngle());
+    if(useTMVA){
+      ROOT::Math::XYZPoint    localPos(i.x,i.y,0);
+      ROOT::Math::XYZPoint    globalPos = localPos+tag->getOffset();
+      
+      ROOT::Math::XYZVector   localVec(0,0,1);
+      ROOT::Math::RotationZYX rot(0,i.theta_y,i.theta_x);
+      ROOT::Math::XYZVector   globalVec = rot(localVec);
+      
+      ROOT::Math::XYZPoint    interceptPos =  globalPos-(globalPos.x()/globalPos.x())*globalVec;
+      
+      nnInput[LowQ2NNIndexIn::PosY] = interceptPos.y();
+      nnInput[LowQ2NNIndexIn::PosZ] = interceptPos.z();
+      nnInput[LowQ2NNIndexIn::DirX] = globalVec.x();
+      nnInput[LowQ2NNIndexIn::DirY] = globalVec.y();
+
+      auto values = m_method->GetRegressionValues();
+    }
 
     //set the track parameters
     i.is_rec = kTRUE;

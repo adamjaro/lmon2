@@ -12,5 +12,5 @@ include_directories(${SUBDIR_INCLUDE})
 file(GLOB SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx)
 
 add_library (${LIB} SHARED ${SRC})
-target_link_libraries(${LIB} ${Geant4_LIBRARIES} ${Boost_LIBRARIES} ${ROOT_LIBRARIES} ${SUBDIR_LIBS})
+target_link_libraries(${LIB} ROOT::TMVA GenVector ${Geant4_LIBRARIES} ${Boost_LIBRARIES} ${ROOT_LIBRARIES} ${SUBDIR_LIBS})
 

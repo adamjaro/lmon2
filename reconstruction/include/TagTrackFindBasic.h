@@ -12,6 +12,7 @@ class GeoParser;
 #include "TagClustersBasic.h"
 #include "Math/Point3D.h" 
 #include "Math/Vector3D.h" 
+#include "Math/RotationZYX.h" 
 
 class TagTrackFindBasic {
 

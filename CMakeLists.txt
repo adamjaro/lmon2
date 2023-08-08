@@ -7,6 +7,7 @@ set (BIN run_lmon2)
 
 #ROOT
 find_package(ROOT REQUIRED COMPONENTS Core RIO Tree MathCore EG)
+#find_package(ROOT REQUIRED)
 include(${ROOT_USE_FILE})
 
 #Geant
@@ -45,5 +46,5 @@ add_subdirectory(reconstruction)
 
 #binary executable
 add_executable(${BIN} run_lmon2.cxx)
-target_link_libraries(${BIN} ${Geant4_LIBRARIES} ${Boost_LIBRARIES} ${SUBDIR_LIBS})
+target_link_libraries(${BIN}  ${Geant4_LIBRARIES} ${Boost_LIBRARIES} ${SUBDIR_LIBS})
 

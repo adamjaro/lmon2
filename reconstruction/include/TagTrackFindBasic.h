@@ -10,6 +10,8 @@ class GeoParser;
 #include "DetectorData.h"
 
 #include "TagClustersBasic.h"
+#include "Math/Point3D.h" 
+#include "Math/Vector3D.h" 
 
 class TagTrackFindBasic {
 
@@ -34,6 +36,12 @@ class TagTrackFindBasic {
 
     Double_t GetMaxChi2ndf() { return fChi2ndfMax; }
     Double_t GetClsLimMdist() { return fPlanes[0]->GetLimMdist(); }
+
+    ROOT::Math::XYZVector getOffset(){return detectorOffset;}
+    void setOffset(double x, double y, double z){ detectorOffset = ROOT::Math::XYZPoint(x,y,z);}
+
+    double getAngle()        { return detectorAngle;}
+    void   setAngle(double angle){ detectorAngle = angle;}
 
     TagClustersBasic* GetPlane(int i) { return fPlanes[i]; }
     Double_t GetPlaneZ(int i) { return fZ[i]; }
@@ -112,6 +120,8 @@ class TagTrackFindBasic {
 
     Double_t fL=0; // plane spacing, mm
     Double_t fZ[4] = {0,0,0,0}; // local z positions for planes, mm
+    ROOT::Math::XYZVector  detectorOffset{0,0,0};
+    double detectorAngle{0};
 
     std::string fNam;
 

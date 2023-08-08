@@ -51,6 +51,14 @@ void TagTrackFindBasic::SetGeometry(GeoParser *geo) {
   fZ[2] = (1./2)*fL;
   fZ[3] = (3./2)*fL;
 
+  double x = geo->GetD("lowQ2_"+fNam+"_1", "xpos") + geo->GetD("lowQ2_"+fNam+"_4", "xpos");
+  double y = geo->GetD("lowQ2_"+fNam+"_1", "ypos") + geo->GetD("lowQ2_"+fNam+"_4", "ypos");
+  double z = geo->GetD("lowQ2_"+fNam+"_1", "zpos") + geo->GetD("lowQ2_"+fNam+"_4", "zpos");
+  
+  setOffset(x,y,z);
+
+  setAngle(geo->GetD("lowQ2_"+fNam+"_1", "theta"));
+
 }//SetGeometry
 
 //_____________________________________________________________________________

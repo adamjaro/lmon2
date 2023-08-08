@@ -20,6 +20,7 @@
 #include "TTree.h"
 #include "TFile.h"
 #include "TMath.h"
+#include "Math/Vector3D.h" 
 
 //lmon2 base
 #include "GeoParser.h"
@@ -261,6 +262,13 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiReco *rec) {
     Int_t ninp=0;
     Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, &ninp); // perform the reconstruction
     if( !stat ) continue;
+
+    //TMVA reconstruction
+    ROOT::Math::XYZPoint  localPos(i.x,i.y,0);
+    ROOT::Math::XYZPoint  globalPos = localPos+tag->getOffset();
+    ROOT::Math::XYZVector localVec(0,0,1);
+    localVec.RotateY(i.theta_x);
+    localVec.RotateX(i.theta_y+tag->getAngle());
 
     //set the track parameters
     i.is_rec = kTRUE;

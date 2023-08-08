@@ -5,7 +5,9 @@
 // Reconstruction task to run TagTrackFindBasic tracker finder
 
 class EThetaPhiReco;
+class EThetaPhiRecoV2;
 class TagTrackFindBasic;
+
 namespace MCParticles {
   class Coll;
 }
@@ -20,7 +22,8 @@ class TagTrackBasic {
 
   private:
 
-    void ElectronRec(TagTrackFindBasic *tag, EThetaPhiReco *rec);
+    //void ElectronRec(TagTrackFindBasic *tag, EThetaPhiReco *rec);
+    void ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec);
 
     std::string GetStr(boost::program_options::variables_map& opt_map, std::string par);
 

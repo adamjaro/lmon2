@@ -8,19 +8,19 @@
 /lmon/construct/geometry geom.xml
 
 #input
-#/lmon/input/type gun
+/lmon/input/type gun
 #/gun/energy 18 GeV
-#/gun/energy 12 GeV
+/gun/energy 12 GeV
 #/gun/energy 7 GeV
-#/gun/particle e-
+/gun/particle e-
 #/gun/particle gamma
-#/gun/direction 0 0 -1
+/gun/direction 0 0 -1
 
-/lmon/input/type tparticle
-/lmon/input/tparticle/name /home/jaroslav/sim/GETaLM_data/qr/qr_18x275_T3p3_5Mevt.root
+#/lmon/input/type tparticle
+#/lmon/input/tparticle/name /home/jaroslav/sim/GETaLM_data/qr/qr_18x275_T3p3_5Mevt.root
 
 #output
-/lmon/output/name rp2.root
+/lmon/output/name lmon.root
 
 #only with optics turned on
 #/process/optical/boundary/setInvokeSD true
@@ -49,7 +49,7 @@
 
 #/vis/viewer/set/targetPoint -50 0 -15000 mm # B2eR end
 
-/vis/viewer/set/targetPoint -181 0 -25000 mm  # Tagger 1
+/vis/viewer/set/targetPoint -181 0 -20500 mm  # Tagger 1
 #/vis/viewer/set/targetPoint -238 100 -21000 mm
 
 #/vis/viewer/set/targetPoint -480 0 -36500 mm  # Tagger 2

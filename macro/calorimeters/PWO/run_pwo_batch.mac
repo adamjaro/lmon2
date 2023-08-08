@@ -1,8 +1,8 @@
 
 #detector
-#/lmon/construct/geometry geom_pwo_cell.xml
+/lmon/construct/geometry geom_pwo_cell.xml
 #/lmon/construct/geometry geom_pwo_cell.in
-/lmon/construct/geometry geom_pwo_module.xml
+#/lmon/construct/geometry geom_pwo_module.xml
 
 #input
 /lmon/input/type gun
@@ -32,5 +32,5 @@
 
 #/process/optical/boundary/setInvokeSD true
 
-/run/beamOn 1
+#/run/beamOn 1
 

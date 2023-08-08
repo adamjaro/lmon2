@@ -77,7 +77,8 @@ class TagTrackFindBasic {
       Double_t rec_theta = 0; // electron polar angle, rad
       Double_t rec_phi = 0; // electron azimuthal angle, rad
       Double_t rec_Q2 = 0; // reconstructed electron Q^2, GeV^2
-      Int_t ninp = 0; //number of inputs used for reconstruction
+      Int_t ninp = 0; // number of inputs used for reconstruction
+      Int_t ilay = -1; // layer index from reconstruction
       Bool_t has_mcp = 0; // track is paired with MC particle
       Double_t mcp_en = 0; // MC particle energy, GeV
       Double_t mcp_theta = 0; // MC particle polar angle, rad

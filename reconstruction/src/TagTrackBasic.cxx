@@ -331,11 +331,23 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
     if( !stat ) continue;
 
     //TMVA reconstruction
-    ROOT::Math::XYZPoint  localPos(i.x,i.y,0);
-    ROOT::Math::XYZPoint  globalPos = localPos+tag->getOffset();
-    ROOT::Math::XYZVector localVec(0,0,1);
-    localVec.RotateY(i.theta_x);
-    localVec.RotateX(i.theta_y+tag->getAngle());
+    if(useTMVA){
+      ROOT::Math::XYZPoint    localPos(i.x,i.y,0);
+      ROOT::Math::XYZPoint    globalPos = localPos+tag->getOffset();
+      
+      ROOT::Math::XYZVector   localVec(0,0,1);
+      ROOT::Math::RotationZYX rot(0,i.theta_y,i.theta_x);
+      ROOT::Math::XYZVector   globalVec = rot(localVec);
+      
+      ROOT::Math::XYZPoint    interceptPos =  globalPos-(globalPos.x()/globalPos.x())*globalVec;
+      
+      nnInput[LowQ2NNIndexIn::PosY] = interceptPos.y();
+      nnInput[LowQ2NNIndexIn::PosZ] = interceptPos.z();
+      nnInput[LowQ2NNIndexIn::DirX] = globalVec.x();
+      nnInput[LowQ2NNIndexIn::DirY] = globalVec.y();
+
+      auto values = m_method->GetRegressionValues();
+    }
 
     //set the track parameters
     i.is_rec = kTRUE;

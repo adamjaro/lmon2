@@ -13,7 +13,7 @@ class EThetaPhiRecoV2 {
     EThetaPhiRecoV2(std::string nam, boost::program_options::options_description *opt=0x0);
 
     void MakeQuantity(std::string qnam);
-    void Initialize(boost::program_options::variables_map *);
+    void Initialize(boost::program_options::variables_map *opt_map);
     void AddInput(Double_t *quant, Double_t en, Double_t theta, Double_t phi);
     void Finalize();
     void Export();

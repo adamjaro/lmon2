@@ -29,6 +29,7 @@
 /run/initialize
 
 /vis/open OGL 800x600-0+0
+#/vis/open OIQt
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:

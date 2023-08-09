@@ -54,7 +54,7 @@ void TagTrackFindBasic::SetGeometry(GeoParser *geo) {
 }//SetGeometry
 
 //_____________________________________________________________________________
-void TagTrackFindBasic::CreateOutput(TTree *tree, bool create_planes) {
+void TagTrackFindBasic::CreateOutput(TTree *tree, bool create_planes, bool create_tracks) {
 
   //individual planes
   if(create_planes) {
@@ -62,7 +62,9 @@ void TagTrackFindBasic::CreateOutput(TTree *tree, bool create_planes) {
   }
 
   //tracks
-  fTracks.CreateOutput(fNam+"_tracks", tree);
+  if(create_tracks) {
+    fTracks.CreateOutput(fNam+"_tracks", tree);
+  }
 
 }//CreateOutput
 

@@ -32,6 +32,15 @@ using namespace boost;
 EThetaPhiRecoV2::EThetaPhiRecoV2(string nam, program_options::options_description *opt):
     fNam(nam), fOpt(opt) {
 
+  if(!opt) return;
+
+  //program options for layers configuration with default values
+  fOpt->add_options()
+    ((fNam+".nlayers").c_str(), program_options::value<int>()->default_value(10), "Number of layers")
+    ((fNam+".layer0_bins").c_str(), program_options::value<int>()->default_value(1000), "First layer #0 segmentation")
+    ((fNam+".layer_dec").c_str(), program_options::value<int>()->default_value(100), "Decrement in bins to each next layer")
+  ;
+
 }//EThetaPhiRecoV2
 
 //_____________________________________________________________________________
@@ -42,9 +51,9 @@ void EThetaPhiRecoV2::MakeQuantity(std::string qnam) {
 }//MakeQuantity
 
 //_____________________________________________________________________________
-void EThetaPhiRecoV2::Initialize(program_options::variables_map *) {
+void EThetaPhiRecoV2::Initialize(program_options::variables_map *opt_map) {
 
-  cout << "EThetaPhiRecoV2::Initialize" << endl;
+  cout << "EThetaPhiRecoV2::Initialize, " << fNam << endl;
 
   //input cache
   fCacheFile = new TFile((fNam+"_tmp.root").c_str(), "recreate");
@@ -65,10 +74,10 @@ void EThetaPhiRecoV2::Initialize(program_options::variables_map *) {
   //fCacheFile->ls();
   //fCacheTree->Print();
 
-  //default layers configuration, to be implemented as optional parameters
-  Int_t nlayers = 10; // number of all layers
-  Int_t layer0_bins = 1000; // segmentation of the first layer #0
-  Int_t layer_dec = 100; // decrement in bins to each next layer
+  //layers configuration from optional parameters
+  Int_t nlayers = opt_map->at(fNam+".nlayers").as<int>(); // number of all layers
+  Int_t layer0_bins = opt_map->at(fNam+".layer0_bins").as<int>(); // segmentation of the first layer #0
+  Int_t layer_dec = opt_map->at(fNam+".layer_dec").as<int>(); // decrement in bins to each next layer
 
   //create the layers
   for(Int_t i=0; i<nlayers; i++) {

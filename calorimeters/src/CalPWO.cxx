@@ -178,13 +178,14 @@ void CalPWO::SetCrystalOptics(G4Material *mat) {
   std::vector<G4double> scin_fast = {1., 1.};
 
   G4MaterialPropertiesTable *tab = new G4MaterialPropertiesTable();
-  tab->AddProperty("FASTCOMPONENT", LambdaNMtoEV(scin_lam), scin_fast, true);
-  tab->AddProperty("SLOWCOMPONENT", LambdaNMtoEV(scin_lam), scin_fast, true);
+  tab->AddProperty("SCINTILLATIONCOMPONENT1", LambdaNMtoEV(scin_lam), scin_fast);
+  tab->AddProperty("SCINTILLATIONCOMPONENT2", LambdaNMtoEV(scin_lam), scin_fast);
   //tab->AddConstProperty("FASTTIMECONSTANT", 1*ps);
-  tab->AddConstProperty("FASTTIMECONSTANT", 1.67*ns, true);
-  tab->AddConstProperty("SLOWTIMECONSTANT", 6.6*ns, true);
-  tab->AddConstProperty("YIELDRATIO", 0.5, true);
+  tab->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 1.67*ns);
+  tab->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 6.6*ns);
   tab->AddConstProperty("SCINTILLATIONYIELD", 300/MeV);
+  tab->AddConstProperty("SCINTILLATIONYIELD1", 0.5);
+  tab->AddConstProperty("SCINTILLATIONYIELD2", 0.5);
   tab->AddConstProperty("RESOLUTIONSCALE", 1.);
 
   //uniform optical properties

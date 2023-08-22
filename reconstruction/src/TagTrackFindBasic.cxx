@@ -51,13 +51,21 @@ void TagTrackFindBasic::SetGeometry(GeoParser *geo) {
   fZ[2] = (1./2)*fL;
   fZ[3] = (3./2)*fL;
 
-  double x = geo->GetD("lowQ2_"+fNam+"_1", "xpos") + geo->GetD("lowQ2_"+fNam+"_4", "xpos");
-  double y = geo->GetD("lowQ2_"+fNam+"_1", "ypos") + geo->GetD("lowQ2_"+fNam+"_4", "ypos");
-  double z = geo->GetD("lowQ2_"+fNam+"_1", "zpos") + geo->GetD("lowQ2_"+fNam+"_4", "zpos");
+  double theta = geo->GetD("vac_"+fNam, "theta");
+  double xvac  = geo->GetD("vac_"+fNam, "xpos" );
+  double zvac  = geo->GetD("vac_"+fNam, "zpos" );
   
-  setOffset(x,y,z);
+  double x     = (geo->GetD("lowQ2_"+fNam+"_1", "xpos") + geo->GetD("lowQ2_"+fNam+"_4", "xpos"))/2;
+  double y     = (geo->GetD("lowQ2_"+fNam+"_1", "ypos") + geo->GetD("lowQ2_"+fNam+"_4", "ypos"))/2;
+  double z     = (geo->GetD("lowQ2_"+fNam+"_1", "zpos") + geo->GetD("lowQ2_"+fNam+"_4", "zpos"))/2;
+  
+  double globalx = xvac+x*cos(theta)+z*sin(theta);
+  double globaly = y;
+  double globalz = zvac+z*cos(theta)+x*sin(theta);
 
-  setAngle(geo->GetD("vac_S1", "theta"));
+  setOffset(globalx,globaly,globalz);
+
+  setAngle(theta);
 
 }//SetGeometry
 

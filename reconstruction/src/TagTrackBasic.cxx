@@ -276,8 +276,8 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
       ROOT::Math::XYZPoint    localPos(i.x,i.y,0);
       ROOT::Math::XYZPoint    globalPos = localPos+tag->getOffset();
       
-      ROOT::Math::XYZVector   localVec(0,0,1);
-      ROOT::Math::RotationZYX rot(0,i.theta_y+tag->getAngle(),i.theta_x);
+      ROOT::Math::XYZVector   localVec(0,0,-1);
+      ROOT::Math::RotationZYX rot(0,i.theta_y,i.theta_x);
       ROOT::Math::XYZVector   globalVec = rot(localVec);
       
       std::cout << i.theta_y << " " << tag->getAngle() << " " << i.theta_x << std::endl;
@@ -297,6 +297,8 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
       ROOT::Math::XYZVector momentum = ROOT::Math::XYZVector(momx,momy,momz);
 
       std::cout << globalVec << std::endl;
+      std::cout << localPos << std::endl;
+      std::cout << globalPos << std::endl;
       std::cout << interceptPos << std::endl << std::endl;
 
       i.rec2_theta = momentum.Theta();

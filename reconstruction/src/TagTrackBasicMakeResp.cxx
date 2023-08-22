@@ -48,6 +48,7 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
     ("main.outfile", program_options::value<string>(), "Output from the analysis")
     ("main.max_chi2ndf", program_options::value<double>(), "Maximal tracks Chi2/NDF")
     ("main.min_cls_dist", program_options::value<double>(), "Minimal cluster distance")
+    ("main.tracks_output", program_options::value<bool>()->default_value(true), "Write output for tracks")
   ;
 
   //reconstruction for tagger stations
@@ -120,8 +121,10 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
   s1.ConnectHitsInput(&tree);
   s2.ConnectHitsInput(&tree);
 
-  s1.CreateOutput(&otree, false); // no output for planes, tracks only
-  s2.CreateOutput(&otree, false);
+  bool tracks_output = opt_map["main.tracks_output"].as<bool>();
+  cout << "Tracks output: " << tracks_output << endl;
+  s1.CreateOutput(&otree, false, tracks_output); // no output for planes, tracks as required
+  s2.CreateOutput(&otree, false, tracks_output);
 
   //selection criteria
   if( opt_map.find("main.max_chi2ndf") != opt_map.end() ) {
@@ -172,11 +175,13 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
 
   }//event loop
 
+  cout << "Finalizing..." << endl;
   s1_rec->Finalize();
   s2_rec->Finalize();
 
   otree.Write(0, TObject::kOverwrite);
 
+  cout << "Exporting..." << endl;
   s1_rec->Export();
   s2_rec->Export();
 

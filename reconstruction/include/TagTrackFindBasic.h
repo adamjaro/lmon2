@@ -23,7 +23,7 @@ class TagTrackFindBasic {
     void SetGeometry(GeoParser *geo);
     void ConnectHitsInput(TTree *tree) { for(TagClustersBasic *i: fPlanes) i->ConnectHitsInput(tree); }
 
-    void CreateOutput(TTree *tree, bool create_planes=true);
+    void CreateOutput(TTree *tree, bool create_planes=true, bool create_tracks=true);
 
     void ConnecTracksInput(TTree *) {}
 

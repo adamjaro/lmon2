@@ -4,6 +4,7 @@
 
 import ROOT as rt
 from ROOT import gPad, gROOT, gStyle, TFile, gSystem, TMath
+from ROOT import RDataFrame
 
 import sys
 sys.path.append("../")
@@ -70,11 +71,11 @@ def energy_pitheta():
 
     #reconstruction efficiency in energy (GeV) and pi - theta (mrad)
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax1/trk_v1.root"
 
     #tagger 1 or 2
-    tag = 3
+    tag = 1
 
     #bins in energy, GeV
     xbin = 0.3
@@ -87,29 +88,33 @@ def energy_pitheta():
     ymax = 12
 
     if tag == 1:
-        sel = "s1_ntrk>0"
+        #sel = "s1_ntrk>0"
+        sel = "s1_nrec>0"
+        #sel = "s1_ntrk>0 && s1_nrec==0"
         lab_sel = "Tagger 1"
     elif tag == 2:
-        sel = "s2_ntrk>0"
+        #sel = "s2_ntrk>0"
+        sel = "s2_nrec>0"
         lab_sel = "Tagger 2"
     elif tag == 3:
         sel = "s1_ntrk>0 || s2_ntrk>0"
         lab_sel = ""
 
-    infile = TFile.Open(inp)
-    tree = infile.Get("event")
+    df = RDataFrame("event", inp)
+    df = df.Define("pitheta", "(TMath::Pi()-true_el_theta)*1e3")
+    df = df.Define("s1_nrec", "int n=0; for(auto& i:s1_tracks_is_rec) { if(i) n++; } return n;")
+    df = df.Define("s2_nrec", "int n=0; for(auto& i:s2_tracks_is_rec) { if(i) n++; } return n;")
 
     can = ut.box_canvas()
+    hx = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, ybin, ymin, ymax) )
 
-    hTag = ut.prepare_TH2D("hTag", xbin, xmin, xmax, ybin, ymin, ymax)
-    hAll = ut.prepare_TH2D("hAll", xbin, xmin, xmax, ybin, ymin, ymax)
+    hAll = df.Histo2D(hx, "true_el_E", "pitheta")
+    #hAll = df.Filter("s1_ntrk>0").Histo2D(hx, "true_el_E", "pitheta")
+    hTag = df.Filter(sel).Histo2D(hx, "true_el_E", "pitheta")
 
-    #form = "true_el_E:(TMath::Pi()-true_el_theta)*1e3" # convert to mrad
-    form = "(TMath::Pi()-true_el_theta)*1e3:true_el_E" # convert to mrad
-    tree.Draw(form+" >> hTag", sel)
-    tree.Draw(form+" >> hAll")
+    hTag = hTag.GetValue()
 
-    hTag.Divide(hAll)
+    hTag.Divide(hAll.GetValue())
 
     xtit = "Electron energy #it{E} (GeV)"
     ytit = "Electron polar angle #it{#pi}-#it{#theta} (mrad)"

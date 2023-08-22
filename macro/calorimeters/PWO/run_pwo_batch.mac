@@ -6,8 +6,8 @@
 
 #input
 /lmon/input/type gun
-#/gun/energy 511 keV
-/gun/energy 5 GeV
+/gun/energy 511 keV
+#/gun/energy 0.5 GeV
 #/gun/energy 200 MeV
 /gun/particle gamma
 #/gun/particle e-
@@ -32,5 +32,8 @@
 
 #/process/optical/boundary/setInvokeSD true
 
-#/run/beamOn 1
+#/process/optical/cerenkov/verbose 2
+#/process/optical/scintillation/verbose 2
+
+/run/beamOn 1
 

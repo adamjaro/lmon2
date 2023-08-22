@@ -124,7 +124,7 @@
   <const name="vac_xS1C" value="0.5*(vac_xS1SB+vac_xS1ET)"/>
 
   <!-- section for tagger 1 -->
-  <detector type="BoxSegment" name="vac_S1"
+  <detector type="BoxSegment" name="vac_s1"
     dx="vac_S1PL" dy="2.*vac_rBI" dz="vac_S1AL"
     zpos="vac_zS1C" xpos="vac_xS1C" theta="vac_TQ3"
     vis="0:1:0:3">
@@ -258,7 +258,7 @@
   <const name="vac_xS2C" value="0.5*(vac_xS2SB+vac_xS2ET)"/>
 
   <!-- section for tagger 2 -->
-  <detector type="BoxSegment" name="vac_S2"
+  <detector type="BoxSegment" name="vac_s2"
     dx="vac_S2PL" dy="2.*vac_rBI" dz="vac_S2AL"
     zpos="vac_zS2C" xpos="vac_xS2C" theta="vac_TQ3"
     vis="0:1:0:2">

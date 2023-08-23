@@ -127,6 +127,9 @@ void TagTrackBasic::Run(const char *conf) {
   cout << "Output: " << outfile << endl;
   TFile out(outfile.c_str(), "recreate");
 
+  fPosHist = new TH2F("poshist","poshist",50,-20 ,20   ,50,-14 ,-11 );
+  fVecHist = new TH2F("vechist","vechist",50,-4.5,-1.75,50,-0.1,0.1);
+
   //interaction (event) output tree
   TTree otree("event", "event");
 
@@ -229,7 +232,8 @@ void TagTrackBasic::Run(const char *conf) {
   }//event loop
 
   otree.Write(0, TObject::kOverwrite);
-
+  fPosHist->Write();
+  fVecHist->Write();
   out.Close();
 
   cout << "Events: " << nev << endl;
@@ -276,11 +280,11 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
       ROOT::Math::XYZPoint    localPos(i.x,i.y,0);
       ROOT::Math::XYZPoint    globalPos = localPos+tag->getOffset();
       
-      ROOT::Math::XYZVector   localVec(0,0,-1);
-      ROOT::Math::RotationZYX rot(0,i.theta_y,i.theta_x);
+      ROOT::Math::XYZVector   localVec(0,0,-1.0);
+      ROOT::Math::RotationZYX rot(0,i.theta_x,i.theta_y);
       ROOT::Math::XYZVector   globalVec = rot(localVec);
       
-      std::cout << i.theta_y << " " << tag->getAngle() << " " << i.theta_x << std::endl;
+      //      std::cout << i.theta_y << " " << tag->getAngle() << " " << i.theta_x << std::endl;
 
       ROOT::Math::XYZPoint    interceptPos =  globalPos-(globalPos.x()/globalVec.x())*globalVec;
       
@@ -289,6 +293,9 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
       nnInput[LowQ2NNIndexIn::DirX] = globalVec.x();
       nnInput[LowQ2NNIndexIn::DirY] = globalVec.y();
 
+      fPosHist->Fill(interceptPos.y(),interceptPos.z()/1000);
+      fVecHist->Fill(globalVec.x()*100,globalVec.y()*100);
+
       auto values = m_method->GetRegressionValues();
 
       double momx = fBeamEn*values[LowQ2NNIndexOut::MomX];
@@ -296,10 +303,11 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
       double momz = fBeamEn*values[LowQ2NNIndexOut::MomZ];
       ROOT::Math::XYZVector momentum = ROOT::Math::XYZVector(momx,momy,momz);
 
-      std::cout << globalVec << std::endl;
-      std::cout << localPos << std::endl;
-      std::cout << globalPos << std::endl;
-      std::cout << interceptPos << std::endl << std::endl;
+//       std::cout << 100*globalVec << std::endl;
+//       std::cout << localPos << std::endl;
+//       std::cout << globalPos << std::endl;
+//       std::cout << interceptPos << std::endl;
+//       std::cout << std::endl;
 
       i.rec2_theta = momentum.Theta();
       i.rec2_phi   = momentum.Phi();

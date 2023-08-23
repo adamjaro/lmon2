@@ -6,6 +6,7 @@
 
 #include <TMVA/MethodBase.h>
 #include <TMVA/Reader.h>
+#include <TH2F.h>
 
 class EThetaPhiReco;
 class EThetaPhiRecoV2;
@@ -49,6 +50,9 @@ class TagTrackBasic {
     bool useTMVA = true;
     float m_electron{0.000510998928}; //TODO: Link to constant elsewhere?
 
+    TFile* oFile;
+    TH2F*  fPosHist;
+    TH2F*  fVecHist;
 
     MCParticles::Coll *fMC=0x0;
 

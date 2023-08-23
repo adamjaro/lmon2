@@ -52,14 +52,15 @@ void TagTrackFindBasic::SetGeometry(GeoParser *geo) {
   fZ[3] = (3./2)*fL;
 
   double theta = geo->GetD("vac_"+fNam, "theta");
-  double xvac  = geo->GetD("vac_"+fNam, "xpos" );
+  double xvac  = geo->GetD("vac_"+fNam, "xpos" )/2;
   double zvac  = geo->GetD("vac_"+fNam, "zpos" );
   
   double x     = (geo->GetD("lowQ2_"+fNam+"_1", "xpos") + geo->GetD("lowQ2_"+fNam+"_4", "xpos"))/2;
   double y     = (geo->GetD("lowQ2_"+fNam+"_1", "ypos") + geo->GetD("lowQ2_"+fNam+"_4", "ypos"))/2;
   double z     = (geo->GetD("lowQ2_"+fNam+"_1", "zpos") + geo->GetD("lowQ2_"+fNam+"_4", "zpos"))/2;
   
-  double globalx = xvac+x*cos(theta)+z*sin(theta);
+  //  double globalx = 0;//xvac;//+x*cos(theta)+z*sin(theta);
+  double globalx = x*cos(theta)+z*sin(theta);
   double globaly = y;
   double globalz = zvac+z*cos(theta)+x*sin(theta);
 

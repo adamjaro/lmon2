@@ -24,6 +24,7 @@
 #include "UcalA290.h"
 #include "WScFiZXv3.h"
 #include "CalPWO.h"
+#include "QCal1.h"
 
 //macros
 #define ADD_DETECTOR(det) (fDets.insert( make_pair(#det, &CaloBuilder::MakeDet<det>) ))
@@ -40,6 +41,7 @@ CaloBuilder::CaloBuilder(G4LogicalVolume *top, GeoParser *geo): BuilderBase(),
   ADD_DETECTOR( UcalA290 );
   ADD_DETECTOR( WScFiZXv3 );
   ADD_DETECTOR( CalPWO );
+  ADD_DETECTOR( QCal1 );
 
 }//CaloBuilder
 

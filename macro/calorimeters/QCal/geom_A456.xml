@@ -1,0 +1,24 @@
+
+<main>
+
+  <!-- top volume -->
+  <detector
+    name="topv" type="top"
+    xsiz = "500" ysiz="500" zsiz = "10000"> <!-- mm -->
+  </detector>
+
+  <const name="qcal_modz" value="1510"/>
+
+  <!-- QCal1 set as ZPc in NIMA 456 (2001) 248-258 -->
+
+  <detector
+    type="QCal1" name="qcal"
+    modx="160" mody="160" modz="qcal_modz" zpos="-qcal_modz/2"
+    nx="1" ny="1"
+    cell_xy="160" cell_z="1500"
+    cell_mat_name="QCal1_Copper"
+    fiber_clad_D="0.54" fiber_core_D="0.5" fiber_dx="4">
+  </detector>
+
+</main>
+

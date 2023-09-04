@@ -1,0 +1,24 @@
+
+<main>
+
+  <!-- pixel size along x and y, mm -->
+  <const name="tag_dxy" value="0.1"/>
+
+  <!-- number of pixels along x and y -->
+  <const name="tag_nxy" value="40"/>
+
+  <!-- tagger 1, plane 1 -->
+  <detector type="Timepix4v1" name="lowQ2_s1_1"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy"
+    lay_vis="0:0:1:2"
+    >
+  </detector>
+
+  <!-- top volume -->
+  <detector
+    name="topv" type="top"
+    xsiz = "500" ysiz="500" zsiz = "10000"> <!-- mm -->
+  </detector>
+
+</main>
+

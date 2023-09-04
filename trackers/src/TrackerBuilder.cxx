@@ -20,6 +20,7 @@
 
 //local detectors and components
 #include "TrkPlaneBasic.h"
+#include "Timepix4v1.h"
 
 //macros
 #define ADD_DETECTOR(det) (fDets.insert( make_pair(#det, &TrackerBuilder::MakeDet<det>) ))
@@ -31,6 +32,7 @@ TrackerBuilder::TrackerBuilder(G4LogicalVolume *top, GeoParser *geo): BuilderBas
   G4cout << "TrackerBuilder::TrackerBuilder" << G4endl;
 
   ADD_DETECTOR( TrkPlaneBasic );
+  ADD_DETECTOR( Timepix4v1 );
 
 }//TrackerBuilder
 

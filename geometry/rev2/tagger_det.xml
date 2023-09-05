@@ -1,0 +1,116 @@
+
+<main>
+
+  <!-- low-Q2 tagger detectors -->
+
+  <!-- pixel size along x and y, mm -->
+  <const name="tag_dxy" value="0.1"/>
+
+  <!-- number of pixels along x and y -->
+  <const name="tag_nxy" value="1500"/>
+
+  <!-- plane thickness along z, mm, 50 micro meters -->
+  <const name="tag_size_z" value="0.05"/>
+
+  <!-- spacing in z for individual planes, mm -->
+  <const name="tag_iz" value="300."/>
+
+  <!-- offset along z for the first plane after exit window, mm -->
+  <const name="tag_ofs" value="50."/>
+
+  <!-- offset in x from beampipe wall, mm -->
+  <const name="tag_ofs_x" value="5."/>
+
+  <!-- visibility for tagger planes -->
+  <const name="tag_planes_vis" value="0:1:0:0.7"/>
+
+  <!-- plane size set by pixels -->
+  <const name="tag_size_xy" value="tag_dxy*tag_nxy"/>
+
+  <!-- local x position for the planes in tagger 1 -->  
+  <const name="tag_S1_pos_x" value="0.5*vac_S1PL-vac_wall_D-0.5*tag_size_xy-tag_ofs_x"/>
+
+  <!-- local z position for starting plane in tagger 1 -->
+  <const name="tag_S1_start_z" value="0.5*vac_S1AL-vac_S1_ew_Lz-vac_S1_ew_DeltaLz-tag_ofs"/>
+
+
+  <!-- Tagger 1 planes 1 - 4, ordered in increasing z -->
+
+  <!-- tagger 1, plane 1 -->
+  <detector type="Timepix4v1" name="lowQ2_s1_1"
+    zpos="tag_S1_start_z-3.*tag_iz" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+  <!-- tagger 1, plane 2 -->
+  <detector type="Timepix4v1" name="lowQ2_s1_2"
+    zpos="tag_S1_start_z-2.*tag_iz" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+  <!-- tagger 1, plane 3 -->
+  <detector type="Timepix4v1" name="lowQ2_s1_3"
+    zpos="tag_S1_start_z-tag_iz" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+  <!-- tagger 1, plane 4 -->
+  <detector type="Timepix4v1" name="lowQ2_s1_4"
+    zpos="tag_S1_start_z" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+  <!-- Support steel plate below tagger 1 planes -->
+
+  <const name="tag_plate_dy" value="10"/> <!-- plate thickness along y, mm -->
+  <const name="tag_plate_dx" value="vac_S1PL-2*vac_wall_D"/> <!-- plate length in x -->
+  <const name="tag_plate_dz" value="3*tag_iz+80"/> <!-- plate length in z, mm -->
+
+  <detector type="BoxSegment" name="tag_S1_plate"
+    dx="tag_plate_dx" dy="tag_plate_dy" dz="tag_plate_dz"
+    zpos="tag_S1_start_z-1.5*tag_iz" ypos="-0.5*tag_size_xy-0.5*tag_plate_dy"
+    vis="0.5:0.5:0.5:1" place_into="vac_S1"
+    mat_name="G4_Fe">
+  </detector>
+
+
+
+
+
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

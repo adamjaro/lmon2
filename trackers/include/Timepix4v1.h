@@ -4,6 +4,7 @@
 
 #include "Detector.h"
 #include "G4VSensitiveDetector.hh"
+#include "TrkPlaneBasicHits.h"
 
 class Timepix4v1 : public Detector, public G4VSensitiveDetector {
 
@@ -13,9 +14,12 @@ class Timepix4v1 : public Detector, public G4VSensitiveDetector {
 
     //called via Detector
     virtual const G4String& GetName() const {return fNam;}
+    virtual void CreateOutput(TTree*);
+    virtual void ClearEvent();
+    virtual void FinishEvent();
 
     //called via G4VSensitiveDetector
-    virtual G4bool ProcessHits(G4Step *step, G4TouchableHistory*) { return true; }
+    virtual G4bool ProcessHits(G4Step *step, G4TouchableHistory*);
 
   private:
 
@@ -26,6 +30,10 @@ class Timepix4v1 : public Detector, public G4VSensitiveDetector {
 
     G4String fNam; // name of detector sensitive logical volume
     GeoParser *fGeo; // geometry parser
+
+    const MCParticleAction *fStack; // stack for primary particles
+
+    TrkPlaneBasicHits::Coll fHits; // hits collection
 
 };
 

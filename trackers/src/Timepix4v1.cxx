@@ -3,15 +3,20 @@
 //
 // Timepix4, implementation version 1
 //
-// dxy, nx, ny
+// Geometry parameters:
+//  dxy (mm): pixel size in x and y
+//  nx, ny: number of pixels along x and y
 //
-// lay_Cu_dz, lay_PCB_circuit_dz, lay_PCB_TSV_dz
-// lay_ASIC_dz, lay_Si_dz
-// lay_vis, place_into, pix_vis
-// xpos, ypos, zpos
-// Cu_mat_name, Cu_vis
-// PCB_circuit_mat_name, PCB_circuit_vis
-// TSV_mat_name, TSV_vis , ASIC_mat_name, ASIC_vis
+// Optional geometry parameters:
+//  place_into: name of volume to place the Timepix4v1 to
+//  xpos, ypos, zpos (mm): position in the volume where the detector is placed
+//  lay_Cu_dz, lay_PCB_circuit_dz, lay_PCB_TSV_dz
+//  lay_ASIC_dz, lay_Si_dz (mm): thickness of individual layers
+//  lay_vis, pix_vis: visibility of the entire layer and for individual pixels
+//  Cu_mat_name, Cu_vis: material name and visibility for Cu back layer
+//  PCB_circuit_mat_name, PCB_circuit_vis: material and visibility for PCB
+//  TSV_mat_name, TSV_vis: material and visibility for TSV PCB layer
+//  ASIC_mat_name, ASIC_vis: material and visibility for ASIC layer
 //
 //_____________________________________________________________________________
 
@@ -33,11 +38,12 @@
 //local classes
 #include "GeoParser.h"
 #include "ColorDecoder.h"
+#include "MCParticleAction.h"
 #include "Timepix4v1.h"
 
 //_____________________________________________________________________________
 Timepix4v1::Timepix4v1(const G4String& nam, GeoParser *geo, G4LogicalVolume *top):
-   Detector(), G4VSensitiveDetector(nam), fNam(nam), fGeo(geo) {
+   Detector(), G4VSensitiveDetector(nam), fNam(nam), fGeo(geo), fStack(0x0) {
 
   G4cout << "Timepix4v1: " << fNam << G4endl;
 
@@ -224,6 +230,96 @@ G4LogicalVolume* Timepix4v1::GetMotherVolume(G4String mother_nam, G4LogicalVolum
   return 0x0;
 
 }//GetMotherVolume
+
+//_____________________________________________________________________________
+G4bool Timepix4v1::ProcessHits(G4Step *step, G4TouchableHistory*) {
+
+  //G4cout << "Timepix4v1::ProcessHits" << G4endl;
+
+  //pixel location
+  const G4TouchableHandle& hnd = step->GetPreStepPoint()->GetTouchableHandle();
+  G4int ipix = hnd->GetCopyNumber(); // pixel index in the row
+  G4int irow = hnd->GetCopyNumber(1); // row index in the layer
+
+  //global pixel position
+  G4ThreeVector origin(0, 0, 0);
+  G4ThreeVector gpos = hnd->GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
+  G4double x = gpos.x()/mm;
+  G4double y = gpos.y()/mm;
+  G4double z = gpos.z()/mm;
+
+  //G4cout << "ipix, irow, x, y, z (mm): " << ipix << " " << irow << " " << x << " " << y << " " << z << G4endl;
+
+  //deposited energy in step
+  G4double en = step->GetTotalEnergyDeposit()/keV;
+
+  //track ID and PDG in the step
+  G4Track *track = step->GetTrack();
+  G4int itrk = track->GetTrackID();
+  G4int pdg = track->GetParticleDefinition()->GetPDGEncoding();
+
+  //track by primary particle
+  G4bool is_prim = track->GetParentID() > 0 ? false : true;
+
+  //ID of primary particle for the hit
+  Int_t prim_id = fStack->GetPrimaryID(itrk);
+
+  //hit at the given pixel location
+  TrkPlaneBasicHits::Hit& hit = fHits.ConstructedAt( std::make_pair(ipix, irow),
+    TrkPlaneBasicHits::Hit(ipix, irow, x, y, z, itrk, pdg, is_prim, prim_id) );
+
+  //add deposited energy in the hit
+  hit.en += en;
+
+  //lowest track ID associated with the hit and its PDG code
+  if( itrk < hit.itrk ) {
+    hit.itrk = itrk;
+    hit.pdg = pdg;
+  }
+
+  //update primary flag if not set
+  if( hit.is_prim == kFALSE ) {
+    hit.is_prim = is_prim;
+  }
+
+  //lowest primary ID for the hit
+  if( prim_id < hit.prim_id ) {
+
+    hit.prim_id = prim_id;
+  }
+
+  return true;
+
+}//ProcessHits
+
+//_____________________________________________________________________________
+void Timepix4v1::CreateOutput(TTree *tree) {
+
+  fHits.CreateOutput(fNam, tree);
+
+  fStack = static_cast<const MCParticleAction*>( G4RunManager::GetRunManager()->GetUserTrackingAction() );
+
+}//CreateOutput
+
+//_____________________________________________________________________________
+void Timepix4v1::ClearEvent() {
+
+  fHits.ClearEvent();
+
+}//ClearEvent
+
+//_____________________________________________________________________________
+void Timepix4v1::FinishEvent() {
+
+  fHits.FinishEvent();
+
+}//FinishEvent
+
+
+
+
+
+
 
 
 

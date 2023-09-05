@@ -7,7 +7,7 @@
     xsiz = "500" ysiz="500" zsiz = "10000"> <!-- mm -->
   </detector>
 
-  <const name="qcal_modz" value="1510"/>
+  <const name="qcal_modz" value="1510"/> <!-- mm -->
 
   <!-- QCal1 set as ZPc in NIMA 456 (2001) 248-258 -->
 

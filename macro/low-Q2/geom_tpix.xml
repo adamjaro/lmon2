@@ -5,12 +5,12 @@
   <const name="tag_dxy" value="0.1"/>
 
   <!-- number of pixels along x and y -->
-  <const name="tag_nxy" value="40"/>
+  <const name="tag_nxy" value="5"/>
 
   <!-- tagger 1, plane 1 -->
   <detector type="Timepix4v1" name="lowQ2_s1_1"
     dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy"
-    lay_vis="0:0:1:2"
+    lay_vis="0:0:1:2" pix_vis="0:1:0:2"
     >
   </detector>
 

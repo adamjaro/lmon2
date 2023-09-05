@@ -42,8 +42,11 @@ void TagTrackFindBasic::SetGeometry(GeoParser *geo) {
   for(TagClustersBasic *i: fPlanes) i->SetGeometry(geo);
 
   //plane spacing, mm
-  fL = geo->GetD("lowQ2_"+fNam+"_2", "zpos") - geo->GetD("lowQ2_"+fNam+"_1", "zpos");
-  //cout << "L: " << fL << endl;
+  fL = 300;
+  if( geo->GetOptD("lowQ2_"+fNam+"_2", "zpos", fL) ) {
+    fL = geo->GetD("lowQ2_"+fNam+"_2", "zpos") - geo->GetD("lowQ2_"+fNam+"_1", "zpos");
+    cout << "L: " << fL << endl;
+  }
 
   //local z positions for planes, mm
   fZ[0] = (-3./2)*fL;

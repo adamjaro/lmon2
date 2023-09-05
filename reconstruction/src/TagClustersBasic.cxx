@@ -52,7 +52,9 @@ void TagClustersBasic::SetGeometry(GeoParser *geo) {
   G4String det_nam = "lowQ2_"+fNam;
 
   //shift in x position
-  fXpos += geo->GetD(det_nam, "xpos");
+  G4double shift_x=0;
+  geo->GetOptD(det_nam, "xpos", shift_x, GeoParser::Unit(mm));
+  fXpos += shift_x;
 
   cout << "xyz: " << fXpos << " " << fYpos << " " << fZpos << " " << fThetaX << " " << fThetaY << endl;
 

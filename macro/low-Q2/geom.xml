@@ -1,7 +1,7 @@
 
 <main>
 
-  <include_directory name="/home/simon/geant4/lmon2/geometry/rev1"/>
+  <include_directory name="/home/jaroslav/sim/lmon2/geometry/rev2"/>
 
   <include ref="main.xml"/>
 

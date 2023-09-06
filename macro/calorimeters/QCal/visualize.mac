@@ -4,14 +4,21 @@
 /run/verbose 2
 
 #detectors and components
-/lmon/construct/geometry geom_A456.xml
+#/lmon/construct/geometry geom_A456.xml
+/lmon/construct/geometry geom_optics.xml
 
 #input
 /lmon/input/type gun
-/gun/energy 5 GeV
-/gun/particle e+
-/gun/position 0 0 1 mm
-/gun/direction 0.000913 0.052328 -0.99863
+#/gun/energy 5 GeV
+#/gun/particle e+
+#/gun/position 0 0 1 mm
+#/gun/direction 0.000913 0.052328 -0.99863
+/gun/particle opticalphoton
+/gun/polarization 0 1 0
+/gun/energy 7.07 eV
+/gun/position 0 0 -0.1 mm
+#/gun/direction 0.000913 0.2 -0.99863
+/gun/direction 0 0 -1
 
 #output
 #/lmon/output/name pwo.root
@@ -48,7 +55,7 @@
 # Draw coordinate axes:
 #/vis/scene/add/axes 185 10 12 10. mm
 #/vis/scene/add/axes 0 0 0 12.5 mm
-/vis/scene/add/axes 0 0 0 80 mm
+#/vis/scene/add/axes 0 0 0 80 mm
 
 # Draw smooth trajectories at end of event, showing trajectory points
 # as markers 2 pixels wide:

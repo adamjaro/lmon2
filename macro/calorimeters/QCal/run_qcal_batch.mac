@@ -1,13 +1,19 @@
 
 #detector
-/lmon/construct/geometry geom_A456.xml
+#/lmon/construct/geometry geom_A456.xml
+/lmon/construct/geometry geom_optics.xml
 
 #input
 /lmon/input/type gun
-/gun/energy 50 GeV
-/gun/particle e+
-/gun/position 0 0 1 mm
-/gun/direction 0.000913 0.052328 -0.99863
+#/gun/energy 50 GeV
+#/gun/particle e+
+#/gun/position 0 0 1 mm
+#/gun/direction 0.000913 0.052328 -0.99863
+/gun/particle opticalphoton
+/gun/polarization 0 1 0
+/gun/energy 7.07 eV
+/gun/position 0 0 -0.1 mm
+/gun/direction 0 0 -1
 
 #output
 #/lmon/output/name pwo.root
@@ -19,6 +25,7 @@
 
 #/process/optical/cerenkov/verbose 2
 #/process/optical/scintillation/verbose 2
+/process/optical/verbose 2
 
-/run/beamOn 12
+/run/beamOn 1
 

@@ -18,6 +18,7 @@ class QCal1 : public Detector, public G4VSensitiveDetector {
     void CreateOutput(TTree*);
     void ClearEvent();
     void FinishEvent();
+    virtual void Add(std::vector<Detector*> *vec);
 
     //called via G4VSensitiveDetector
     virtual G4bool ProcessHits(G4Step *step, G4TouchableHistory*);
@@ -29,6 +30,8 @@ class QCal1 : public Detector, public G4VSensitiveDetector {
     G4String fNam; // name of detector sensitive logical volume
 
     CalPWOHits::Coll fHits; // hits in fibers as in PWO
+
+    Detector *fOpDet; // optical photon detector
 
 };
 

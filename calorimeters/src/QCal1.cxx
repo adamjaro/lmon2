@@ -16,6 +16,7 @@
 //
 // optional parameters:
 // xpos, ypos, zpos
+// opdet_dz
 // cell_mat_name
 // core_vis
 // mod_vis, opdet_vis
@@ -102,7 +103,8 @@ G4LogicalVolume* QCal1::MakeCell(GeoParser *geo) {
 
   //cell (absorber) size
   G4double cell_xy = geo->GetD(fNam, "cell_xy")*mm;
-  G4double cell_z = geo->GetD(fNam, "cell_z")*mm;
+  G4double cell_z = geo->GetD(fNam, "modz")*mm; // initial value as modz
+  geo->GetOptD(fNam, "cell_z", cell_z, GeoParser::Unit(mm));
 
   //main volume for the cell holding absorber with fibers and photon detector
   G4double modz = geo->GetD(fNam, "modz")*mm;
@@ -162,9 +164,14 @@ G4LogicalVolume* QCal1::MakeCell(GeoParser *geo) {
   siO2_tab->AddProperty("RINDEX", "Fused Silica");
   siO2_mat->SetMaterialPropertiesTable(siO2_tab);
 
+  //optical detector to be attached to fiber cores
+  G4double opdet_dz = 0.3*mm; // thickness in z
+  geo->GetOptD(fNam, "opdet_dz", opdet_dz, GeoParser::Unit(mm));
+
   //fiber core, sensitive volume
   G4double fiber_core_D = geo->GetD(fNam, "fiber_core_D")*mm; // core diameter
-  G4Tubs *core_shape = new G4Tubs(fNam, 0, fiber_core_D/2., cell_z/2., 0, 360*deg);
+  //G4Tubs *core_shape = new G4Tubs(fNam, 0, fiber_core_D/2., cell_z/2., 0, 360*deg);
+  G4Tubs *core_shape = new G4Tubs(fNam, 0, fiber_core_D/2., (cell_z-opdet_dz)/2., 0, 360*deg);
 
   //fiber core volume
   G4LogicalVolume *core_vol = new G4LogicalVolume(core_shape, siO2_mat, fNam);
@@ -174,24 +181,28 @@ G4LogicalVolume* QCal1::MakeCell(GeoParser *geo) {
   core_vol->SetVisAttributes(core_vis.MakeVis(geo, fNam, "core_vis"));
 
   //core in the cladding
-  G4VPhysicalVolume *core_phys = new G4PVPlacement(0, G4ThreeVector(0, 0, 0), core_vol, fNam, clad_vol, false, 0);
-
-  //optical detector to be attached to fiber cores
-  G4double opdet_dz = 0.3*mm;
-  ColorDecoder opdet_vis("1:1:0:2");
+  //G4VPhysicalVolume *core_phys = new G4PVPlacement(0, G4ThreeVector(0, 0, 0), core_vol, fNam, clad_vol, false, 0);
+  G4VPhysicalVolume *core_phys = new G4PVPlacement(0, G4ThreeVector(0, 0, 0.5*opdet_dz), core_vol, fNam, clad_vol, false, 0);
 
   //make the optical detector
   OpSiDet *opdet = new OpSiDet(fNam+"_opdet");
   fOpDet = dynamic_cast<Detector*>( opdet );
-  G4LogicalVolume *opdet_vol = opdet->CreateGeometry(cell_xy, cell_xy, opdet_dz,
+  //G4LogicalVolume *opdet_vol = opdet->CreateGeometry(cell_xy, cell_xy, opdet_dz,
+  //  opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
+  ColorDecoder opdet_vis("1:1:0:3");
+  G4LogicalVolume *opdet_vol = opdet->CreateGeometry(fiber_core_D/2, opdet_dz,
     opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
 
+  //optical detector at the end of the fiber
+  G4VPhysicalVolume *opdet_phys = new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*cell_z+0.5*opdet_dz),
+   opdet_vol, opdet_vol->GetName(), clad_vol, false, 0);
+
   //optical detector in the cell main volume
-  G4VPhysicalVolume *opdet_phys = new G4PVPlacement(0, G4ThreeVector(0, 0, 0.5*modz-cell_z-0.5*opdet_dz),
-   opdet_vol, opdet_vol->GetName(), main_vol, false, 0);
+  //G4VPhysicalVolume *opdet_phys = new G4PVPlacement(0, G4ThreeVector(0, 0, 0.5*modz-cell_z-0.5*opdet_dz),
+   //opdet_vol, opdet_vol->GetName(), main_vol, false, 0);
 
   //optical coupling from fiber core to optical detector
-  opdet->MakeBoundary(core_phys, opdet_phys);
+  //opdet->MakeBoundary(core_phys, opdet_phys);
 
   //fiber spacing in module
   G4double fiber_dx = geo->GetD(fNam, "fiber_dx")*mm;

@@ -12,7 +12,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 3
+    iplot = 1
 
     func = {}
     func[0] = energy
@@ -32,16 +32,17 @@ def energy():
     emin = 3
     emax = 19
 
-    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx12/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v3.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax4/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax4/trk_v2.root"
+    inp = "/home/jaroslav/sim/test/lmon2_examples/lowQ2_reco/lmon2_tracks.root"
 
-    det = "s1_tracks"
-    #det = "s2_tracks"
+    #det = "s1_tracks"
+    det = "s2_tracks"
 
     sel = det+"_is_rec==1"
     #sel = det+"_is_rec==1 && "+det+"_itrk==1"
@@ -96,10 +97,11 @@ def pitheta():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v3.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax4/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax4/trk_v2.root"
+    inp = "/home/jaroslav/sim/test/lmon2_examples/lowQ2_reco/lmon2_tracks.root"
 
-    det = "s1_tracks"
-    #det = "s2_tracks"
+    #det = "s1_tracks"
+    det = "s2_tracks"
 
     sel = det+"_is_rec==1"
     #sel = det+"_is_rec==1 && "+det+"_itrk==1"

@@ -13,6 +13,7 @@
 //Geant
 #include "G4NistManager.hh"
 #include "G4Box.hh"
+#include "G4Tubs.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
@@ -40,13 +41,36 @@ OpSiDet::OpSiDet(const G4String& nam, GeoParser *geo, G4LogicalVolume *top): Det
 //_____________________________________________________________________________
 G4LogicalVolume* OpSiDet::CreateGeometry(G4double dx, G4double dy, G4double dz, G4VisAttributes *vis) {
 
-  //detector shape
+  //rectangular detector shape
   G4Box *shape = new G4Box(fNam, dx/2., dy/2., dz/2.);
+
+  return MakeLogical(shape, vis);
+
+}//CreateGeometry
+
+//_____________________________________________________________________________
+G4LogicalVolume* OpSiDet::CreateGeometry(G4double radius, G4double dz, G4VisAttributes *vis) {
+
+  //circular detector shape
+  G4Tubs *shape = new G4Tubs(fNam, 0, radius, dz/2., 0, CLHEP::twopi);
+
+  return MakeLogical(shape, vis);
+
+}//CreateGeometry
+
+//_____________________________________________________________________________
+G4LogicalVolume* OpSiDet::MakeLogical(G4VSolid *shape, G4VisAttributes *vis) {
+
+  //make material and final logical volume for a given shape
+
   G4Material *mat = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
 
   //optical properties for detector material
   G4MaterialPropertiesTable *tab = new G4MaterialPropertiesTable();
   tab->AddProperty("RINDEX", "Fused Silica");
+  std::vector<G4double> opt_lam = {800, 350}; // nm
+  std::vector<G4double> abs_length = {1e-20*m, 1e-20*m};
+  tab->AddProperty("ABSLENGTH", LambdaNMtoEV(opt_lam), abs_length);
   mat->SetMaterialPropertiesTable(tab);
 
   G4LogicalVolume *vol = new G4LogicalVolume(shape, mat, fNam);
@@ -55,7 +79,7 @@ G4LogicalVolume* OpSiDet::CreateGeometry(G4double dx, G4double dy, G4double dz, 
 
   return vol;
 
-}//CreateGeometry
+}//MakeLogical
 
 //_____________________________________________________________________________
 void OpSiDet::MakeBoundary(G4VPhysicalVolume *src_phys, G4VPhysicalVolume *opdet_phys) {
@@ -84,7 +108,31 @@ void OpSiDet::MakeBoundary(G4VPhysicalVolume *src_phys, G4VPhysicalVolume *opdet
 //_____________________________________________________________________________
 G4bool OpSiDet::ProcessHits(G4Step *step, G4TouchableHistory*) {
 
-  G4cout << "OpSiDet::ProcessHits" << G4endl;
+  //track in step
+  G4Track *track = step->GetTrack();
+
+  //optical photons only
+  if( track->GetDefinition() != G4OpticalPhoton::OpticalPhotonDefinition() ) return false;
+
+  //only absorbed photons
+  if( track->GetTrackStatus() <= 0 ) return false;
+
+  //G4cout << "OpSiDet::ProcessHits" << G4endl;
+
+  //point in current step
+  G4StepPoint *point = step->GetPostStepPoint();
+
+  //add the hit
+  PhotoHitsV2::Hit& hit = fHits.Add( PhotoHitsV2::Hit() );
+
+  //hit time, ns
+  hit.time = point->GetGlobalTime()/ns;
+
+  //hit position
+  G4ThreeVector hpos = point->GetPosition();
+  hit.pos_x = hpos.x()/mm;
+  hit.pos_y = hpos.y()/mm;
+  hit.pos_z = hpos.z()/mm;
 
   return true;
 
@@ -125,7 +173,26 @@ std::vector<G4double> OpSiDet::LambdaNMtoEV(const std::vector<G4double>& lambda)
 
 }//LambdaNMtoEV
 
+//_____________________________________________________________________________
+void OpSiDet::CreateOutput(TTree *tree) {
 
+  fHits.CreateOutput(fNam, tree);
+
+}//CreateOutput
+
+//_____________________________________________________________________________
+void OpSiDet::ClearEvent() {
+
+  fHits.ClearEvent();
+
+}//ClearEvent
+
+//_____________________________________________________________________________
+void OpSiDet::FinishEvent() {
+
+  fHits.FinishEvent();
+
+}//FinishEvent
 
 
 

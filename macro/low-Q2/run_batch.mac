@@ -32,5 +32,5 @@
 
 #/process/optical/boundary/setInvokeSD true
 
-/run/beamOn 12
+#/run/beamOn 12
 

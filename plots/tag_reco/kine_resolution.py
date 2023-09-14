@@ -4,6 +4,7 @@
 
 import ROOT as rt
 from ROOT import gPad, gROOT, gStyle, TFile, gSystem, TMath
+from ROOT import RDataFrame
 
 import sys
 sys.path.append("../")
@@ -97,11 +98,11 @@ def pitheta():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v3.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax4/trk_v2.root"
-    inp = "/home/jaroslav/sim/test/lmon2_examples/lowQ2_reco/lmon2_tracks.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax4/trk_v2.root"
+    #inp = "/home/jaroslav/sim/test/lmon2_examples/lowQ2_reco/lmon2_tracks.root"
 
-    #det = "s1_tracks"
-    det = "s2_tracks"
+    det = "s1_tracks"
+    #det = "s2_tracks"
 
     sel = det+"_is_rec==1"
     #sel = det+"_is_rec==1 && "+det+"_itrk==1"

@@ -1,0 +1,364 @@
+
+<main>
+
+  <!-- distance between tagger planes edge and Q3eR axis, mm -->
+  <const name="vac_delt_Q3A" value="40."/>
+
+  <!-- coupling to Q3eR, theta angle in xz plane and start point on its front -->
+  <const name="vac_TQ3" value="Q3eR_Theta"/>
+  <const name="vac_zQ" value="Q3eR_StartZ"/>
+  <const name="vac_xQ" value="Q3eR_StartX"/>
+
+  <!-- lower point at B2BeR end outer radius -->
+  <const name="vac_zBO" value="B2BeR_CenterPosition-0.5*B2BeR_Length"/>
+  <const name="vac_xBO" value="-B2BeR_OuterRadius"/>
+
+  <!-- upper point at B2BeR end outer radius -->
+  <const name="vac_zB1T" value="vac_zBO"/>
+  <const name="vac_xB1T" value="B2BeR_OuterRadius"/>
+
+  <!-- upper point at B2BeR at lower z (further from B2eR) -->
+  <const name="vac_zB0T" value="vac_zB1T-(vac_xB1T-vac_xBO)*tan(vac_TQ3)"/>
+  <const name="vac_xB0T" value="vac_xB1T"/>
+
+  <!-- B2BeR inner radius -->
+  <const name="vac_rBI" value="B2BeR_InnerRadius"/>
+
+  <!-- drift element immediately after B2BeR to adapt for Q3eR angle -->
+  <detector type="BeamDrift" name="vac_B2B"
+    ysiz="2.*vac_rBI" delta="0"
+    z0TO="vac_zB0T" x0TO="vac_xB0T" z0BO="vac_zBO" x0BO="vac_xBO"
+    z0TI="vac_zB0T" x0TI="vac_xB0T" z0BI="vac_zBO" x0BI="vac_xBO"
+    z1TO="vac_zB1T" x1TO="vac_xB1T" z1BO="vac_zBO" x1BO="vac_xBO"
+    x1TI="vac_xB1T" z1BI="vac_zBO" x1BI="vac_xBO"
+    vis="0:0:0:3" vis_inout="0:0:1:2">
+  </detector>
+
+  <!-- length of Q3eR axis (from Q3 front to the element after B2B (vac_B2B)) -->
+  <const name="vac_Q3AL" value="(vac_zBO-vac_zQ)*cos(vac_TQ3) -(vac_xQ-vac_xBO)*sin(vac_TQ3)"/>
+
+  <!-- bottom of drift section at Q3 -->
+  <const name="vac_zQB" value="vac_delt_Q3A*sin(vac_TQ3) + vac_zQ"/>
+  <const name="vac_xQB" value="vac_xQ - vac_delt_Q3A*cos(vac_TQ3)"/>
+
+  <!-- perpendicular size for drift section -->
+  <const name="vac_Q3PL"
+    value="TMath::Sqrt((vac_zB0T-vac_zQB)*(vac_zB0T-vac_zQB) + (vac_xB0T-vac_xQB)*(vac_xB0T-vac_xQB) - vac_Q3AL*vac_Q3AL)"/>
+
+  <!-- center of drift section -->
+  <const name="vac_zQ3D" value="0.5*(vac_zB0T+vac_zQB)"/>
+  <const name="vac_xQ3D" value="0.5*(vac_xB0T+vac_xQB)"/>
+
+  <!-- drift section from B2eR to Q3eR -->
+  <detector type="BoxSegment" name="vac_B2Q3"
+    dx="vac_Q3PL" dy="2.*vac_rBI" dz="vac_Q3AL"
+    zpos="vac_zQ3D" xpos="vac_xQ3D" theta="vac_TQ3"
+    vis="0:0:1:3">
+  </detector>
+
+  <!-- wall thickness for vacuum vessels, mm (2 mm, larger for debug) -->
+  <const name="vac_wall_D" value="2."/>
+
+  <!-- wall material for vacuum vessels (G4_Al) -->
+  <const name="vac_wall_mat_name" value="G4_Al"/>
+
+  <!-- wall visibility for vacuum vessels -->
+  <const name="vac_wall_vis" value="0:0:1:1"/>
+
+  <!-- upper wall along drift section (vac_B2Q3), at positive y  -->
+  <detector type="BoxSegment" name="vac_B2Q3_wall_up"
+    dx="vac_Q3PL" dy="vac_wall_D" dz="vac_Q3AL"
+    ypos="vac_rBI-0.5*vac_wall_D" place_into="vac_B2Q3" mat_name="vac_wall_mat_name"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- lower wall along drift section (vac_B2Q3), at negative y  -->
+  <detector type="BoxSegment" name="vac_B2Q3_wall_down"
+    dx="vac_Q3PL" dy="vac_wall_D" dz="vac_Q3AL"
+    ypos="-vac_rBI+0.5*vac_wall_D" place_into="vac_B2Q3" mat_name="vac_wall_mat_name"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- inner wall along drift section (vac_B2Q3), at larger x  -->
+  <detector type="BoxSegment" name="vac_B2Q3_wall_inner"
+    dx="vac_wall_D" dy="2.*vac_rBI-2.*vac_wall_D" dz="vac_Q3AL"
+    xpos="0.5*vac_Q3PL-0.5*vac_wall_D" place_into="vac_B2Q3" mat_name="vac_wall_mat_name"
+    vis="vac_wall_vis">
+  </detector>
+
+
+
+  <!-- volume for tagger 1, including exit window -->
+
+  <!-- start z position for tagger 1 section, mm -->
+  <const name="vac_zS1ST" value="-20000"/>
+  <!-- <const name="vac_zS1ST" value="-16000"/> -->
+
+  <!-- length of tagger 1 section along Q3eR axis, mm -->
+  <const name="vac_S1AL" value="2000"/>
+
+  <!-- perpendicular size for tagger 1 section, mm -->
+  <const name="vac_S1PL" value="170"/>
+
+  <!-- start x position for tagger 1 section -->
+  <const name="vac_xS1ST" value="vac_xQB + (vac_zS1ST-vac_zQB)*TMath::Tan(vac_TQ3)"/>
+
+  <!-- end point top for tagger 1 section -->
+  <const name="vac_zS1ET" value="vac_zS1ST - vac_S1AL*cos(vac_TQ3)"/>
+  <const name="vac_xS1ET" value="vac_xS1ST - vac_S1AL*sin(vac_TQ3)"/>
+
+  <!-- start point bottom for tagger 1 section -->
+  <const name="vac_zS1SB" value="vac_zS1ST + vac_S1PL*sin(vac_TQ3)"/>
+  <const name="vac_xS1SB" value="vac_xS1ST - vac_S1PL*cos(vac_TQ3)"/>
+
+  <!-- center point for tagger 1 section -->
+  <const name="vac_zS1C" value="0.5*(vac_zS1SB+vac_zS1ET)"/>
+  <const name="vac_xS1C" value="0.5*(vac_xS1SB+vac_xS1ET)"/>
+
+  <!-- section for tagger 1 -->
+  <detector type="BoxSegment" name="vac_S1"
+    dx="vac_S1PL" dy="2.*vac_rBI" dz="vac_S1AL"
+    zpos="vac_zS1C" xpos="vac_xS1C" theta="vac_TQ3"
+    vis="0:1:0:3">
+  </detector>
+
+  <!-- bottom of drift section at B2, determined by drift section perpendicular size -->
+  <const name="vac_zBP" value="vac_zB0T + vac_Q3PL*sin(vac_TQ3)"/>
+  <const name="vac_xBP" value="vac_xB0T - vac_Q3PL*cos(vac_TQ3)"/>
+
+  <!-- bottom of B2 inner diameter at B2  -->
+  <const name="vac_zBDI" value="vac_zBO-(B2BeR_OuterRadius-vac_rBI)*sin(vac_TQ3)"/>
+  <const name="vac_xBDI" value="vac_xBO+(B2BeR_OuterRadius-vac_rBI)*cos(vac_TQ3)"/>
+
+  <!-- drift section in front of tagger 1 -->
+  <detector type="VacDrift" name="vac_DS1"
+    ysiz="2.*vac_rBI-2*vac_wall_D"
+    z1T="vac_zBP" x1T="vac_xBP" z1B="vac_zBDI" x1B="vac_xBDI"
+    z0T="vac_zS1ST" x0T="vac_xS1ST" z0B="vac_zS1SB" x0B="vac_xS1SB"
+    vis="1:0:0:3">
+  </detector>
+
+  <!-- upper wall (along y) for drift section in front of tagger 1 -->
+  <detector type="VacDrift" name="vac_DS1_wall_up"
+    ysiz="vac_wall_D" ypos="vac_rBI-0.5*vac_wall_D" mat_name="vac_wall_mat_name"
+    z1T="vac_zBP" x1T="vac_xBP" z1B="vac_zBDI" x1B="vac_xBDI"
+    z0T="vac_zS1ST" x0T="vac_xS1ST" z0B="vac_zS1SB" x0B="vac_xS1SB"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- lower wall (along y) for drift section in front of tagger 1 -->
+  <detector type="VacDrift" name="vac_DS1_wall_down"
+    ysiz="vac_wall_D" ypos="-vac_rBI+0.5*vac_wall_D" mat_name="vac_wall_mat_name"
+    z1T="vac_zBP" x1T="vac_xBP" z1B="vac_zBDI" x1B="vac_xBDI"
+    z0T="vac_zS1ST" x0T="vac_xS1ST" z0B="vac_zS1SB" x0B="vac_xS1SB"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- outer wall (at lower x) for drift section in front of tagger 1 -->
+  <detector type="VacDrift" name="vac_DS1_wall_out"
+    ysiz="2.*vac_rBI" mat_name="vac_wall_mat_name"
+    z1T="vac_zBDI" x1T="vac_xBDI" z1B="vac_zBDI" x1B="vac_xBDI-vac_wall_D"
+    z0T="vac_zS1SB" x0T="vac_xS1SB" z0B="vac_zS1SB" x0B="vac_xS1SB-vac_wall_D"
+    vis="vac_wall_vis">
+  </detector>
+
+
+
+  <!-- exit window for tagger 1 -->
+
+  <!-- thickness for tagger exit window, mm (2 mm, larger for debug) -->
+  <const name="vac_tag_Dew" value="2."/>
+
+  <!-- visibility for tagger exit window -->
+  <const name="vac_tag_ew_vis" value="1:0:0:1"/>
+
+  <!-- angle for tagger exit window relative to beam axis, rad -->
+  <const name="vac_tag_ThetaEW" value="TMath::Pi()/4"/>
+
+  <!-- full axis length for tagger 1 exit window -->
+  <const name="vac_S1_ew_L" value="vac_S1PL/sin(vac_tag_ThetaEW)"/>
+
+  <!-- correction to axis length for tagger 1 exit window -->
+  <const name="vac_S1_ew_DeltaL" value="vac_tag_Dew/(2.*TMath::Tan(vac_tag_ThetaEW))"/>
+
+  <!-- axis projection along z for tagger 1 exit window -->
+  <const name="vac_S1_ew_Lz" value="vac_S1PL/TMath::Tan(vac_tag_ThetaEW)"/>
+
+  <!-- reach after axis projection along z for tagger 1 exit window -->
+  <const name="vac_S1_ew_DeltaLz" value="0.5*vac_tag_Dew*cos(0.5*TMath::Pi()-vac_tag_ThetaEW)"/>
+
+  <!-- tagger 1 exit window -->
+  <detector type="BoxSegment" name="vac_S1_ew"
+    dx="vac_tag_Dew" dy="2.*vac_rBI-2.*vac_wall_D" dz="vac_S1_ew_L-2*vac_S1_ew_DeltaL"
+    zpos="0.5*vac_S1AL-0.5*vac_S1_ew_Lz" place_into="vac_S1" mat_name="G4_Be"
+    theta="-vac_tag_ThetaEW" vis="vac_tag_ew_vis">
+  </detector>
+
+  <!-- inner wall along tagger 1 section (vac_S1), along the beampipe  -->
+  <detector type="BoxSegment" name="vac_S1_wall_inner"
+    dx="vac_wall_D" dy="2.*vac_rBI" dz="vac_S1AL - vac_S1_ew_Lz - vac_S1_ew_DeltaLz"
+    zpos="-0.5*(vac_S1_ew_Lz + vac_S1_ew_DeltaLz)"
+    xpos="0.5*vac_S1PL-0.5*vac_wall_D" place_into="vac_S1" mat_name="vac_wall_mat_name"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- upper wall along tagger 1 section (vac_S1), at positive y -->
+  <detector type="VacDrift" name="vac_S1_wall_up"
+    ysiz="vac_wall_D" mat_name="vac_wall_mat_name"
+    place_into="vac_S1" ypos="vac_rBI-0.5*vac_wall_D"
+    z1T="vac_S1AL/2." x1T="-vac_S1PL/2." z1B="vac_S1AL/2." x1B="vac_S1PL/2."
+    z0T="0.5*vac_S1AL-vac_S1_ew_Lz" x0T="vac_S1PL/2."
+    z0B="0.5*vac_S1AL-vac_S1_ew_Lz" x0B="vac_S1PL/2."
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- lower wall along tagger 1 section (vac_S1), at negative y  -->
+  <detector type="VacDrift" name="vac_S1_wall_down"
+    ysiz="vac_wall_D" mat_name="vac_wall_mat_name"
+    place_into="vac_S1" ypos="-vac_rBI+0.5*vac_wall_D"
+    z1T="vac_S1AL/2." x1T="-vac_S1PL/2." z1B="vac_S1AL/2." x1B="vac_S1PL/2."
+    z0T="0.5*vac_S1AL-vac_S1_ew_Lz" x0T="vac_S1PL/2."
+    z0B="0.5*vac_S1AL-vac_S1_ew_Lz" x0B="vac_S1PL/2."
+    vis="vac_wall_vis">
+  </detector>
+
+
+
+  <!-- volume for tagger 2, including exit window -->
+
+  <!-- start z position for tagger 2 section, mm -->
+  <const name="vac_zS2ST" value="-35500"/>
+
+  <!-- length of tagger 2 section along Q3eR axis, mm -->
+  <const name="vac_S2AL" value="2000"/>
+
+  <!-- perpendicular size for tagger 2 section, mm -->
+  <const name="vac_S2PL" value="170"/>
+
+  <!-- start x position for tagger 2 section -->
+  <const name="vac_xS2ST" value="vac_xQB + (vac_zS2ST-vac_zQB)*TMath::Tan(vac_TQ3)"/>
+
+  <!-- end point top for tagger 2 section -->
+  <const name="vac_zS2ET" value="vac_zS2ST - vac_S2AL*cos(vac_TQ3)"/>
+  <const name="vac_xS2ET" value="vac_xS2ST - vac_S2AL*sin(vac_TQ3)"/>
+
+  <!-- start point bottom for tagger 2 section -->
+  <const name="vac_zS2SB" value="vac_zS2ST + vac_S2PL*sin(vac_TQ3)"/>
+  <const name="vac_xS2SB" value="vac_xS2ST - vac_S2PL*cos(vac_TQ3)"/>
+
+  <!-- center point for tagger 2 section -->
+  <const name="vac_zS2C" value="0.5*(vac_zS2SB+vac_zS2ET)"/>
+  <const name="vac_xS2C" value="0.5*(vac_xS2SB+vac_xS2ET)"/>
+
+  <!-- section for tagger 2 -->
+  <detector type="BoxSegment" name="vac_S2"
+    dx="vac_S2PL" dy="2.*vac_rBI" dz="vac_S2AL"
+    zpos="vac_zS2C" xpos="vac_xS2C" theta="vac_TQ3"
+    vis="0:1:0:3">
+  </detector>
+
+  <!-- drift section in front of tagger 2 -->
+  <detector type="VacDrift" name="vac_DS2"
+    ysiz="2.*vac_rBI-2*vac_wall_D"
+    z1T="vac_zS1ET" x1T="vac_xS1ET" z1B="vac_zS1ET" x1B="vac_xS1ET"
+    z0T="vac_zS2ST" x0T="vac_xS2ST" z0B="vac_zS2SB" x0B="vac_xS2SB"
+    vis="0:1:0:3">
+  </detector>
+
+  <!-- upper wall (along y) for drift section in front of tagger 2 -->
+  <detector type="VacDrift" name="vac_DS2_wall_up"
+    ysiz="vac_wall_D" ypos="vac_rBI-0.5*vac_wall_D" mat_name="vac_wall_mat_name"
+    z1T="vac_zS1ET" x1T="vac_xS1ET" z1B="vac_zS1ET" x1B="vac_xS1ET"
+    z0T="vac_zS2ST" x0T="vac_xS2ST" z0B="vac_zS2SB" x0B="vac_xS2SB"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- lower wall (along y) for drift section in front of tagger 2 -->
+  <detector type="VacDrift" name="vac_DS2_wall_down"
+    ysiz="vac_wall_D" ypos="-vac_rBI+0.5*vac_wall_D" mat_name="vac_wall_mat_name"
+    z1T="vac_zS1ET" x1T="vac_xS1ET" z1B="vac_zS1ET" x1B="vac_xS1ET"
+    z0T="vac_zS2ST" x0T="vac_xS2ST" z0B="vac_zS2SB" x0B="vac_xS2SB"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- outer wall (at lower x) for drift section in front of tagger 2 -->
+  <detector type="VacDrift" name="vac_DS2_wall_out"
+    ysiz="2.*vac_rBI" mat_name="vac_wall_mat_name"
+    z1T="vac_zS1ET" x1T="vac_xS1ET" z1B="vac_zS1ET" x1B="vac_xS1ET-vac_wall_D"
+    z0T="vac_zS2SB" x0T="vac_xS2SB" z0B="vac_zS2SB" x0B="vac_xS2SB-vac_wall_D"
+    vis="vac_wall_vis">
+  </detector>
+
+
+
+  <!-- exit window for tagger 2 -->
+
+  <!-- full axis length for tagger 2 exit window -->
+  <const name="vac_S2_ew_L" value="vac_S2PL/sin(vac_tag_ThetaEW)"/>
+
+  <!-- correction to axis length for tagger 2 exit window -->
+  <const name="vac_S2_ew_DeltaL" value="vac_tag_Dew/(2.*TMath::Tan(vac_tag_ThetaEW))"/>
+
+  <!-- axis projection along z for tagger 2 exit window -->
+  <const name="vac_S2_ew_Lz" value="vac_S2PL/TMath::Tan(vac_tag_ThetaEW)"/>
+
+  <!-- reach after axis projection along z for tagger 2 exit window -->
+  <const name="vac_S2_ew_DeltaLz" value="0.5*vac_tag_Dew*cos(0.5*TMath::Pi()-vac_tag_ThetaEW)"/>
+
+  <!-- tagger 2 exit window -->
+  <detector type="BoxSegment" name="vac_S2_ew"
+    dx="vac_tag_Dew" dy="2.*vac_rBI-2.*vac_wall_D" dz="vac_S2_ew_L-2*vac_S2_ew_DeltaL"
+    zpos="0.5*vac_S2AL-0.5*vac_S2_ew_Lz" place_into="vac_S2" mat_name="G4_Be"
+    theta="-vac_tag_ThetaEW" vis="vac_tag_ew_vis">
+  </detector>
+
+  <!-- inner wall along tagger 2 section (vac_S2), along the beampipe  -->
+  <detector type="BoxSegment" name="vac_S2_wall_inner"
+    dx="vac_wall_D" dy="2.*vac_rBI" dz="vac_S2AL - vac_S2_ew_Lz - vac_S2_ew_DeltaLz"
+    zpos="-0.5*(vac_S2_ew_Lz + vac_S2_ew_DeltaLz)"
+    xpos="0.5*vac_S2PL-0.5*vac_wall_D" place_into="vac_S2" mat_name="vac_wall_mat_name"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- upper wall along tagger 2 section (vac_S2), at positive y  -->
+  <detector type="VacDrift" name="vac_S2_wall_up"
+    ysiz="vac_wall_D" mat_name="vac_wall_mat_name"
+    place_into="vac_S2" ypos="vac_rBI-0.5*vac_wall_D"
+    z1T="vac_S2AL/2." x1T="-vac_S2PL/2." z1B="vac_S2AL/2." x1B="vac_S2PL/2."
+    z0T="0.5*vac_S2AL-vac_S2_ew_Lz" x0T="vac_S2PL/2."
+    z0B="0.5*vac_S2AL-vac_S2_ew_Lz" x0B="vac_S2PL/2."
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- lower wall along tagger 2 section (vac_S2), at negative y  -->
+  <detector type="VacDrift" name="vac_S2_wall_down"
+    ysiz="vac_wall_D" mat_name="vac_wall_mat_name"
+    place_into="vac_S2" ypos="-vac_rBI+0.5*vac_wall_D"
+    z1T="vac_S2AL/2." x1T="-vac_S2PL/2." z1B="vac_S2AL/2." x1B="vac_S2PL/2."
+    z0T="0.5*vac_S2AL-vac_S2_ew_Lz" x0T="vac_S2PL/2."
+    z0B="0.5*vac_S2AL-vac_S2_ew_Lz" x0B="vac_S2PL/2."
+    vis="vac_wall_vis">
+  </detector>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</main>
+

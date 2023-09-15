@@ -1,0 +1,16 @@
+
+<main>
+
+  <const name="ElectronBeamEnergy" value="18" comment="GeV"/>
+
+  <const name="Q1eR_Gradient" value="-0.739741*ElectronBeamEnergy" comment="T/m"/>
+
+  <const name="Q2eR_Gradient" value="0.66821*ElectronBeamEnergy" comment="T/m"/>
+
+  <const name="B2AeR_B" value="0.0106667*ElectronBeamEnergy" comment="T"/>
+  <const name="B2BeR_B" value="0.0132222*ElectronBeamEnergy" comment="T"/>
+
+  <const name="Q3eR_grad" value="-6.37062990591305" comment="T/m"/>
+
+</main>
+

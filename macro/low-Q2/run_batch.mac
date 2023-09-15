@@ -1,7 +1,8 @@
 
 #detector
-/lmon/construct/geometry geom.xml
+#/lmon/construct/geometry geom.xml
 #/lmon/construct/geometry geom_tpix.xml
+/lmon/construct/geometry geom_rev1b.xml
 
 #input
 /lmon/input/type gun

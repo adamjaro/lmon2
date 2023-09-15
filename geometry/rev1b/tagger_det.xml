@@ -1,0 +1,140 @@
+
+<main>
+
+  <!-- low-Q2 tagger detectors -->
+
+  <!-- pixel size along x and y, mm -->
+  <const name="tag_dxy" value="0.1"/>
+
+  <!-- number of pixels along x and y -->
+  <const name="tag_nxy" value="1500"/>
+
+  <!-- plane thickness along z, mm, 50 micro meters -->
+  <const name="tag_size_z" value="0.05"/>
+
+  <!-- spacing in z for individual planes, mm -->
+  <const name="tag_iz" value="300."/>
+
+  <!-- offset along z for the first plane after exit window, mm -->
+  <const name="tag_ofs" value="50."/>
+
+  <!-- offset in x from beampipe wall, mm -->
+  <const name="tag_ofs_x" value="5."/>
+
+  <!-- visibility for tagger planes -->
+  <const name="tag_planes_vis" value="0:1:0:0.7"/>
+
+  <!-- plane size set by pixels -->
+  <const name="tag_size_xy" value="tag_dxy*tag_nxy"/>
+
+  <!-- local x position for the planes in tagger 1 -->  
+  <const name="tag_S1_pos_x" value="0.5*vac_S1PL-vac_wall_D-0.5*tag_size_xy-tag_ofs_x"/>
+
+  <!-- local z position for starting plane in tagger 1 -->
+  <const name="tag_S1_start_z" value="0.5*vac_S1AL-vac_S1_ew_Lz-vac_S1_ew_DeltaLz-tag_ofs"/>
+
+
+  <!-- Tagger 1 planes 1 - 4, ordered in increasing z -->
+
+  <!-- tagger 1, plane 1 -->
+  <detector type="TrkPlaneBasic" name="lowQ2_s1_1"
+    zpos="tag_S1_start_z-3.*tag_iz" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+  <!-- tagger 1, plane 2 -->
+  <detector type="TrkPlaneBasic" name="lowQ2_s1_2"
+    zpos="tag_S1_start_z-2.*tag_iz" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+  <!-- tagger 1, plane 3 -->
+  <detector type="TrkPlaneBasic" name="lowQ2_s1_3"
+    zpos="tag_S1_start_z-tag_iz" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+  <!-- tagger 1, plane 4 -->
+  <detector type="TrkPlaneBasic" name="lowQ2_s1_4"
+    zpos="tag_S1_start_z" xpos="tag_S1_pos_x" dxy="tag_dxy"
+    nx="tag_nxy" ny="tag_nxy" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+
+  <!-- Tagger 2 planes 1 - 4, ordered in increasing z -->
+
+  <!-- local x position for the planes in tagger 2 -->  
+  <const name="tag_S2_pos_x" value="0.5*vac_S2PL-vac_wall_D-0.5*tag_size_xy-tag_ofs_x"/>
+
+  <!-- local z position for starting plane in tagger 2 -->
+  <const name="tag_S2_start_z" value="0.5*vac_S2AL-vac_S2_ew_Lz-vac_S2_ew_DeltaLz-tag_ofs"/>
+
+  <!-- tagger 2, plane 1 -->
+  <detector type="TrkPlaneBasic" name="lowQ2_s2_1"
+    zpos="tag_S2_start_z-3.*tag_iz" xpos="tag_S2_pos_x"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S2">
+  </detector>
+
+  <!-- tagger 2, plane 2 -->
+  <detector type="TrkPlaneBasic" name="lowQ2_s2_2"
+    zpos="tag_S2_start_z-2.*tag_iz" xpos="tag_S2_pos_x"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S2">
+  </detector>
+
+  <!-- tagger 2, plane 3 -->
+  <detector type="TrkPlaneBasic" name="lowQ2_s2_3"
+    zpos="tag_S2_start_z-tag_iz" xpos="tag_S2_pos_x"
+    dxy="tag_dxy" nx="tag_nxy" ny="tag_nxy" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S2">
+  </detector>
+
+  <!-- tagger 2, plane 4 -->
+  <detector type="TrkPlaneBasic" name="lowQ2_s2_4"
+    zpos="tag_S2_start_z" xpos="tag_S2_pos_x" dxy="tag_dxy"
+    nx="tag_nxy" ny="tag_nxy" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S2">
+  </detector>
+
+
+
+
+
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

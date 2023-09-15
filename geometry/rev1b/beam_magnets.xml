@@ -1,0 +1,144 @@
+
+<main>
+
+  <!-- Q1eR quadrupole -->
+  <!-- mm -->
+  <const name="Q1eR_InnerRadius" value="67.5"/>
+  <const name="Q1eR_Length" value="1780"/>
+  <const name="Q1eR_CenterPosition" value="-6200"/>
+
+  <detector
+    name="Magnet_Q1eR" type="BeamQuadrupole"
+    zpos="Q1eR_CenterPosition"
+    r1="Q1eR_InnerRadius" r2="Q1eR_InnerRadius"
+    length="Q1eR_Length" grad="Q1eR_Gradient"
+    vis="0:0:1:1">
+  </detector>
+
+  <!-- Q2eR quadrupole -->
+  <!-- mm -->
+  <const name="Q2eR_InnerRadius" value="78"/>
+  <const name="Q2eR_Length" value="1400"/>
+  <const name="Q2eR_CenterPosition" value="-8300."/>
+
+  <detector
+    name="Magnet_Q2eR" type="BeamQuadrupole"
+    zpos="Q2eR_CenterPosition"
+    r1="Q2eR_InnerRadius" r2="Q2eR_InnerRadius"
+    length="Q2eR_Length" grad="Q2eR_Gradient"
+    vis="0:0:1:1">
+  </detector>
+
+  <!-- beam section from Q1eR to Q2eR -->
+  <detector
+    type="ConeBeam" name="beam_Q1Q2"
+    dz="Q1eR_CenterPosition - 0.5*Q1eR_Length-(Q2eR_CenterPosition + 0.5*Q2eR_Length)"
+    zpos="(Q1eR_CenterPosition - 0.5*Q1eR_Length+Q2eR_CenterPosition + 0.5*Q2eR_Length)/2."
+    rmin0="Q2eR_InnerRadius" rmax0="Q2eR_InnerRadius+2."
+    rmin1="Q1eR_InnerRadius" rmax1="Q1eR_InnerRadius+2."
+    vis="0.5:0.5:0.5:0.9">
+  </detector>
+
+  <!-- B2AeR and B2BeR dipoles, mm -->
+  <const name="B2AeR_InnerRadius" value="90"/>
+  <const name="B2AeR_Length" value="1780"/>
+  <const name="B2AeR_CenterPosition" value="-10500"/>
+
+  <const name="B2BeR_InnerRadius" value="111"/>
+  <const name="B2BeR_Length" value="3180"/>
+  <const name="B2BeR_CenterPosition" value="-13275"/>
+  <const name="B2BeR_OuterRadius" value="2*B2BeR_InnerRadius"/>
+
+  <detector
+    name="Magnet_B2AeR" type="BeamDipole"
+    zpos="B2AeR_CenterPosition"
+    r1="B2AeR_InnerRadius" r2="B2AeR_InnerRadius"
+    r3="2*B2AeR_InnerRadius"
+    length="B2AeR_Length" field="B2AeR_B"
+    vis="0:1:0:1">
+  </detector>
+
+  <!-- beam section from Q2eR to BA2eR -->
+  <detector
+    type="ConeBeam" name="beam_Q2B2"
+    dz="Q2eR_CenterPosition-0.5*Q2eR_Length-(B2AeR_CenterPosition+0.5*B2AeR_Length)"
+    zpos="(Q2eR_CenterPosition-0.5*Q2eR_Length+B2AeR_CenterPosition+0.5*B2AeR_Length)/2."
+    rmin0="B2AeR_InnerRadius" rmax0="B2AeR_InnerRadius+2."
+    rmin1="Q2eR_InnerRadius" rmax1="Q2eR_InnerRadius+2."
+    vis="0.5:0.5:0.5:1">
+  </detector>
+
+  <detector
+    name="Magnet_B2BeR" type="BeamDipole"
+    zpos="B2BeR_CenterPosition"
+    r1="B2BeR_InnerRadius" r2="B2BeR_InnerRadius"
+    r3="B2BeR_OuterRadius"
+    length="B2BeR_Length" field="B2BeR_B"
+    vis="0:1:0:1">
+  </detector>
+
+  <!-- beam section from BA2eR to B2BeR -->
+  <detector
+    type="ConeBeam" name="beam_B2A_B2B"
+    dz="B2AeR_CenterPosition-0.5*B2AeR_Length-(B2BeR_CenterPosition+0.5*B2BeR_Length)"
+    zpos="(B2AeR_CenterPosition-0.5*B2AeR_Length+B2BeR_CenterPosition+0.5*B2BeR_Length)/2."
+    rmin0="B2BeR_InnerRadius" rmax0="B2BeR_InnerRadius+2."
+    rmin1="B2AeR_InnerRadius" rmax1="B2AeR_InnerRadius+2."
+    vis="0.5:0.5:0.5:1">
+  </detector>
+
+  <!-- Q3eR quadrupole, mm, rad -->
+  <const name="Q3eR_InnerRadius" value="50"/>
+  <const name="Q3eR_StartZ" value="-37696.067"/>
+  <const name="Q3eR_StartX" value="-460.027"/>
+  <const name="Q3eR_EndZ" value="-38295.969"/>
+  <const name="Q3eR_EndX" value="-470.873"/>
+  <!-- <const name="Q3eR_Length" value="600"/> -->
+  <const name="Q3eR_Length"
+    value="sqrt((Q3eR_StartX-Q3eR_EndX)*(Q3eR_StartX-Q3eR_EndX)+(Q3eR_StartZ-Q3eR_EndZ)*(Q3eR_StartZ-Q3eR_EndZ))"/>
+  <!-- <const name="Q3eR_Theta" value="0.0180766389"/> -->
+  <const name="Q3eR_Theta" value="atan((Q3eR_StartX-Q3eR_EndX)/(Q3eR_StartZ-Q3eR_EndZ))"/>
+
+  <const name="Q3eR_XPosition" value="-465.45"/>
+  <const name="Q3eR_CenterPosition" value="-37996.018"/>
+
+  <detector
+    name="Magnet_Q3eR" type="BeamQuadrupole"
+    xpos="(Q3eR_StartX+Q3eR_EndX)/2" zpos="(Q3eR_StartZ+Q3eR_EndZ)/2"
+    r1="Q3eR_InnerRadius" r2="Q3eR_InnerRadius"
+    length="Q3eR_Length" grad="Q3eR_grad"
+    theta="Q3eR_Theta" angle="TMath::Pi()/2"
+    vis="0:0:1:1">
+  </detector>
+
+
+
+
+
+
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

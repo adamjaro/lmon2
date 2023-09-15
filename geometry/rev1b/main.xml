@@ -1,0 +1,28 @@
+
+<main>
+
+  <!-- Revision rev1b layout -->
+
+  <include ref="fields_18GeV.xml"/>
+
+  <include ref="beam_magnets.xml"/>
+
+  <include ref="central_section.xml"/>
+
+  <include ref="vacuum_B2BQ3.xml"/>
+
+  <include ref="tagger_det.xml"/>
+
+  <include ref="tagger_pwo.xml"/>
+
+  <!-- top volume, mm  G4_AIR  G4_Galactic -->
+  <detector
+    name="topv" type="top"
+    xsiz = "2000" ysiz="2000" zsiz="40000"
+    material="G4_AIR">
+  </detector>
+
+</main>
+
+
+

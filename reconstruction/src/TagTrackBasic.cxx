@@ -92,6 +92,7 @@ void TagTrackBasic::Run(const char *conf) {
   tree.SetBranchAddress("true_el_theta", &fTrueTheta);
   tree.SetBranchAddress("true_el_phi", &fTruePhi);
   tree.SetBranchAddress("true_Q2", &fTrueQ2);
+  tree.SetBranchAddress("true_x", &fTrueX);
 
   //input MC particles
   fMC = new MCParticles::Coll();
@@ -138,6 +139,7 @@ void TagTrackBasic::Run(const char *conf) {
   otree.Branch("true_el_theta", &fTrueTheta, "true_el_theta/D");
   otree.Branch("true_el_phi", &fTruePhi, "true_el_phi/D");
   otree.Branch("true_Q2", &fTrueQ2, "true_Q2/D");
+  otree.Branch("true_x", &fTrueX, "true_x/D");
 
   //event counters
   Int_t evt_s1_ntrk=0, evt_s2_ntrk=0;

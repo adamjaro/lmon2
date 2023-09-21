@@ -41,6 +41,7 @@ class TagTrackBasic {
     Double_t fTrueTheta=0;
     Double_t fTruePhi=0;
     Double_t fTrueQ2=0;
+    Double_t fTrueX=0;
 
     float nnInput[4];
     TMVA::Reader          m_reader{"!Color:!Silent"};

@@ -12,7 +12,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 6
+    iplot = 1
 
     func = {}
     func[0] = theta_x
@@ -35,7 +35,13 @@ def theta_x():
     xmin = -10
     xmax = 40
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -64,14 +70,20 @@ def theta_x():
 def theta_y():
 
     #mrad
-    xbin = 1
-    xmin = -10
-    xmax = 40
+    xbin = 0.5
+    xmin = -12
+    xmax = 12
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
 
-    #det = "s1_tracks"
-    det = "s2_tracks"
+    det = "s1_tracks"
+    #det = "s2_tracks"
 
     infile = TFile.Open(inp)
     tree = infile.Get("event")
@@ -103,10 +115,16 @@ def xy():
     xmin = -80
     xmax = 80
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
 
-    #det = "s1_tracks"
-    det = "s2_tracks"
+    det = "s1_tracks"
+    #det = "s2_tracks"
 
     infile = TFile.Open(inp)
     tree = infile.Get("event")
@@ -134,14 +152,20 @@ def xy():
 #_____________________________________________________________________________
 def chi2():
 
-    xbin = 1e-3
+    xbin = 0.003
     xmin = 0
     xmax = 0.06
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
 
-    #det = "s1_tracks"
-    det = "s2_tracks"
+    det = "s1_tracks"
+    #det = "s2_tracks"
 
     infile = TFile.Open(inp)
     tree = infile.Get("event")
@@ -155,6 +179,8 @@ def chi2():
     ut.put_yx_tit(hx, "Counts", "chi2", 1.9, 1.3)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.11)
+
+    gPad.SetLogy()
 
     gPad.SetGrid()
 

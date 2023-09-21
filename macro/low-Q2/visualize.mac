@@ -4,9 +4,9 @@
 /run/verbose 2
 
 #detectors and components
-#/lmon/construct/geometry geom.xml
+/lmon/construct/geometry geom.xml
 #/lmon/construct/geometry geom_tpix.xml
-/lmon/construct/geometry geom_rev1b.xml
+#/lmon/construct/geometry geom_rev1b.xml
 
 #input
 /lmon/input/type gun
@@ -30,8 +30,8 @@
 # Initialize kernel
 /run/initialize
 
-/vis/open OGL 800x600-0+0
-#/vis/open OIQt
+#/vis/open OGL 800x600-0+0
+/vis/open OIQt
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:

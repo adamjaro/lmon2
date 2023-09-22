@@ -3,7 +3,7 @@
 #relative resolutions in reconstructed kinematics
 
 import ROOT as rt
-from ROOT import gPad, gROOT, gStyle, RDataFrame
+from ROOT import gPad, gROOT, gStyle, RDataFrame, gInterpreter, TMath
 
 from ROOT import RooFit as rf
 from ROOT import RooRealVar, RooCBShape, RooDataHist, RooArgList
@@ -173,17 +173,21 @@ def lQ2_2d():
     ymin = -1
     ymax = 1
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax4/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
 
-    #sel = "s1_tracks_is_rec==1 && s1_tracks_has_mcp==1"
-    sel = "s2_tracks_is_rec==1 && s2_tracks_has_mcp==1"
+    sel = "s1_tracks_is_rec==1 && s1_tracks_has_mcp==1"
+    #sel = "s2_tracks_is_rec==1 && s2_tracks_has_mcp==1"
 
     df = RDataFrame("event", inp)
-    #df = df.Define("s1_tracks_mcp_good_Q2", "s1_tracks_mcp_Q2["+sel+"]")
-    #df = df.Define("s1_tracks_rec_good_Q2", "s1_tracks_rec_Q2["+sel+"]")
-    df = df.Define("s1_tracks_mcp_good_Q2", "s2_tracks_mcp_Q2["+sel+"]")
-    df = df.Define("s1_tracks_rec_good_Q2", "s2_tracks_rec_Q2["+sel+"]")
+    df = df.Define("s1_tracks_mcp_good_Q2", "s1_tracks_mcp_Q2["+sel+"]")
+    df = df.Define("s1_tracks_rec_good_Q2", "s1_tracks_rec_Q2["+sel+"]")
+    #df = df.Define("s1_tracks_mcp_good_Q2", "s2_tracks_mcp_Q2["+sel+"]")
+    #df = df.Define("s1_tracks_rec_good_Q2", "s2_tracks_rec_Q2["+sel+"]")
     df = df.Define("s1_tracks_mcp_lQ2",\
         "std::vector<Double_t> v; for(auto& i: s1_tracks_mcp_good_Q2) {v.push_back(TMath::Log10(i));} return v;")
     df = df.Define("s1_tracks_rec_lQ2",\
@@ -193,14 +197,35 @@ def lQ2_2d():
         "std::vector<Double_t> v; for(size_t i=0; i<s1_tracks_rec_lQ2.size(); i++)\
         {v.push_back( (s1_tracks_rec_lQ2[i]-s1_tracks_mcp_lQ2[i])/s1_tracks_mcp_lQ2[i] );} return v;")
 
+    gInterpreter.Declare("int calc_nout(std::vector<Double_t>& v) {\
+        int n=0; for(auto& i: v) {if(i>0.3 || i<-0.3) n++;} return n;}")
+
+    df = df.Define("s1_tracks_rel_mcp_lQ2_nout", "calc_nout(s1_tracks_rel_mcp_lQ2)")
+
     can = ut.box_canvas()
     hx = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, ybin, ymin, ymax) )
 
-    hx = df.Histo2D(hx, "s1_tracks_mcp_lQ2", "s1_tracks_rel_mcp_lQ2").GetValue()
+    hx = df.Histo2D(hx, "s1_tracks_mcp_lQ2", "s1_tracks_rel_mcp_lQ2")
+    #nOut = df.Filter("for(auto i: s1_tracks_rel_mcp_lQ2 ) return true;").Count()
+    nout = df.Sum("s1_tracks_rel_mcp_lQ2_nout")
+    ntrk_all = df.Sum("s1_ntrk")
 
+    hx = hx.GetValue()
     hx.Draw("colz")
 
-    print("Entries: ", hx.GetEntries())
+    #fraction outside 30%
+    nall = hx.GetEntries()
+    nsel = nout.GetValue()
+    f30 = nsel/nall
+    f30_sigma = f30*TMath.Sqrt( (nall-nsel)/(nall*nsel) )
+
+    print("All tracks:", ntrk_all.GetValue())
+    print("Reconstruction efficiency:", nall/ntrk_all.GetValue())
+
+    #print("Entries: ", hx.GetEntries())
+    #print("nout:", nout.GetValue())
+    #print("Fraction outside 30%:", nout.GetValue()/hx.GetEntries())
+    print("Entries: ", nall, ", nout:", nsel, ", fraction outside 30%:", f30, "+/-", f30_sigma)
 
     ytit = "(rec-gen)/gen"
     xtit = "mcp lQ2"

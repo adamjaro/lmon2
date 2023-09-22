@@ -12,7 +12,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 1
+    iplot = 2
 
     func = {}
     func[0] = theta_x
@@ -35,13 +35,15 @@ def theta_x():
     xmin = -10
     xmax = 40
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -70,17 +72,19 @@ def theta_x():
 def theta_y():
 
     #mrad
-    xbin = 0.5
+    xbin = 0.4
     xmin = -12
     xmax = 12
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -115,13 +119,15 @@ def xy():
     xmin = -80
     xmax = 80
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -156,13 +162,14 @@ def chi2():
     xmin = 0
     xmax = 0.06
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6a/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"

@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 1
+    iplot = 3
 
     func = {}
     func[0] = energy_1d
@@ -167,22 +167,20 @@ def logx_logQ2():
     ymin = -9
     ymax = 0
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
 
     infile = TFile.Open(inp)
     tree = infile.Get("event")
 
     can = ut.box_canvas()
 
-    #hxy_all = ut.prepare_TH2D("hxy_all", xbin, xmin, xmax, ybin, ymin, ymax)
-    #hxy_sel = ut.prepare_TH2D("hxy_sel", xbin, xmin, xmax, ybin, ymin, ymax)
-    hxy_all = ut.prepare_TH2D("hxy_all", xbin, xmin, xmax, xbin, xmin, xmax)
-    hxy_sel = ut.prepare_TH2D("hxy_sel", xbin, xmin, xmax, xbin, xmin, xmax)
+    hxy_all = ut.prepare_TH2D("hxy_all", xbin, xmin, xmax, ybin, ymin, ymax)
+    hxy_sel = ut.prepare_TH2D("hxy_sel", xbin, xmin, xmax, ybin, ymin, ymax)
 
-    #val = "(TMath::Log10(true_Q2)):(TMath::Log10(true_x))"
-    val = "(TMath::Log10(true_Q2)):(TMath::Log10(true_Q2))"
+    val = "(TMath::Log10(true_Q2)):(TMath::Log10(true_x))"
+
     tree.Draw(val+" >> hxy_sel", "s1_ntrk>0")
     tree.Draw(val+" >> hxy_all")
 
@@ -216,11 +214,12 @@ def energy_mlt():
 
     #reconstruction efficiency in energy (GeV) and mlt defined as -log_10(pi - theta) (rad)
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax1/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
 
     #bins in energy, GeV
     xbin = 0.3

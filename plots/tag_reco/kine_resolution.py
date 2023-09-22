@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 1
+    iplot = 3
 
     func = {}
     func[0] = energy
@@ -33,17 +33,15 @@ def energy():
     emin = 3
     emax = 19
 
-    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx12/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v3.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax4/trk_v2.root"
-    inp = "/home/jaroslav/sim/test/lmon2_examples/lowQ2_reco/lmon2_tracks.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
 
-    #det = "s1_tracks"
-    det = "s2_tracks"
+    det = "s1_tracks"
+    #det = "s2_tracks"
 
     sel = det+"_is_rec==1"
     #sel = det+"_is_rec==1 && "+det+"_itrk==1"
@@ -92,14 +90,12 @@ def pitheta():
     xmin = 0
     xmax = 11
 
-    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx12/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v3.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax4/trk_v2.root"
-    #inp = "/home/jaroslav/sim/test/lmon2_examples/lowQ2_reco/lmon2_tracks.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -151,13 +147,15 @@ def phi():
     xmin = -TMath.Pi()-0.1
     xmax = TMath.Pi()+0.1
 
-    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx12/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
 
-    #det = "s1_tracks"
-    det = "s2_tracks"
+    det = "s1_tracks"
+    #det = "s2_tracks"
 
     sel = det+"_is_rec==1"
     #sel = det+"_is_rec==1 && "+det+"_itrk==1"
@@ -207,9 +205,12 @@ def logQ2():
     xmin = -8
     xmax = -1
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag5dx12/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax4/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"

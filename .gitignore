@@ -13,3 +13,4 @@ build/
 G4History.macro
 *.csv
 *.h5
+*.*~

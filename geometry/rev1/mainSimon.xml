@@ -8,9 +8,9 @@
     material="G4_AIR">
   </detector>
 
-  <include ref="/home/simon/geant4/lmon2/geometry/rev1/fields_18GeV.xml"/>
+  <include ref="/home/simon/geant4/lmon2/geometry/rev1/fields_18GeV_Simon.xml"/>
 
-  <include ref="/home/simon/geant4/lmon2/geometry/rev1/beam_magnets.xml"/>
+  <include ref="/home/simon/geant4/lmon2/geometry/rev1/beam_magnets_Simon.xml"/>
 
   <include ref="/home/simon/geant4/lmon2/geometry/rev1/central_section.xml"/>
 

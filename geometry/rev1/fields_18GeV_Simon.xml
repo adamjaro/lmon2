@@ -1,0 +1,14 @@
+
+<main>
+
+  <const name="Q1eR_grad" value="13.71866359725427" comment="T/m"/>
+
+  <const name="Q2eR_grad" value="-13.309114237184442" comment="T/m"/>
+
+  <const name="B2AeR_field" value="0.198" comment="T"/>
+  <const name="B2BeR_field" value="0.198" comment="T"/>
+
+  <const name="Q3eR_grad" value="-6.37062990591305" comment="T/m"/>
+
+</main>
+

@@ -43,11 +43,21 @@ class TagTrackBasic {
     Double_t fTrueQ2=0;
     Double_t fTrueX=0;
 
+    Double_t fTrueMomX=0;
+    Double_t fTrueMomY=0;
+    Double_t fTrueMomZ=0;
+
     float nnInput[4];
+    std::vector<float> intercept_pos_y;
+    std::vector<float> intercept_pos_z;
+    std::vector<float> intercept_dir_x;
+    std::vector<float> intercept_dir_y;
+
     TMVA::Reader          m_reader{"!Color:!Silent"};
     TMVA::MethodBase*     m_method{nullptr};
     std::string m_method_name{"DNN_CPU"};
-    std::string m_file_path{"/home/simon/geant4/lmon2/reconstruction/python/LowQ2_DNN_CPU.weights.xml"};
+    //    std::string m_file_path{"/home/simon/geant4/lmon2/reconstruction/python/LowQ2_DNN_CPU.weights.xml"};
+    std::string m_file_path{"/home/simon/geant4/lmon2/dataset/weights/LowQ2Reconstruction_DNN.weights.xml"};
     bool useTMVA = true;
     float m_electron{0.000510998928}; //TODO: Link to constant elsewhere?
 

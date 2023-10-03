@@ -141,19 +141,28 @@ void TagTrackBasic::Run(const char *conf) {
   otree.Branch("true_Q2", &fTrueQ2, "true_Q2/D");
   otree.Branch("true_x", &fTrueX, "true_x/D");
 
+  otree.Branch("true_el_momx", &fTrueMomX, "true_el_momx/D");
+  otree.Branch("true_el_momy", &fTrueMomY, "true_el_momy/D");
+  otree.Branch("true_el_momz", &fTrueMomZ, "true_el_momz/D");
+
   //event counters
   Int_t evt_s1_ntrk=0, evt_s2_ntrk=0;
   otree.Branch("s1_ntrk", &evt_s1_ntrk, "s1_ntrk/I");
   otree.Branch("s2_ntrk", &evt_s2_ntrk, "s2_ntrk/I");
 
-  TagTrackFindBasic s1("s1");
-  TagTrackFindBasic s2("s2");
+  TagTrackFindBasic s1("S1");
+  TagTrackFindBasic s2("S2");
 
   s1.SetGeometry(&geo);
   s2.SetGeometry(&geo);
 
   s1.ConnectHitsInput(&tree);
   s2.ConnectHitsInput(&tree);
+
+  otree.Branch("intercept_pos_y", &intercept_pos_y);
+  otree.Branch("intercept_pos_z", &intercept_pos_z);
+  otree.Branch("intercept_vec_x", &intercept_dir_x);
+  otree.Branch("intercept_vec_y", &intercept_dir_y);
 
   //output for clusters from individual planes
   bool planes_output = true;
@@ -183,11 +192,19 @@ void TagTrackBasic::Run(const char *conf) {
   //total reconstruction counters
   Long64_t ncls_s1=0, ncls_s2=0, ntrk_s1=0, ntrk_s2=0;
 
+//   if(useTMVA){
+//     m_reader.AddVariable( "LowQ2Tracks[0].loc.a", &nnInput[LowQ2NNIndexIn::PosY] );
+//     m_reader.AddVariable( "LowQ2Tracks[0].loc.b", &nnInput[LowQ2NNIndexIn::PosZ] );
+//     m_reader.AddVariable( "sin(LowQ2Tracks[0].phi)*sin(LowQ2Tracks[0].theta)", &nnInput[LowQ2NNIndexIn::DirX] );
+//     m_reader.AddVariable( "cos(LowQ2Tracks[0].phi)*sin(LowQ2Tracks[0].theta)", &nnInput[LowQ2NNIndexIn::DirY] );
+//     m_method = dynamic_cast<TMVA::MethodBase*>(m_reader.BookMVA( m_method_name, m_file_path ));
+//   }
+
   if(useTMVA){
-    m_reader.AddVariable( "LowQ2Tracks[0].loc.a", &nnInput[LowQ2NNIndexIn::PosY] );
-    m_reader.AddVariable( "LowQ2Tracks[0].loc.b", &nnInput[LowQ2NNIndexIn::PosZ] );
-    m_reader.AddVariable( "sin(LowQ2Tracks[0].phi)*sin(LowQ2Tracks[0].theta)", &nnInput[LowQ2NNIndexIn::DirX] );
-    m_reader.AddVariable( "cos(LowQ2Tracks[0].phi)*sin(LowQ2Tracks[0].theta)", &nnInput[LowQ2NNIndexIn::DirY] );
+    m_reader.AddVariable( "intercept_pos_y[0]", &nnInput[LowQ2NNIndexIn::PosY] );
+    m_reader.AddVariable( "intercept_pos_z[0]", &nnInput[LowQ2NNIndexIn::PosZ] );
+    m_reader.AddVariable( "intercept_vec_x[0]", &nnInput[LowQ2NNIndexIn::DirX] );
+    m_reader.AddVariable( "intercept_vec_y[0]", &nnInput[LowQ2NNIndexIn::DirY] );
     m_method = dynamic_cast<TMVA::MethodBase*>(m_reader.BookMVA( m_method_name, m_file_path ));
   }
 
@@ -197,8 +214,13 @@ void TagTrackBasic::Run(const char *conf) {
   Long64_t iprint = nev/12;
   for(Long64_t iev=0; iev<nev; iev++) {
 
-    tree.GetEntry(iev);
+    intercept_pos_y.clear();
+    intercept_pos_z.clear();
+    intercept_dir_x.clear();
+    intercept_dir_y.clear();
 
+    tree.GetEntry(iev);
+   
     if( iev > 0 and iev%iprint == 0 ) {
       cout << Form("%.1f", 100.*iev/nev) << "%" << endl;
     }
@@ -207,6 +229,10 @@ void TagTrackBasic::Run(const char *conf) {
 
     //load the mc
     fMC->LoadInput();
+
+    fTrueMomX = fBeamEn*sin(fTruePhi)*sin(fTrueTheta);
+    fTrueMomY = fBeamEn*cos(fTruePhi)*sin(fTrueTheta);
+    fTrueMomZ = fBeamEn*cos(fTrueTheta);
 
     //run the reconstruction
     s1.ProcessEvent();
@@ -221,7 +247,6 @@ void TagTrackBasic::Run(const char *conf) {
     //set the event counters
     evt_s1_ntrk = s1.GetTracks().size();
     evt_s2_ntrk = s2.GetTracks().size();
-
     //fill event tree
     otree.Fill();
 
@@ -283,7 +308,7 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
       ROOT::Math::XYZPoint    globalPos = localPos+tag->getOffset();
       
       ROOT::Math::XYZVector   localVec(0,0,-1.0);
-      ROOT::Math::RotationZYX rot(0,i.theta_x,i.theta_y);
+      ROOT::Math::RotationZYX rot(0,i.theta_x,i.theta_y+0.018);
       ROOT::Math::XYZVector   globalVec = rot(localVec);
       
       //      std::cout << i.theta_y << " " << tag->getAngle() << " " << i.theta_x << std::endl;
@@ -294,6 +319,15 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
       nnInput[LowQ2NNIndexIn::PosZ] = interceptPos.z();
       nnInput[LowQ2NNIndexIn::DirX] = globalVec.x();
       nnInput[LowQ2NNIndexIn::DirY] = globalVec.y();
+
+      intercept_pos_y.push_back(interceptPos.y());
+      intercept_pos_z.push_back(interceptPos.z());
+      intercept_dir_x.push_back(globalVec.x());
+      intercept_dir_y.push_back(globalVec.y());
+
+      std::cout << interceptPos.x() << std::endl;
+      std::cout << nnInput[LowQ2NNIndexIn::PosY] << " " <<nnInput[LowQ2NNIndexIn::PosZ] << std::endl;
+      std::cout << nnInput[LowQ2NNIndexIn::DirX] << " " <<nnInput[LowQ2NNIndexIn::DirY] << std::endl << std::endl;
 
       fPosHist->Fill(interceptPos.y(),interceptPos.z()/1000);
       fVecHist->Fill(globalVec.x()*100,globalVec.y()*100);

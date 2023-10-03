@@ -19,7 +19,7 @@ find_package(Boost COMPONENTS program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 #HepMC3
-option(USE_HEPMC3 "Use HepMC3 input" OFF)
+option(USE_HEPMC3 "Use HepMC3 input" ON)
 set(HepMC3_DIR "" CACHE PATH "HepMC3 location")
 configure_file(base/include/use_hepmc3.h.in use_hepmc3.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})

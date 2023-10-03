@@ -302,35 +302,39 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
 
     }//MC loop
 
+    ROOT::Math::XYZPoint    localPos(i.x,i.y,0);
+    ROOT::Math::XYZPoint    globalPos = localPos+tag->getOffset();
+    
+    ROOT::Math::XYZVector   localVec(0,0,-1.0);
+    ROOT::Math::RotationZYX rot(0,i.theta_x,i.theta_y+0.018);
+    ROOT::Math::XYZVector   globalVec = rot(localVec);
+
+    ROOT::Math::XYZPoint    interceptPos =  globalPos-(globalPos.x()/globalVec.x())*globalVec;
+      
+
+    intercept_pos_y.push_back(interceptPos.y());
+    intercept_pos_z.push_back(interceptPos.z());
+    intercept_dir_x.push_back(globalVec.x());
+    intercept_dir_y.push_back(globalVec.y());
+
+    fPosHist->Fill(interceptPos.y(),interceptPos.z()/1000);
+    fVecHist->Fill(globalVec.x()*100,globalVec.y()*100);
+
     //TMVA reconstruction
     if(useTMVA){
-      ROOT::Math::XYZPoint    localPos(i.x,i.y,0);
-      ROOT::Math::XYZPoint    globalPos = localPos+tag->getOffset();
-      
-      ROOT::Math::XYZVector   localVec(0,0,-1.0);
-      ROOT::Math::RotationZYX rot(0,i.theta_x,i.theta_y+0.018);
-      ROOT::Math::XYZVector   globalVec = rot(localVec);
       
       //      std::cout << i.theta_y << " " << tag->getAngle() << " " << i.theta_x << std::endl;
 
-      ROOT::Math::XYZPoint    interceptPos =  globalPos-(globalPos.x()/globalVec.x())*globalVec;
-      
       nnInput[LowQ2NNIndexIn::PosY] = interceptPos.y();
       nnInput[LowQ2NNIndexIn::PosZ] = interceptPos.z();
       nnInput[LowQ2NNIndexIn::DirX] = globalVec.x();
       nnInput[LowQ2NNIndexIn::DirY] = globalVec.y();
 
-      intercept_pos_y.push_back(interceptPos.y());
-      intercept_pos_z.push_back(interceptPos.z());
-      intercept_dir_x.push_back(globalVec.x());
-      intercept_dir_y.push_back(globalVec.y());
 
-      std::cout << interceptPos.x() << std::endl;
-      std::cout << nnInput[LowQ2NNIndexIn::PosY] << " " <<nnInput[LowQ2NNIndexIn::PosZ] << std::endl;
-      std::cout << nnInput[LowQ2NNIndexIn::DirX] << " " <<nnInput[LowQ2NNIndexIn::DirY] << std::endl << std::endl;
+//       std::cout << interceptPos.x() << std::endl;
+//       std::cout << nnInput[LowQ2NNIndexIn::PosY] << " " <<nnInput[LowQ2NNIndexIn::PosZ] << std::endl;
+//       std::cout << nnInput[LowQ2NNIndexIn::DirX] << " " <<nnInput[LowQ2NNIndexIn::DirY] << std::endl << std::endl;
 
-      fPosHist->Fill(interceptPos.y(),interceptPos.z()/1000);
-      fVecHist->Fill(globalVec.x()*100,globalVec.y()*100);
 
       auto values = m_method->GetRegressionValues();
 

@@ -20,7 +20,7 @@ class EThetaPhiRecoV2 {
 
     void Import(TFile *in);
     void SetMinNinp(Int_t n) { fMinNinp = n; }
-    Bool_t Reconstruct(Double_t *quant, Double_t& el_en, Double_t& el_theta, Double_t& el_phi, Int_t *ipar=0);
+    Bool_t Reconstruct(Double_t *quant, Double_t& el_en, Double_t& el_theta, Double_t& el_phi, Int_t *ipar=0, Double_t *dpar=0);
 
   private:
 

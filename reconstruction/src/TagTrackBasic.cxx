@@ -266,8 +266,9 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
     Double_t rec_en=0, rec_theta=0, rec_phi=0; // reconstructed electron by reference
     //Int_t ninp=0;
     Int_t ipar[2];
+    Double_t dpar[3];
     //Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, &ninp); // perform the reconstruction
-    Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, ipar); // perform the reconstruction
+    Bool_t stat = rec->Reconstruct(quant, rec_en, rec_theta, rec_phi, ipar, dpar); // perform the reconstruction
     if( !stat ) continue;
 
     //set the track parameters
@@ -277,6 +278,9 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
     i.rec_phi = rec_phi;
     i.ninp = ipar[0]; // at index 0 from Reconstruct
     i.ilay = ipar[1]; // at index 1
+    i.rec_en_err = dpar[0];
+    i.rec_theta_err = dpar[1];
+    i.rec_phi_err = dpar[2];
 
     //reconstructed electron Q^2 by beam energy, electron energy and polar angle
     i.rec_Q2 = 2*fBeamEn*i.rec_en*(1-TMath::Cos(TMath::Pi()-i.rec_theta));

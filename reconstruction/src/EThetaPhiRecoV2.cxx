@@ -282,13 +282,16 @@ void EThetaPhiRecoV2::Import(TFile *in) {
     //import the links for the layer
     TTree *link_tree = dynamic_cast<TTree*>(in->Get( (fNam+"_links_"+to_string(ilay)).c_str() ));
     ULong64_t idx;
-    Double_t en, theta, phi;
+    Double_t en, theta, phi, en_err, theta_err, phi_err;
     Int_t ninp;
     link_tree->SetBranchAddress("idx", &idx);
     link_tree->SetBranchAddress("en", &en);
     link_tree->SetBranchAddress("theta", &theta);
     link_tree->SetBranchAddress("phi", &phi);
     link_tree->SetBranchAddress("ninp", &ninp);
+    link_tree->SetBranchAddress("en_err", &en_err);
+    link_tree->SetBranchAddress("theta_err", &theta_err);
+    link_tree->SetBranchAddress("phi_err", &phi_err);
 
     //links tree loop
     for(Long64_t i=0; i<link_tree->GetEntries(); i++) {
@@ -304,6 +307,9 @@ void EThetaPhiRecoV2::Import(TFile *in) {
       lnk.phi = phi;
       lnk.ninp = ninp;
       lnk.ilay = ilay;
+      lnk.en_err = en_err;
+      lnk.theta_err = theta_err;
+      lnk.phi_err = phi_err;
 
     }//links tree loop
 
@@ -313,7 +319,7 @@ void EThetaPhiRecoV2::Import(TFile *in) {
 
 //_____________________________________________________________________________
 Bool_t EThetaPhiRecoV2::Reconstruct(Double_t *quant,
-    Double_t& el_en, Double_t& el_theta, Double_t& el_phi, Int_t *ipar) {
+    Double_t& el_en, Double_t& el_theta, Double_t& el_phi, Int_t *ipar, Double_t *dpar) {
 
   //run reconstruction for the measured quantities
 
@@ -340,6 +346,11 @@ Bool_t EThetaPhiRecoV2::Reconstruct(Double_t *quant,
     if(ipar) {
       ipar[0] = lnk.ninp;
       ipar[1] = lnk.ilay;
+    }
+    if(dpar) {
+      dpar[0] = lnk.en_err;
+      dpar[1] = lnk.theta_err;
+      dpar[2] = lnk.phi_err;
     }
 
     return kTRUE;

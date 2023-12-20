@@ -13,13 +13,15 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 3
+    iplot = 5
 
     func = {}
     func[0] = energy
     func[1] = pitheta
     func[2] = phi
     func[3] = logQ2
+    func[4] = energy_err
+    func[5] = theta_err
 
     func[iplot]()
 
@@ -255,6 +257,94 @@ def logQ2():
     can.SaveAs("01fig.pdf")
 
 #logQ2
+
+#_____________________________________________________________________________
+def energy_err():
+
+    #relative error in energy
+
+    #a.u.
+    xbin = 0.02
+    xmin = 0
+    xmax = 0.2
+
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk_ax2.root"
+    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk_bx2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
+
+    det = "s1_tracks"
+    #det = "s2_tracks"
+
+    #reconstructed value and its error
+    val = det+"_rec_en"
+    err = det+"_rec_en_err"
+
+    infile = TFile.Open(inp)
+    tree = infile.Get("event")
+
+    can = ut.box_canvas()
+
+    hx = ut.prepare_TH1D("hx", xbin, xmin, xmax)
+
+    tree.Draw(err+"/"+val+" >> hx", err+">=0")
+
+    ytit = "Counts"
+    xtit = "sigma_E/E"
+    ut.put_yx_tit(hx, ytit, xtit, 1.4, 1.3)
+
+    ut.set_margin_lbtr(gPad, 0.11, 0.11, 0.02, 0.11)
+
+    gPad.SetGrid()
+
+    ut.invert_col(rt.gPad)
+    can.SaveAs("01fig.pdf")
+
+#energy_err
+
+#_____________________________________________________________________________
+def theta_err():
+
+    #relative error in theta
+
+    #a.u.
+    #xbin = 1e-5
+    xmin = 0
+    #xmax = 1e-3
+    xbin = 0.001
+    xmax = 0.01
+
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk_ax2.root"
+    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk_bx2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
+
+    det = "s1_tracks"
+    #det = "s2_tracks"
+
+    #reconstructed value and its error
+    val = "TMath::Pi()-"+det+"_rec_theta"
+    err = "TMath::Pi()-"+det+"_rec_theta_err"
+
+    infile = TFile.Open(inp)
+    tree = infile.Get("event")
+
+    can = ut.box_canvas()
+
+    hx = ut.prepare_TH1D("hx", xbin, xmin, xmax)
+
+    tree.Draw(err+"/"+val+" >> hx", det+"_rec_theta_err>=0")
+
+    ytit = "Counts"
+    xtit = "sigma_theta/theta"
+    ut.put_yx_tit(hx, ytit, xtit, 1.4, 1.3)
+
+    ut.set_margin_lbtr(gPad, 0.11, 0.11, 0.02, 0.11)
+
+    gPad.SetGrid()
+
+    ut.invert_col(rt.gPad)
+    can.SaveAs("01fig.pdf")
+
+#theta_err
 
 #_____________________________________________________________________________
 if __name__ == "__main__":

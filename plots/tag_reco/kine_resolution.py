@@ -37,8 +37,8 @@ def energy():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -65,7 +65,7 @@ def energy():
     print("On the plot:  ", hxy.Integral())
 
     ytit = "Reconstructed energy #it{E_{e}} (GeV)"
-    xtit = "Generated true energy #it{E_{e,gen}} (GeV)"
+    xtit = "Generated MC particle energy #it{E_{e,mc}} (GeV)"
     ut.put_yx_tit(hxy, ytit, xtit, 1.4, 1.3)
 
     ut.set_margin_lbtr(gPad, 0.11, 0.11, 0.02, 0.11)
@@ -77,7 +77,7 @@ def energy():
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #energy
@@ -122,7 +122,8 @@ def pitheta():
     print("On the plot:  ", hxy.Integral())
 
     ytit = "Reconstructed #it{#pi-#theta_{e}} (mrad)"
-    xtit = "Generated true #it{#pi-#theta_{e,gen}} (mrad)"
+    #xtit = "Generated true #it{#pi-#theta_{e,gen}} (mrad)"
+    xtit = "Generated MC particle #it{#pi-#theta_{e,gen}} (mrad)"
     ut.put_yx_tit(hxy, ytit, xtit, 1.9, 1.3)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.11)
@@ -134,7 +135,7 @@ def pitheta():
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #pitheta
@@ -236,8 +237,9 @@ def logQ2():
 
     print("On the plot:  ", hxy.Integral())
 
-    ytit = "Reconstructed electron #it{Q}^{2} (GeV^{2})"
-    xtit = "Generated true #it{Q}^{2} (GeV^{2})"
+    ytit = "Reconstructed electron log_{10}(#it{Q}^{2}) (GeV^{2})"
+    #xtit = "Generated true #it{Q}^{2} (GeV^{2})"
+    xtit = "Generated MC particle log_{10}(#it{Q}^{2}) (GeV^{2})"
     ut.put_yx_tit(hxy, ytit, xtit, 1.9, 1.4)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.11, 0.03, 0.11)
@@ -249,7 +251,7 @@ def logQ2():
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #logQ2

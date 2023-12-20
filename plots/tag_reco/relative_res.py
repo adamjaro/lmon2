@@ -16,12 +16,14 @@ from parameter_descriptor import parameter_descriptor as pdesc
 #_____________________________________________________________________________
 def main():
 
-    iplot = 2
+    iplot = 3
 
     func = {}
     func[0] = pitheta_2d
     func[1] = pitheta_1d
     func[2] = lQ2_2d
+    func[3] = energy_2d
+    func[4] = energy_1d
 
     func[iplot]()
 
@@ -227,8 +229,10 @@ def lQ2_2d():
     #print("Fraction outside 30%:", nout.GetValue()/hx.GetEntries())
     print("Entries: ", nall, ", nout:", nsel, ", fraction outside 30%:", f30, "+/-", f30_sigma)
 
-    ytit = "(rec-gen)/gen"
-    xtit = "mcp lQ2"
+    #ytit = "(rec-gen)/gen"
+    ytit = "( (reconstructed #it{Q}^{2}) - (generated #it{Q}^{2}) ) / (generated #it{Q}^{2})"
+    #xtit = "mcp lQ2"
+    xtit = "Generated MC particle log_{10}(#it{Q}^{2}) (GeV^{2})"
     ut.put_yx_tit(hx, ytit, xtit, 1.9, 1.4)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.11, 0.03, 0.11)
@@ -239,11 +243,111 @@ def lQ2_2d():
     gPad.SetLogz()
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #lQ2_2d
 
+#_____________________________________________________________________________
+def energy_2d():
+
+    #GeV
+    #xbin = 0.05
+    xbin = 0.1
+    xmin = 4
+    xmax = 19
+
+    #A.U.
+    #ybin = 0.005
+    ybin = 0.01
+    ymin = -1
+    ymax = 1
+
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v2.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+
+    sel = "s1_tracks_is_rec==1 && s1_tracks_has_mcp==1"
+
+    df = RDataFrame("event", inp)
+    df = df.Define("s1_tracks_rel_en", "(s1_tracks_rec_en-s1_tracks_true_en)/s1_tracks_true_en")
+
+    can = ut.box_canvas()
+    hx = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, ybin, ymin, ymax) )
+
+    hx = df.Histo2D(hx, "s1_tracks_true_en", "s1_tracks_rel_en").GetValue()
+
+    hx.Draw("colz")
+
+    print("Entries: ", hx.GetEntries())
+
+    #ytit = "(rec-gen)/gen"
+    #xtit = "true_en (GeV)"
+    ytit = "( (reconstructed #it{E}) - (generated #it{E}) ) / (generated #it{E})"
+    xtit = "Generated MC particle energy #it{E} (GeV)"
+    ut.put_yx_tit(hx, ytit, xtit, 1.9, 1.4)
+
+    ut.set_margin_lbtr(gPad, 0.14, 0.11, 0.03, 0.11)
+
+    hx.SetMinimum(0.98)
+    hx.SetContour(300)
+
+    gPad.SetLogz()
+    gPad.SetGrid()
+
+    #ut.invert_col(rt.gPad)
+    can.SaveAs("01fig.pdf")
+
+#energy_2d
+
+#_____________________________________________________________________________
+def energy_1d():
+
+    #A.U.
+    xbin = 0.005
+    xmin = -0.9
+    xmax = 1
+
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+
+    sel = "s1_tracks_is_rec==1 && s1_tracks_has_mcp==1"
+
+    df = RDataFrame("event", inp)
+    df = df.Define("s1_tracks_rel_en", "(s1_tracks_rec_en-s1_tracks_true_en)/s1_tracks_true_en")
+
+    gInterpreter.Declare("int calc_nin(ROOT::VecOps::RVec<double>& v) {Double_t ref=0.05;\
+        int n=0; for(auto& i: v) {if(i<ref and i>-ref) n++;} return n;}")
+
+    df = df.Define("s1_tracks_rel_en_nin", "calc_nin(s1_tracks_rel_en)")
+
+    nin = df.Sum("s1_tracks_rel_en_nin")
+    ntrk_all = df.Sum("s1_ntrk")
+
+    print("All:", ntrk_all.GetValue())
+    print("Sel:", nin.GetValue())
+    print("Ratio sel/all:", nin.GetValue()/ntrk_all.GetValue())
+
+    can = ut.box_canvas()
+    hx = rt.RDF.TH1DModel( ut.prepare_TH1D("hx", xbin, xmin, xmax) )
+
+    hx = df.Histo1D(hx, "s1_tracks_rel_en").GetValue()
+
+    ut.set_H1D(hx)
+
+    hx.Draw()
+
+    ut.put_yx_tit(hx, "Counts", "(#it{E}_{rec} - #it{E}_{gen})/#it{E}_{gen}", 1.9, 1.3)
+
+    ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.11)
+
+    gPad.SetLogy()
+
+    gPad.SetGrid()
+
+    ut.invert_col(rt.gPad)
+    can.SaveAs("01fig.pdf")
+
+#energy_1d
 
 #_____________________________________________________________________________
 if __name__ == "__main__":

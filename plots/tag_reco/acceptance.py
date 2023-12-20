@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 3
+    iplot = 2
 
     func = {}
     func[0] = energy_1d
@@ -77,10 +77,10 @@ def energy_pitheta():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
 
     #tagger 1 or 2
     tag = 1
@@ -145,9 +145,9 @@ def energy_pitheta():
 
     leg = ut.prepare_leg(0.15, 0.9, 0.24, 0.06, 0.035) # x, y, dx, dy, tsiz
     leg.AddEntry("", "#bf{"+lab_sel+"}", "")
-    leg.Draw("same")
+    #leg.Draw("same")
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #energy_pitheta
@@ -167,9 +167,9 @@ def logx_logQ2():
     ymin = -9
     ymax = 0
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
 
     infile = TFile.Open(inp)
     tree = infile.Get("event")
@@ -186,9 +186,9 @@ def logx_logQ2():
 
     hxy_sel.Divide(hxy_all)
 
-    ytit = "Virtuality #it{Q}^{2} (GeV^{2})"
-    xtit = "Bjorken #it{x}"
-    ut.put_yx_tit(hxy_sel, ytit, xtit, 1.4, 1.3)
+    ytit = "Virtuality log_{10}(#it{Q}^{2}) (GeV^{2})"
+    xtit = "Bjorken log_{10}(#it{x})"
+    ut.put_yx_tit(hxy_sel, ytit, xtit, 1.35, 1.3)
 
     #hxy_sel.SetZTitle("Acceptance #times Efficiency #it{A}#times#it{E}")
     hxy_sel.SetZTitle("Acceptance")
@@ -204,7 +204,7 @@ def logx_logQ2():
 
     hxy_sel.Draw("colz")
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #logx_logQ2

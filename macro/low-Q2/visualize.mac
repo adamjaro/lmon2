@@ -31,7 +31,8 @@
 /run/initialize
 
 #/vis/open OGL 800x600-0+0
-/vis/open OIQt
+/vis/open OGL 3000x2000-0+0
+#/vis/open OIQt
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
@@ -50,6 +51,7 @@
 /vis/viewer/set/viewpointThetaPhi -45 -45
 #/vis/viewer/set/viewpointThetaPhi 45 45 deg
 
+#/vis/viewer/set/targetPoint 0 0 -10000 mm
 #/vis/viewer/set/targetPoint 0 0 -14865 mm # B2BeR end
 
 /vis/viewer/set/targetPoint -181 0 -20500 mm  # Tagger 1

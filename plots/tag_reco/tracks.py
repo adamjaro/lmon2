@@ -40,10 +40,10 @@ def theta_x():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -57,13 +57,13 @@ def theta_x():
 
     tree.Draw(det+"_theta_x*1e3 >> hx")
 
-    ut.put_yx_tit(hx, "Counts", "theta_x (mrad)", 1.9, 1.3)
+    ut.put_yx_tit(hx, "Counts", "Tracks #it{#theta}_{x} angle (mrad)", 1.9, 1.3)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.11)
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #theta_x
@@ -81,10 +81,10 @@ def theta_y():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -98,13 +98,13 @@ def theta_y():
 
     tree.Draw(det+"_theta_y*1e3 >> hx")
 
-    ut.put_yx_tit(hx, "Counts", "theta_y (mrad)", 1.9, 1.3)
+    ut.put_yx_tit(hx, "Counts", "Tracks #it{#theta_{y}} angle (mrad)", 1.9, 1.3)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.11)
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #theta_y
@@ -123,11 +123,11 @@ def xy():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -141,7 +141,7 @@ def xy():
 
     tree.Draw(det+"_y:"+det+"_x >> hxy")
 
-    ut.put_yx_tit(hxy, "y (mm)", "x (mm)", 1.9, 1.3)
+    ut.put_yx_tit(hxy, "#it{y} (mm)", "#it{x} (mm)", 1.9, 1.3)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.11)
 
@@ -150,7 +150,7 @@ def xy():
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #xy
@@ -167,9 +167,9 @@ def chi2():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -183,7 +183,7 @@ def chi2():
 
     tree.Draw(det+"_chi2_xy >> hx")
 
-    ut.put_yx_tit(hx, "Counts", "chi2", 1.9, 1.3)
+    ut.put_yx_tit(hx, "Counts", "Tracks #it{#chi}^{2}", 1.9, 1.3)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.11)
 
@@ -191,7 +191,7 @@ def chi2():
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #chi2

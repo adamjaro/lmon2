@@ -122,10 +122,12 @@ GeoParser::Constant GeoParser::Evaluate(G4String val) {
     }//parameter loop
 
     //constant value from the formula
-    c.type = Constant::kDouble; // set type to double
-    c.val_d = form.Eval(0); // set the double value
+    if( form.Compile() == 0 ) {
+      c.type = Constant::kDouble; // set type to double
+      c.val_d = form.Eval(0); // set the double value
 
-    return c;
+      return c;
+    }
   }
 
   //string constant or single substitution in the token loop

@@ -11,6 +11,10 @@ namespace CalPWOHits {
 //hit representation
 struct Hit {
 
+  //geometry transformations
+  void Translate(Double_t xp, Double_t yp, Double_t zp);
+  void RotateXY(Double_t tx, Double_t ty);
+
   //hit members to appear in fUnitIO
   Int_t cell_id=0; // cell ID in the module
   Double_t x=0; // cell position in x, mm

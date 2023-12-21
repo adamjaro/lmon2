@@ -10,6 +10,7 @@
 
 //ROOT
 #include "TTree.h"
+#include "TVector3.h"
 
 //Geant
 //#include "G4ios.hh"
@@ -18,6 +19,29 @@
 #include "CalPWOHits.h"
 
 using namespace std;
+
+//_____________________________________________________________________________
+void CalPWOHits::Hit::Translate(Double_t xp, Double_t yp, Double_t zp) {
+
+  //hit translation in all coordinates
+  x += xp;
+  y += yp;
+  z += zp;
+
+}//Hit::Translate
+
+//_____________________________________________________________________________
+void CalPWOHits::Hit::RotateXY(Double_t tx, Double_t ty) {
+
+  TVector3 pos(x, y, z);
+  pos.RotateY(ty);
+  pos.RotateX(tx);
+
+  x = pos.X();
+  y = pos.Y();
+  z = pos.Z();
+
+}//Hit::RotateXY
 
 //_____________________________________________________________________________
 CalPWOHits::Coll::Coll() {

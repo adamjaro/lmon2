@@ -69,9 +69,17 @@ void CalPWOClusterWavg::SetGeometry(string geo_nam, std::string det_nam, GeoPars
 }//SetGeometry
 
 //_____________________________________________________________________________
+void CalPWOClusterWavg::CreateOutput(TTree *tree) {
+
+  fCls.CreateOutput(fNam+"_clusters", tree);
+
+}//CreateOutput
+
+//_____________________________________________________________________________
 void CalPWOClusterWavg::ProcessEvent() {
 
   fHits.LoadInput();
+  fCls.ClearEvent();
 
   if(fHits.GetN() <= 0) return;
 
@@ -103,7 +111,16 @@ void CalPWOClusterWavg::ProcessEvent() {
   cls_x = cls_x/cls_en;
   cls_y = cls_y/cls_en;
 
-  cout << "cluster: " << cls_x << " " << cls_y << " " << cls_en << " " << cls_nhit << endl;
+  //add the cluster
+  CaloCluster::Cls& cls = fCls.Add();
+  cls.x = cls_x;
+  cls.y = cls_y;
+  cls.en = cls_en;
+  cls.nhit = cls_nhit;
+
+  //cout << "cluster: " << cls_x << " " << cls_y << " " << cls_en << " " << cls_nhit << endl;
+
+  fCls.FinishEvent();
 
 }//ProcessEvent
 

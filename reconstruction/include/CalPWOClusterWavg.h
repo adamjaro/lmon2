@@ -7,6 +7,7 @@
 class GeoParser;
 
 #include "CalPWOHits.h"
+#include "CaloCluster.h"
 
 class CalPWOClusterWavg {
 
@@ -17,7 +18,12 @@ class CalPWOClusterWavg {
     void ConnectInput(TTree *tree);
     void SetGeometry(std::string geo_nam, std::string det_nam, GeoParser *geo);
 
+    void CreateOutput(TTree *tree);
+
     void ProcessEvent();
+
+    //access to created clusters during reconstruction
+    const std::vector<CaloCluster::Cls>& GetClusters() { return fCls.GetStore(); }
 
   private:
 
@@ -30,6 +36,8 @@ class CalPWOClusterWavg {
     G4double fZpos=0; // calorimeter position in z, mm
     G4double fThetaX=0; // calorimeter rotation along x, rad
     G4double fThetaY=0; // calorimeter rotation along y, rad
+
+    CaloCluster::Coll fCls; // reconstructed clusters
 
 };
 

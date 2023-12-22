@@ -64,10 +64,22 @@ void TagCalPWO::Run(const char *conf) {
     tree.Add( glob_inputs.gl_pathv[i] );
   }
 
+  //output
+  string outfile = GetStr(opt_map, "main.outfile");
+  cout << "Output: " << outfile << endl;
+  TFile out(outfile.c_str(), "recreate");
+
+  //interaction (event) output tree
+  TTree otree("event", "event");
+
   //calorimeter clusters
-  CalPWOClusterWavg cls_s1("lowQ2_s1_pwo");
+  CalPWOClusterWavg cls_s1("lowQ2_s1_pwo"); // name as in the geometry
   cls_s1.ConnectInput(&tree);
   cls_s1.SetGeometry("vac_S1", "lowQ2_s1_pwo", &geo);
+  cls_s1.CreateOutput(&otree);
+
+  //reconstruction counters
+  Long64_t ncls_s1=0;
 
   //event loop
   Long64_t nev = tree.GetEntries();
@@ -81,9 +93,20 @@ void TagCalPWO::Run(const char *conf) {
 
     cls_s1.ProcessEvent();
 
+    //update the counters
+    ncls_s1 += cls_s1.GetClusters().size();
+
+    //fill event tree
+    otree.Fill();
+
   }//event loop
 
+  //close the output
+  otree.Write(0, TObject::kOverwrite);
+  out.Close();
+
   cout << "Events: " << nev << endl;
+  cout << "Calorimeter clusters: " << ncls_s1 << endl;
 
 }//Run
 

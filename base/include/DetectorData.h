@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <string>
 #include <functional>
+#include <iostream>
 
 //ROOT
 #include "TTree.h"
@@ -53,7 +54,7 @@ template<class U, class S=std::vector<U>> class DetectorData {
     }//ClearEvent
 
     //_____________________________________________________________________________
-    U& Add(U obj) {
+    U& Add(U obj=U()) {
 
       //make new object obj of Unit U with Storage S as a sequence container
       //and return reference to it
@@ -65,7 +66,7 @@ template<class U, class S=std::vector<U>> class DetectorData {
     }//Add
 
     //_____________________________________________________________________________
-    template<typename key_type> U& ConstructedAt(key_type i, U obj) {
+    template<typename key_type> U& ConstructedAt(key_type i, U obj=U()) {
 
       //create object obj of unit U in the Storage S or retrieve already existing
       //with S as an associative container and return reference to it
@@ -97,8 +98,15 @@ template<class U, class S=std::vector<U>> class DetectorData {
 
       //connect input for Unit attributes from the tree
 
+      bool stat = false;
+
       //attribute representation loop
-      for(UnitAttrBase *i: fUnitAttr) i->ConnectInput(base_nam, tree);
+      for(UnitAttrBase *i: fUnitAttr) {
+        stat += i->ConnectInput(base_nam, tree);
+      }
+
+      //report the error when not at least one input branch was found
+      if(!stat) std::cerr << "Error, no input found for '" << base_nam << "'" << std::endl;
 
     }//ConnectInput
 
@@ -157,7 +165,7 @@ template<class U, class S=std::vector<U>> class DetectorData {
       virtual void CreateOutput(std::string base_nam, TTree* tree) = 0;
       virtual void ClearEvent() = 0;
       virtual void Write() = 0;
-      virtual void ConnectInput(std::string base_nam, TTree* tree) = 0;
+      virtual bool ConnectInput(std::string base_nam, TTree* tree) = 0;
       virtual unsigned long GetN() = 0;
       virtual void LoadVal(unsigned long i) = 0;
     };
@@ -174,11 +182,12 @@ template<class U, class S=std::vector<U>> class DetectorData {
         }
         void ClearEvent() { if(vec) vec->clear(); } //clear the vector for next event
         void Write() { if(vec) vec->push_back(val); } // write the given value to the vector with attribute values
-        void ConnectInput(std::string base_nam, TTree *tree) {
+        bool ConnectInput(std::string base_nam, TTree *tree) {
           //connect the vector with attribute values to the input tree
           vec = 0x0;
-          if( !tree->FindBranch( (base_nam+attr_nam).c_str() ) ) return;
+          if( !tree->FindBranch( (base_nam+attr_nam).c_str() ) ) { return false; }
           tree->SetBranchAddress((base_nam+attr_nam).c_str(), &vec);
+          return true;
         }
         unsigned long GetN() { return vec ? vec->size() : 0; } // number of attribute values for a given event
         void LoadVal(unsigned long i) {

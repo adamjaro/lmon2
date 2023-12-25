@@ -12,7 +12,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 2
+    iplot = 7
 
     func = {}
     func[0] = theta_x
@@ -22,6 +22,7 @@ def main():
     func[4] = lQ2_resolution
     func[5] = theta_x_x
     func[6] = theta_x_true_en
+    func[7] = track_en_cal_en
 
     func[iplot]()
 
@@ -320,6 +321,54 @@ def theta_x_true_en():
 
     xtit = "Generated true electron energy (GeV)"
     ytit = "Track horizontal angle #it{#theta}_{x} (mrad)"
+    ut.put_yx_tit(hxy, ytit, xtit, 1.5, 1.3)
+
+    ut.set_margin_lbtr(gPad, 0.12, 0.12, 0.03, 0.11)
+
+    hxy.SetMinimum(0.98)
+    hxy.SetContour(300)
+
+    gPad.SetGrid()
+
+    gPad.SetLogz()
+
+    ut.invert_col(rt.gPad)
+    can.SaveAs("01fig.pdf")
+
+#theta_x_true_en
+
+#_____________________________________________________________________________
+def track_en_cal_en():
+
+    #track reconstructed energy (x) and calorimeter energy (y)
+
+    #GeV on y axis
+    ybin = 0.3
+    ymin = 2
+    ymax = 19
+
+    #GeV on x axis
+    xbin = 0.3
+    xmin = 2
+    xmax = 19
+
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
+    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
+
+    det = "s1_tracks"
+    #det = "s2_tracks"
+
+    infile = TFile.Open(inp)
+    tree = infile.Get("event")
+
+    can = ut.box_canvas()
+
+    hxy = ut.prepare_TH2D("hxy", xbin, xmin, xmax, ybin, ymin, ymax)
+
+    tree.Draw(det+"_cal_en:"+det+"_rec_en >> hxy", det+"_cal_x<70")
+
+    xtit = "Track energy (GeV)"
+    ytit = "Cal energy (GeV)"
     ut.put_yx_tit(hxy, ytit, xtit, 1.5, 1.3)
 
     ut.set_margin_lbtr(gPad, 0.12, 0.12, 0.03, 0.11)

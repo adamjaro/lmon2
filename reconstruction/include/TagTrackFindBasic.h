@@ -74,6 +74,10 @@ class TagTrackFindBasic {
       Double_t rec_Q2 = 0; // reconstructed electron Q^2, GeV^2
       Int_t ninp = 0; // number of inputs used for reconstruction
       Int_t ilay = -1; // layer index from reconstruction
+      Bool_t has_cal=0; // flag for matched calorimeter cluster
+      Double_t cal_x=0; // matched calorimeter cluster, x position (mm)
+      Double_t cal_y=0; // matched calorimeter cluster, y position (mm)
+      Double_t cal_en=0; // matched calorimeter cluster, energy (GeV)
       Bool_t has_mcp = 0; // track is paired with MC particle
       Double_t mcp_en = 0; // MC particle energy, GeV
       Double_t mcp_theta = 0; // MC particle polar angle, rad

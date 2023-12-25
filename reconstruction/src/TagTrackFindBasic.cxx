@@ -295,6 +295,11 @@ TagTrackFindBasic::Coll::Coll() {
   DATA_ADD_UNIT_ATTR( ninp )
   DATA_ADD_UNIT_ATTR( ilay )
 
+  DATA_ADD_UNIT_ATTR( has_cal )
+  DATA_ADD_UNIT_ATTR( cal_x )
+  DATA_ADD_UNIT_ATTR( cal_y )
+  DATA_ADD_UNIT_ATTR( cal_en )
+
   DATA_ADD_UNIT_ATTR( has_mcp )
   DATA_ADD_UNIT_ATTR( mcp_en )
   DATA_ADD_UNIT_ATTR( mcp_theta )

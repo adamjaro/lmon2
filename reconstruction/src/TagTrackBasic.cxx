@@ -33,6 +33,7 @@
 #include "TrkPlaneBasicHits.h"
 #include "EThetaPhiReco.h"
 #include "EThetaPhiRecoV2.h"
+#include "CalPWOClusterWavg.h"
 
 using namespace std;
 using namespace boost;
@@ -139,6 +140,7 @@ void TagTrackBasic::Run(const char *conf) {
   otree.Branch("s1_ntrk", &evt_s1_ntrk, "s1_ntrk/I");
   otree.Branch("s2_ntrk", &evt_s2_ntrk, "s2_ntrk/I");
 
+  //tracking
   TagTrackFindBasic s1("s1");
   TagTrackFindBasic s2("s2");
 
@@ -148,7 +150,7 @@ void TagTrackBasic::Run(const char *conf) {
   s1.ConnectHitsInput(&tree);
   s2.ConnectHitsInput(&tree);
 
-  //output for clusters from individual planes
+  //output for tracking clusters from individual planes
   bool planes_output = true;
   if( opt_map.find("main.planes_output") != opt_map.end() ) {
     planes_output = opt_map["main.planes_output"].as<bool>();
@@ -173,8 +175,15 @@ void TagTrackBasic::Run(const char *conf) {
     s2.SetClsLimMdist(min_cls_dist);
   }
 
+  //calorimeter clusters
+  CalPWOClusterWavg cls_s1("lowQ2_s1_pwo"); // name as in the geometry
+  cls_s1.ConnectInput(&tree);
+  cls_s1.SetGeometry("vac_S1", "lowQ2_s1_pwo", &geo);
+  cls_s1.CreateOutput(&otree);
+
   //total reconstruction counters
-  Long64_t ncls_s1=0, ncls_s2=0, ntrk_s1=0, ntrk_s2=0;
+  Long64_t ncls_s1=0, ncls_s2=0, ntrk_s1=0, ntrk_s2=0; // tracking counters
+  Long64_t ncal_cls_s1=0; // calorimeter counters
 
   //event loop
   Long64_t nev = tree.GetEntries();
@@ -200,12 +209,19 @@ void TagTrackBasic::Run(const char *conf) {
     ElectronRec(&s1, s1_rec);
     ElectronRec(&s2, s2_rec);
 
+    //calorimeter clusters
+    cls_s1.ProcessEvent();
+
+    //track and calorimeter cluster matching
+    TrackCalMatch(&s1, &cls_s1);
+
     s1.FinishEvent();
     s2.FinishEvent();
 
     //set the event counters
     evt_s1_ntrk = s1.GetTracks().size();
     evt_s2_ntrk = s2.GetTracks().size();
+    ncal_cls_s1 += cls_s1.GetClusters().size();
 
     //fill event tree
     otree.Fill();
@@ -225,6 +241,7 @@ void TagTrackBasic::Run(const char *conf) {
   cout << "Events: " << nev << endl;
   cout << "Clusters, s1: " << ncls_s1 << ", s2: " << ncls_s2 << endl;
   cout << "Tracks, s1: " << ntrk_s1 << ", s2: " << ntrk_s2 << endl;
+  cout << "Calorimeter clusters, s1: " << ncal_cls_s1 << endl;
 
 }//Run
 
@@ -288,6 +305,31 @@ void TagTrackBasic::ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec) {
   }//tracks loop
 
 }//ElectronRec
+
+//_____________________________________________________________________________
+void TagTrackBasic::TrackCalMatch(TagTrackFindBasic *tag, CalPWOClusterWavg *cal) {
+
+  //track and calorimeter cluster matching, version for CalPWOClusterWavg
+  //which is assuming one track (and one calorimeter cluster) per event
+
+  //event with cluster
+  if( cal->GetClusters().size() != 1 ) return;
+
+  //get the calorimeter cluster
+  const CaloCluster::Cls& cls = cal->GetClusters().at(0);
+
+  //track loop
+  for(TagTrackFindBasic::Track& i: tag->GetTracks()) {
+
+    //set the matched calorimeter cluster
+    i.has_cal = kTRUE;
+    i.cal_x = cls.x;
+    i.cal_y = cls.y;
+    i.cal_en = cls.en;
+
+  }//track loop
+
+}//TrackCalMatch
 
 //_____________________________________________________________________________
 string TagTrackBasic::GetStr(program_options::variables_map& opt_map, std::string par) {

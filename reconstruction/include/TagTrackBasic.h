@@ -7,6 +7,7 @@
 class EThetaPhiReco;
 class EThetaPhiRecoV2;
 class TagTrackFindBasic;
+class CalPWOClusterWavg;
 
 namespace MCParticles {
   class Coll;
@@ -24,6 +25,7 @@ class TagTrackBasic {
 
     //void ElectronRec(TagTrackFindBasic *tag, EThetaPhiReco *rec);
     void ElectronRec(TagTrackFindBasic *tag, EThetaPhiRecoV2 *rec);
+    void TrackCalMatch(TagTrackFindBasic *tag, CalPWOClusterWavg *cal);
 
     std::string GetStr(boost::program_options::variables_map& opt_map, std::string par);
 

@@ -54,6 +54,7 @@ void TagTrackBasic::Run(const char *conf) {
     ("main.input_resp", program_options::value<string>(), "Input response for reconstruction")
     ("main.min_resp_ninp", program_options::value<int>(), "Minimal number of inputs for reconstruction")
     ("main.planes_output", program_options::value<bool>(), "Write output for planes")
+    ("main.cal_s1_name", program_options::value<string>()->default_value("lowQ2_s1_pwo"), "Calorimeter name in S1")
   ;
 
   //load the configuration file
@@ -176,9 +177,10 @@ void TagTrackBasic::Run(const char *conf) {
   }
 
   //calorimeter clusters
-  CalPWOClusterWavg cls_s1("lowQ2_s1_pwo"); // name as in the geometry
+  string cal_s1_name = GetStr(opt_map, "main.cal_s1_name"); // name for calorimeter volume
+  CalPWOClusterWavg cls_s1(cal_s1_name); // name as in the geometry
   cls_s1.ConnectInput(&tree);
-  cls_s1.SetGeometry("vac_S1", "lowQ2_s1_pwo", &geo);
+  cls_s1.SetGeometry("vac_S1", cal_s1_name, &geo);
   cls_s1.CreateOutput(&otree);
 
   //total reconstruction counters

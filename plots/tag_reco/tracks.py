@@ -343,17 +343,17 @@ def track_en_cal_en():
     #track reconstructed energy (x) and calorimeter energy (y)
 
     #GeV on y axis
-    ybin = 0.3
+    ybin = 0.2
     ymin = 2
-    ymax = 19
+    ymax = 16
 
     #GeV on x axis
-    xbin = 0.3
+    xbin = 0.2
     xmin = 2
-    xmax = 19
+    xmax = 16
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v3.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -365,7 +365,7 @@ def track_en_cal_en():
 
     hxy = ut.prepare_TH2D("hxy", xbin, xmin, xmax, ybin, ymin, ymax)
 
-    tree.Draw(det+"_cal_en:"+det+"_rec_en >> hxy", det+"_cal_x<70")
+    tree.Draw(det+"_cal_en:"+det+"_rec_en >> hxy", det+"_cal_x<65")
 
     xtit = "Track energy (GeV)"
     ytit = "Cal energy (GeV)"

@@ -1,0 +1,39 @@
+
+<main>
+
+  <!-- QCal1 intented to implement in tagger detector -->
+
+  <!-- calorimeter cells, mm -->
+  <const name="tag_qcal_cell_xy" value="12"/>
+  <const name="tag_qcal_cell_z" value="350"/>
+
+  <!-- free space after each cell, mm -->
+  <const name="tag_qcal_cell_phot_z" value="2"/>
+
+  <!-- number of cells along x and y in calorimeter module -->
+  <const name="tag_qcal_nxy" value="14"/>
+
+  <!-- size of calorimeter module in xy and z -->
+  <const name="tag_qcal_modxy" value="tag_qcal_cell_xy*tag_qcal_nxy"/>
+  <const name="tag_qcal_modz" value="tag_qcal_cell_z+tag_qcal_cell_phot_z"/>
+
+  <!-- calorimeter (QCal) for the tagger section -->
+
+  <detector
+    type="QCal1" name="lowQ2_s1_qcal"
+    modx="tag_qcal_modxy" mody="tag_qcal_modxy"
+    modz="tag_qcal_modz" zpos="-tag_qcal_modz/2"
+    nx="tag_qcal_nxy" ny="tag_qcal_nxy"
+    cell_xy="tag_qcal_cell_xy" cell_z="tag_qcal_cell_z"
+    cell_mat_name="QCal1_Copper"
+    fiber_clad_D="1.54" fiber_core_D="1.5" fiber_dx="4">
+  </detector>
+
+  <!-- top volume -->
+  <detector
+    name="topv" type="top"
+    xsiz = "500" ysiz="500" zsiz = "10000"> <!-- mm -->
+  </detector>
+
+</main>
+

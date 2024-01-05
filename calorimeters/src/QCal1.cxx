@@ -9,7 +9,6 @@
 // modx, mody, modz
 // nx, ny
 // cell_xy, cell_z
-// cell_vis
 // fiber_clad_D
 // fiber_core_D
 // fiber_dx
@@ -18,7 +17,7 @@
 // xpos, ypos, zpos
 // opdet_dz
 // cell_mat_name
-// core_vis
+// cell_vis, core_vis
 // mod_vis, opdet_vis
 //
 //_____________________________________________________________________________
@@ -93,8 +92,13 @@ QCal1::QCal1(const G4String& nam, GeoParser *geo, G4LogicalVolume *top): Detecto
   geo->GetOptD(fNam, "ypos", ypos, GeoParser::Unit(mm));
   geo->GetOptD(fNam, "zpos", zpos, GeoParser::Unit(mm));
 
-  //module in top volume
-  new G4PVPlacement(0, G4ThreeVector(xpos, ypos, zpos), mod_vol, mod_vol->GetName(), top, false, 0);
+  //module in its mother volume
+  G4LogicalVolume *mother_vol = top;
+  G4String mother_nam;
+  if( geo->GetOptS(fNam, "place_into", mother_nam) ) {
+    mother_vol = GetMotherVolume(mother_nam, top);
+  }
+  new G4PVPlacement(0, G4ThreeVector(xpos, ypos, zpos), mod_vol, mod_vol->GetName(), mother_vol, false, 0);
 
 }//QCal1
 
@@ -304,6 +308,21 @@ void QCal1::Add(std::vector<Detector*> *vec) {
 
 }//Add
 
+//_____________________________________________________________________________
+G4LogicalVolume* QCal1::GetMotherVolume(G4String mother_nam, G4LogicalVolume *top) {
+
+  for(size_t i=0; i<top->GetNoDaughters(); i++) {
+
+    G4LogicalVolume *dv = top->GetDaughter(i)->GetLogicalVolume();
+
+    if( dv->GetName() == mother_nam ) {
+      return dv;
+    }
+  }
+
+  return 0x0;
+
+}//GetMotherVolume
 
 
 

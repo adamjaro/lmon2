@@ -30,8 +30,8 @@
 # Initialize kernel
 /run/initialize
 
-#/vis/open OGL 800x600-0+0
-/vis/open OGL 3000x2000-0+0
+/vis/open OGL 800x600-0+0
+#/vis/open OGL 3000x2000-0+0
 #/vis/open OIQt
 
 # Disable auto refresh and quieten vis messages whilst scene and
@@ -54,8 +54,8 @@
 #/vis/viewer/set/targetPoint 0 0 -10000 mm
 #/vis/viewer/set/targetPoint 0 0 -14865 mm # B2BeR end
 
-/vis/viewer/set/targetPoint -181 0 -20500 mm  # Tagger 1
-#/vis/viewer/set/targetPoint -238 100 -21000 mm
+#/vis/viewer/set/targetPoint -181 0 -20500 mm  # Tagger 1
+/vis/viewer/set/targetPoint -238 100 -21500 mm
 
 #/vis/viewer/set/targetPoint -480 0 -36500 mm  # Tagger 2
 

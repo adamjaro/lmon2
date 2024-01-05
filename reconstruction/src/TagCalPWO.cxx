@@ -40,6 +40,7 @@ void TagCalPWO::Run(const char *conf) {
     ("main.input", program_options::value<string>(), "Analysis input")
     ("main.geo", program_options::value<string>(), "Geometry configuration")
     ("main.outfile", program_options::value<string>(), "Output from the analysis")
+    ("main.cal_name", program_options::value<string>()->default_value("lowQ2_s1_pwo"), "Calorimeter module name")
   ;
 
   //load the configuration file
@@ -73,9 +74,10 @@ void TagCalPWO::Run(const char *conf) {
   TTree otree("event", "event");
 
   //calorimeter clusters
-  CalPWOClusterWavg cls_s1("lowQ2_s1_pwo"); // name as in the geometry
+  string cal_name = GetStr(opt_map, "main.cal_name"); // name for calorimeter volume
+  CalPWOClusterWavg cls_s1(cal_name); // name as in the geometry
   cls_s1.ConnectInput(&tree);
-  cls_s1.SetGeometry("vac_S1", "lowQ2_s1_pwo", &geo);
+  cls_s1.SetGeometry("vac_S1", cal_name, &geo);
   cls_s1.CreateOutput(&otree);
 
   //reconstruction counters

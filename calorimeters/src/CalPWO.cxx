@@ -181,11 +181,16 @@ void CalPWO::SetCrystalOptics(G4Material *mat) {
   tab->AddProperty("SCINTILLATIONCOMPONENT1", LambdaNMtoEV(scin_lam), scin_fast);
   tab->AddProperty("SCINTILLATIONCOMPONENT2", LambdaNMtoEV(scin_lam), scin_fast);
   //tab->AddConstProperty("FASTTIMECONSTANT", 1*ps);
-  tab->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 1.67*ns);
-  tab->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 6.6*ns);
-  tab->AddConstProperty("SCINTILLATIONYIELD", 300/MeV);
-  tab->AddConstProperty("SCINTILLATIONYIELD1", 0.5);
-  tab->AddConstProperty("SCINTILLATIONYIELD2", 0.5);
+  //tab->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 1.67*ns);
+  //tab->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 6.6*ns);
+  //tab->AddConstProperty("SCINTILLATIONYIELD", 300/MeV);
+  //tab->AddConstProperty("SCINTILLATIONYIELD1", 0.5);
+  //tab->AddConstProperty("SCINTILLATIONYIELD2", 0.5);
+  tab->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 0.64*ns); // PWO-UF
+  tab->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 3.2*ns);
+  tab->AddConstProperty("SCINTILLATIONYIELD", 150/MeV);
+  tab->AddConstProperty("SCINTILLATIONYIELD1", 0.72);
+  tab->AddConstProperty("SCINTILLATIONYIELD2", 0.28);
   tab->AddConstProperty("RESOLUTIONSCALE", 1.);
 
   //uniform optical properties

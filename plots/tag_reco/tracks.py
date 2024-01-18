@@ -12,7 +12,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 7
+    iplot = 8
 
     func = {}
     func[0] = theta_x
@@ -23,6 +23,7 @@ def main():
     func[5] = theta_x_x
     func[6] = theta_x_true_en
     func[7] = track_en_cal_en
+    func[8] = ntrk
 
     func[iplot]()
 
@@ -343,9 +344,12 @@ def track_en_cal_en():
     #track reconstructed energy (x) and calorimeter energy (y)
 
     #GeV on y axis
-    ybin = 0.01
-    ymin = 0
-    ymax = 0.7
+    #ybin = 0.01
+    #ymin = 0
+    #ymax = 0.7
+    ybin = 0.2
+    ymin = 2
+    ymax = 16
 
     #GeV on x axis
     xbin = 0.2
@@ -353,8 +357,8 @@ def track_en_cal_en():
     xmax = 15
 
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v3.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag8ax1/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v3.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag8ax1/trk_v1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -381,10 +385,47 @@ def track_en_cal_en():
 
     gPad.SetLogz()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #theta_x_true_en
+
+#_____________________________________________________________________________
+def ntrk():
+
+    #mrad
+    xbin = 1
+    xmin = 0
+    xmax = 20
+
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax5/trk_v1.root"
+
+    det = "s1_tracks"
+    #det = "s2_tracks"
+
+    infile = TFile.Open(inp)
+    tree = infile.Get("event")
+
+    can = ut.box_canvas()
+
+    hx = ut.prepare_TH1D("hx", xbin, xmin, xmax)
+
+    tree.Draw("s1_ntrk >> hx") #, "s1_ntrk==14"
+
+    ut.line_h1(hx)
+
+    ut.put_yx_tit(hx, "Counts", "Number of tracks per event", 1.9, 1.3)
+
+    ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.03)
+
+    gPad.SetGrid()
+
+    gPad.SetLogy()
+
+    #ut.invert_col(rt.gPad)
+    can.SaveAs("01fig.pdf")
+
+#ntrk
 
 #_____________________________________________________________________________
 if __name__ == "__main__":

@@ -53,6 +53,9 @@ void TagTrackBasic::Run(const char *conf) {
     ("main.min_cls_dist", program_options::value<double>(), "Minimal cluster distance")
     ("main.input_resp", program_options::value<string>(), "Input response for reconstruction")
     ("main.min_resp_ninp", program_options::value<int>(), "Minimal number of inputs for reconstruction")
+    ("main.max_resp_rel_en", program_options::value<double>()->default_value(-1), "Maximal relative error in energy")
+    ("main.max_resp_rel_phi", program_options::value<double>()->default_value(-1), "Maximal relative error in phi")
+    ("main.max_resp_err_theta", program_options::value<double>()->default_value(-1), "Maximal error in theta (rad)")
     ("main.planes_output", program_options::value<bool>(), "Write output for planes")
     ("main.cal_s1_name", program_options::value<string>()->default_value("lowQ2_s1_pwo"), "Calorimeter name in S1")
   ;
@@ -120,6 +123,14 @@ void TagTrackBasic::Run(const char *conf) {
     s2_rec->SetMinNinp( opt_map["main.min_resp_ninp"].as<int>() );
 
   }
+
+  //error limits in reconstruction
+  s1_rec->SetMaxRelEn( opt_map["main.max_resp_rel_en"].as<double>() );
+  s1_rec->SetMaxRelPhi( opt_map["main.max_resp_rel_phi"].as<double>() );
+  s1_rec->SetMaxErrTheta( opt_map["main.max_resp_err_theta"].as<double>() );
+  s2_rec->SetMaxRelEn( opt_map["main.max_resp_rel_en"].as<double>() );
+  s2_rec->SetMaxRelPhi( opt_map["main.max_resp_rel_phi"].as<double>() );
+  s2_rec->SetMaxErrTheta( opt_map["main.max_resp_err_theta"].as<double>() );
 
   //output
   string outfile = GetStr(opt_map, "main.outfile");

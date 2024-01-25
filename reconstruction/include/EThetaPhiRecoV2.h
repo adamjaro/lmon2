@@ -20,6 +20,9 @@ class EThetaPhiRecoV2 {
 
     void Import(TFile *in);
     void SetMinNinp(Int_t n) { fMinNinp = n; }
+    void SetMaxRelEn(Double_t e) { fMaxRelEn = e; }
+    void SetMaxRelPhi(Double_t e) { fMaxRelPhi = e; }
+    void SetMaxErrTheta(Double_t e) { fMaxErrTheta = e; }
     Bool_t Reconstruct(Double_t *quant, Double_t& el_en, Double_t& el_theta, Double_t& el_phi, Int_t *ipar=0, Double_t *dpar=0);
 
   private:
@@ -37,6 +40,11 @@ class EThetaPhiRecoV2 {
     Double_t fCachePhi; //rad
 
     Int_t fMinNinp=0; // minimal number of inputs used for reconstruction
+
+    //error limits on reconstructed kinematics, negative values for inactive criteria
+    Double_t fMaxRelEn=-1; // maximal relative error in reconstructed energy
+    Double_t fMaxRelPhi=-1; // maximal relative error in reconstructed phi
+    Double_t fMaxErrTheta=-1; // maximal (absolute) error in reconstructed theta (rad)
 
     //measured quantity
     class Quantity {

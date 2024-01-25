@@ -336,7 +336,18 @@ Bool_t EThetaPhiRecoV2::Reconstruct(Double_t *quant,
     Link& lnk = (*ilnk).second;
 
     //selection criteria
+
+    //minimal number of inputs
     if( lnk.ninp < fMinNinp ) continue;
+
+    //maximal relative error in energy
+    if( fMaxRelEn > 0 and lnk.en != 0 and ( lnk.en_err < 0 or lnk.en_err/lnk.en > fMaxRelEn ) ) continue;
+
+    //maximal relative error in phi
+    if( fMaxRelPhi > 0 and lnk.phi != 0 and ( lnk.phi_err < 0 or lnk.phi_err/lnk.phi > fMaxRelPhi ) ) continue;
+
+    //maximal error in theta
+    if( fMaxErrTheta > 0 and ( lnk.theta_err < 0 or lnk.theta_err > fMaxErrTheta ) ) continue;
 
     //return the result of reconstruction
     el_en = lnk.en;

@@ -18,7 +18,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 0
+    iplot = 1
 
     func = {}
     func[0] = yields
@@ -31,24 +31,34 @@ def main():
 #_____________________________________________________________________________
 def yields(draw=True):
 
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal1a/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal1ax1/en_","/lmon.root"]
+    #inp = ["/home/jaroslav/sim/lmon2-data/pwo/pwo1ax2/en_","/lmon.root"]
 
-    energy = [1, 5, 9, 14]
+    energy = [1, 5, 9, 14, 18]
+    #energy = [1]
 
     #photon counts
     xmin = 0
-    xmax = 500
-    xbin = 3
+    xmax = 600
+    xbin = 4
+    #xmax = 30000
+    #xbin = 60
+    #xmin = 17
+    #xmax = 20
+    #xbin = 0.001
 
     hx = ut.prepare_TH1D("hx", xbin, xmin, xmax)
 
     func = []
+    hist = []
     for i in energy:
 
         df = RDataFrame("DetectorTree", inp[0]+str(i)+inp[1])
-        df = df.Define("nphot", "lowQ2_s1_qcal_opdet_time.size()")
+        df = df.Define("nphot", "lowQ2_s1_qcal_opdet_time.size()") # photon counts
+        #df = df.Define("nphot", "pwo_cath_time.size()")
+        #df = df.Define("nphot", "double en=0; for(auto& i:pwo_en) {en+=i;} return en;") # deposited energy
 
-        h_en = rt.RDF.TH1DModel( hx )
+        h_en = rt.RDF.TH1DModel( hx.Clone("hx_"+str(i)) )
         h_en = df.Histo1D(h_en, "nphot").GetValue()
 
         fg = TF1("fg_"+str(i), "gaus", xmin, xmax)
@@ -58,20 +68,25 @@ def yields(draw=True):
         h_en.Fit(fg)
 
         func.append(fg)
-
-        hx.Add(h_en)
+        hist.append(h_en)
 
     if not draw: return func
 
     can = ut.box_canvas()
 
-    ut.line_h1(hx)
+    hx = hist[0]
+
+    for i in hist: ut.line_h1(i, rt.kBlue, 2)
 
     hx.Draw()
 
-    for i in func:
-  
-      i.Draw("same")
+    for i in hist: i.Draw("same")
+
+    ut.put_yx_tit(hx, "Counts", "Number of detected optical photons per event", 1.9, 1.4)
+
+    ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.03)
+
+    for i in func: i.Draw("same")
 
     gPad.SetGrid()
 
@@ -83,18 +98,18 @@ def yields(draw=True):
 #_____________________________________________________________________________
 def resolution():
 
-    energy = [1, 5, 9, 14]
+    energy = [1, 5, 9, 14, 18]
 
     func = yields(False)
     res = [func[i].GetParameter(2)/func[i].GetParameter(1) for i in range(len(func))]
 
     #res = [0.30564878886284014, 0.15333344730667908, 0.11558254016508898]
 
-    #print(res)
+    print(res)
 
-    plt.style.use("dark_background")
-    col = "lime"
-    #col = "black"
+    #plt.style.use("dark_background")
+    #col = "lime"
+    col = "black"
 
     #fit the resolution
     pars, cov = curve_fit(resf2, energy, res)

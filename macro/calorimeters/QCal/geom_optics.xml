@@ -3,8 +3,8 @@
 
   <!-- Optics development for QCal1 -->
 
-  <const name="qcal_modz" value="12"/> <!-- mm -->
-  <const name="qcal_xy" value="12"/> <!-- mm -->
+  <const name="qcal_modz" value="14"/> <!-- mm -->
+  <const name="qcal_xy" value="14"/> <!-- mm -->
 
   <detector
     type="QCal1" name="qcal"
@@ -12,8 +12,8 @@
     nx="1" ny="1"
     cell_xy="qcal_xy"
     cell_mat_name="QCal1_Copper"
-    fiber_clad_D="0.54" fiber_core_D="0.5" fiber_dx="4"
-    core_vis="0:0:1:2" opdet_vis="1:1:0:1">
+    fiber_clad_D="1.54" fiber_core_D="1.5" fiber_dx="4"
+    core_vis="0:0:1:0.3" opdet_vis="1:1:0:1">
   </detector>
 
   <!-- top volume -->

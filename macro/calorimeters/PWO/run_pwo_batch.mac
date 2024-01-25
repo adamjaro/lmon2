@@ -7,7 +7,7 @@
 #input
 /lmon/input/type gun
 #/gun/energy 511 keV
-/gun/energy 1 GeV
+/gun/energy 18 GeV
 #/gun/energy 200 MeV
 /gun/particle gamma
 #/gun/particle e-
@@ -44,5 +44,5 @@
 
 #/process/optical/verbose 2
 
-/run/beamOn 10
+/run/beamOn 1
 

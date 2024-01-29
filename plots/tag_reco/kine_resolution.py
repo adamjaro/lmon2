@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 1
+    iplot = 2
 
     func = {}
     func[0] = energy
@@ -35,9 +35,9 @@ def energy():
     emin = 3
     emax = 19
 
-    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v4.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
@@ -93,9 +93,9 @@ def pitheta():
     xmin = 0
     xmax = 11
 
-    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v4.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
@@ -152,9 +152,9 @@ def phi():
     xmin = -TMath.Pi()-0.1
     xmax = TMath.Pi()+0.1
 
-    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v4.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"

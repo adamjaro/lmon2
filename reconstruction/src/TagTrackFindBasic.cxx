@@ -267,6 +267,16 @@ int TagTrackFindBasic::GetNumberOfClusters() {
 }//GetNumberOfClusters
 
 //_____________________________________________________________________________
+void TagTrackFindBasic::Track::ExtrapolateZ(Double_t z, Double_t& xe, Double_t& ye) {
+
+  //find extrapolated point xe, ye at a given position z
+
+  xe = x + z*slope_x;
+  ye = y + z*slope_y;
+
+}//Track::ExtrapolateZ
+
+//_____________________________________________________________________________
 TagTrackFindBasic::Coll::Coll() {
 
   //data members of Track to be written in the output from Coll of Track objects
@@ -299,6 +309,8 @@ TagTrackFindBasic::Coll::Coll() {
   DATA_ADD_UNIT_ATTR( cal_x )
   DATA_ADD_UNIT_ATTR( cal_y )
   DATA_ADD_UNIT_ATTR( cal_en )
+  DATA_ADD_UNIT_ATTR( cal_ext_x )
+  DATA_ADD_UNIT_ATTR( cal_ext_y )
 
   DATA_ADD_UNIT_ATTR( has_mcp )
   DATA_ADD_UNIT_ATTR( mcp_en )

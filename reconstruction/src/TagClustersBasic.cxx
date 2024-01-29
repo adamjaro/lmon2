@@ -56,7 +56,7 @@ void TagClustersBasic::SetGeometry(GeoParser *geo) {
   geo->GetOptD(det_nam, "xpos", shift_x, GeoParser::Unit(mm));
   fXpos += shift_x;
 
-  cout << "xyz: " << fXpos << " " << fYpos << " " << fZpos << " " << fThetaX << " " << fThetaY << endl;
+  cout << det_nam << ", " << "xyz: " << fXpos << " " << fYpos << " " << fZpos << " " << fThetaX << " " << fThetaY << endl;
 
 
 }//SetGeometry

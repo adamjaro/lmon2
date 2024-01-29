@@ -78,6 +78,8 @@ class TagTrackFindBasic {
       Double_t cal_x=0; // matched calorimeter cluster, x position (mm)
       Double_t cal_y=0; // matched calorimeter cluster, y position (mm)
       Double_t cal_en=0; // matched calorimeter cluster, energy (GeV)
+      Double_t cal_ext_x=0; // extrapolated x track position to calorimeter (mm)
+      Double_t cal_ext_y=0; // extrapolated x track position to calorimeter (mm)
       Bool_t has_mcp = 0; // track is paired with MC particle
       Double_t mcp_en = 0; // MC particle energy, GeV
       Double_t mcp_theta = 0; // MC particle polar angle, rad
@@ -89,6 +91,8 @@ class TagTrackFindBasic {
       Double_t true_Q2=0; // true generated event Q^2, GeV^2
 
       std::vector<TagClustersBasic::Cluster*> cls; // track clusters
+
+      void ExtrapolateZ(Double_t z, Double_t& xe, Double_t& ye);
 
     };//Track
 

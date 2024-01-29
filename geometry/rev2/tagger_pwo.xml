@@ -4,16 +4,16 @@
   <!-- PWO calorimeters for tagger detectors -->
 
   <!-- crystal tower, mm -->
-  <const name="tag_pwo_crystal_xy" value="22."/>
+  <const name="tag_pwo_crystal_xy" value="9."/>
   <const name="tag_pwo_crystal_z" value="350."/>
   <const name="tag_pwo_wrapping_thickness" value="0.2"/>
 
   <!-- optical detector at the tower, mm -->
-  <const name="tag_pwo_phot_xy" value="18."/>
+  <const name="tag_pwo_phot_xy" value="8."/>
   <const name="tag_pwo_phot_z" value="2."/>
 
   <!-- number of towers along x and y in calorimeter module -->
-  <const name="tag_pwo_nxy" value="7"/>
+  <const name="tag_pwo_nxy" value="17"/>
 
   <!-- distance along z from last tagger plane to start of calorimeter module, mm -->
   <const name="tag_pwo_to_start_dz" value="200."/>

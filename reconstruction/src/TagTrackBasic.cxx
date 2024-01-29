@@ -331,6 +331,8 @@ void TagTrackBasic::TrackCalMatch(TagTrackFindBasic *tag, CalPWOClusterWavg *cal
   //get the calorimeter cluster
   const CaloCluster::Cls& cls = cal->GetClusters().at(0);
 
+  //cout << "cluster: " << cls.x << " " << cls.y << endl;
+
   //track loop
   for(TagTrackFindBasic::Track& i: tag->GetTracks()) {
 
@@ -339,6 +341,14 @@ void TagTrackBasic::TrackCalMatch(TagTrackFindBasic *tag, CalPWOClusterWavg *cal
     i.cal_x = cls.x;
     i.cal_y = cls.y;
     i.cal_en = cls.en;
+
+    //extrapolate the track to calorimeter position
+    Double_t xe=0, ye=0;
+    i.ExtrapolateZ(-650, xe, ye); // distance from middle tracker to calorimeter front
+    i.cal_ext_x = xe+3.9; // offset to calorimeter coordinates
+    i.cal_ext_y = ye;
+
+    //cout << "track: " << i.cal_x << " " << i.cal_y << " " << i.cal_ext_x << " " << i.cal_ext_y << endl;
 
   }//track loop
 

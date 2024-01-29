@@ -74,17 +74,17 @@ def delt_xy():
     #difference between track projected position and calorimeter cluster
 
     #mm
-    xbin = 0.1
-    xmin = -10
-    xmax = 10
+    xbin = 0.12
+    xmin = -6
+    xmax = 6
 
     #mm
-    ybin = 0.1
-    ymin = -10
-    ymax = 10
+    ybin = 0.12
+    ymin = -6
+    ymax = 6
 
-    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag8ax2/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag8ax3/trk_v2.root"
 
     #det = "s1_tracks"
     #det = "s2_tracks"
@@ -100,7 +100,7 @@ def delt_xy():
     #tree.Draw("(s1_tracks_cal_ext_y-s1_tracks_cal_y):(s1_tracks_cal_ext_x-s1_tracks_cal_x) >> hxy")
     tree.Draw("(s1_tracks_cal_ext_y-s1_tracks_cal_y):(s1_tracks_cal_ext_x-s1_tracks_cal_x) >> hxy", "s1_tracks_cal_x<60")
 
-    ut.put_yx_tit(hxy, "#it{y} (mm)", "#it{x} (mm)", 1.9, 1.3)
+    ut.put_yx_tit(hxy, "#Delta#it{y}_{track-cal} (mm)", "#Delta#it{x}_{track-cal} (mm)", 1.9, 1.4)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.11)
 

@@ -1,0 +1,105 @@
+
+<main>
+
+  <!-- low-Q2 tagger detectors -->
+
+  <!-- pixel size along x and y, mm -->
+  <const name="tag_dxy" value="0.055"/>
+
+  <!-- number of pixels along x and y -->
+  <const name="tag_nx" value="5455"/>
+
+  <!-- number of pixels along x and y -->
+  <const name="tag_ny" value="3637"/>
+
+  <!-- spacing in z for individual planes, mm -->
+  <const name="tag_iz" value="300."/>
+
+  <!-- offset along z for the first plane after exit window, mm -->
+  <const name="tag_ofs" value="50."/>
+
+  <!-- offset in x from beampipe wall, mm -->
+  <const name="tag_ofs_x" value="5."/>
+
+  <!-- visibility for tagger planes -->
+  <const name="tag_planes_vis" value="0:1:0:0.7"/>
+
+  <!-- plane size in x set by pixels -->
+  <const name="tag_size_x" value="tag_dxy*tag_nx"/>
+
+  <!-- local x position for the planes in tagger 1 -->  
+  <const name="tag_S1_pos_x" value="0.5*vac_S1PL-vac_wall_D-0.5*tag_size_x-tag_ofs_x"/>
+
+  <!-- local z position for starting plane in tagger 1 -->
+  <const name="tag_S1_start_z" value="0.5*vac_S1AL-vac_S1_ew_Lz-vac_S1_ew_DeltaLz-tag_ofs"/>
+
+
+  <!-- Tagger 1 planes 1 - 4, ordered in increasing z -->
+
+  <!-- tagger 1, plane 1 -->
+  <detector type="Timepix4v1" name="lowQ2_s1_1"
+    zpos="tag_S1_start_z-3.*tag_iz" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nx" ny="tag_ny"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+  <!-- tagger 1, plane 2 -->
+  <detector type="Timepix4v1" name="lowQ2_s1_2"
+    zpos="tag_S1_start_z-2.*tag_iz" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nx" ny="tag_ny"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+  <!-- tagger 1, plane 3 -->
+  <detector type="Timepix4v1" name="lowQ2_s1_3"
+    zpos="tag_S1_start_z-tag_iz" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nx" ny="tag_ny"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+  <!-- tagger 1, plane 4 -->
+  <detector type="Timepix4v1" name="lowQ2_s1_4"
+    zpos="tag_S1_start_z" xpos="tag_S1_pos_x"
+    dxy="tag_dxy" nx="tag_nx" ny="tag_ny"
+    lay_vis="tag_planes_vis" place_into="vac_S1">
+  </detector>
+
+
+
+
+
+
+
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -30,7 +30,7 @@ def main():
     tree.SetBranchAddress("lowQ2_s1_4_irow", irow_vec)
     tree.SetBranchAddress("lowQ2_s1_4_en", en_vec)
 
-    h_counts = TH2I("h_counts", "h_counts", 5455, 0, 5455, 3637, 0, 3637)
+    h_counts = TH2D("h_counts", "h_counts", 5455, 0, 5455, 3637, 0, 3637)
 
     #event loop
     for iev in range(tree.GetEntries()):

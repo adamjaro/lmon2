@@ -193,7 +193,8 @@
   <const name="vac_S1_ew_Lz" value="vac_S1PL/TMath::Tan(vac_tag_ThetaEW)"/>
 
   <!-- reach after axis projection along z for tagger 1 exit window -->
-  <const name="vac_S1_ew_DeltaLz" value="0.5*vac_tag_Dew*cos(0.5*TMath::Pi()-vac_tag_ThetaEW)"/>
+  <!-- <const name="vac_S1_ew_DeltaLz" value="0.5*vac_tag_Dew*cos(0.5*TMath::Pi()-vac_tag_ThetaEW)"/> -->
+  <const name="vac_S1_ew_DeltaLz" value="vac_tag_Dew/(2*TMath::Sin(vac_tag_ThetaEW))"/>
 
   <!-- tagger 1 exit window -->
   <detector type="BoxSegment" name="vac_S1_ew"
@@ -214,7 +215,7 @@
   <detector type="VacDrift" name="vac_S1_wall_up"
     ysiz="vac_wall_D" mat_name="vac_wall_mat_name"
     place_into="vac_S1" ypos="vac_rBI-0.5*vac_wall_D"
-    z1T="vac_S1AL/2." x1T="-vac_S1PL/2." z1B="vac_S1AL/2." x1B="vac_S1PL/2."
+    z1T="vac_S1AL/2." x1T="vac_S1PL/2." z1B="vac_S1AL/2." x1B="-vac_S1PL/2."
     z0T="0.5*vac_S1AL-vac_S1_ew_Lz" x0T="vac_S1PL/2."
     z0B="0.5*vac_S1AL-vac_S1_ew_Lz" x0B="vac_S1PL/2."
     vis="vac_wall_vis">
@@ -224,7 +225,7 @@
   <detector type="VacDrift" name="vac_S1_wall_down"
     ysiz="vac_wall_D" mat_name="vac_wall_mat_name"
     place_into="vac_S1" ypos="-vac_rBI+0.5*vac_wall_D"
-    z1T="vac_S1AL/2." x1T="-vac_S1PL/2." z1B="vac_S1AL/2." x1B="vac_S1PL/2."
+    z1T="vac_S1AL/2." x1T="vac_S1PL/2." z1B="vac_S1AL/2." x1B="-vac_S1PL/2."
     z0T="0.5*vac_S1AL-vac_S1_ew_Lz" x0T="vac_S1PL/2."
     z0B="0.5*vac_S1AL-vac_S1_ew_Lz" x0B="vac_S1PL/2."
     vis="vac_wall_vis">

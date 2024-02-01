@@ -217,7 +217,7 @@
   <detector type="VacDrift" name="vac_S1_wall_up"
     ysiz="vac_wall_D" mat_name="vac_wall_mat_name"
     place_into="vac_S1" ypos="0.5*vac_DY-0.5*vac_wall_D"
-    z1T="vac_S1AL/2." x1T="-vac_S1PL/2." z1B="vac_S1AL/2." x1B="vac_S1PL/2."
+    z1T="vac_S1AL/2." x1T="vac_S1PL/2." z1B="vac_S1AL/2." x1B="-vac_S1PL/2."
     z0T="0.5*vac_S1AL-vac_S1_ew_Lz" x0T="vac_S1PL/2."
     z0B="0.5*vac_S1AL-vac_S1_ew_Lz" x0B="vac_S1PL/2."
     vis="vac_wall_vis">
@@ -227,16 +227,135 @@
   <detector type="VacDrift" name="vac_S1_wall_down"
     ysiz="vac_wall_D" mat_name="vac_wall_mat_name"
     place_into="vac_S1" ypos="-0.5*vac_DY+0.5*vac_wall_D"
-    z1T="vac_S1AL/2." x1T="-vac_S1PL/2." z1B="vac_S1AL/2." x1B="vac_S1PL/2."
+    z1T="vac_S1AL/2." x1T="vac_S1PL/2." z1B="vac_S1AL/2." x1B="-vac_S1PL/2."
     z0T="0.5*vac_S1AL-vac_S1_ew_Lz" x0T="vac_S1PL/2."
     z0B="0.5*vac_S1AL-vac_S1_ew_Lz" x0B="vac_S1PL/2."
     vis="vac_wall_vis">
   </detector>
 
 
-  <!-- inner wall along drift section (vac_B2Q3), at lower x, after Tagger 1 section till Q3eR  -->
+
+
+
+
+  <!-- volume for tagger 2, including exit window -->
+
+  <!-- start z position for tagger 2 section, mm -->
+  <const name="vac_zS2ST" value="-35500"/>
+
+  <!-- length of tagger 2 section along Q3eR axis, mm -->
+  <const name="vac_S2AL" value="2000"/>
+
+  <!-- perpendicular size for tagger 2 section, mm -->
+  <const name="vac_S2PL" value="260"/>
+
+  <!-- start x position for tagger 2 section -->
+  <const name="vac_xS2ST" value="vac_xQB + (vac_zS2ST-vac_zQB)*TMath::Tan(vac_TQ3)"/>
+
+  <!-- end point top for tagger 2 section -->
+  <const name="vac_zS2ET" value="vac_zS2ST - vac_S2AL*cos(vac_TQ3)"/>
+  <const name="vac_xS2ET" value="vac_xS2ST - vac_S2AL*sin(vac_TQ3)"/>
+
+  <!-- start point bottom for tagger 2 section -->
+  <const name="vac_zS2SB" value="vac_zS2ST + vac_S2PL*sin(vac_TQ3)"/>
+  <const name="vac_xS2SB" value="vac_xS2ST - vac_S2PL*cos(vac_TQ3)"/>
+
+  <!-- center point for tagger 2 section -->
+  <const name="vac_zS2C" value="0.5*(vac_zS2SB+vac_zS2ET)"/>
+  <const name="vac_xS2C" value="0.5*(vac_xS2SB+vac_xS2ET)"/>
+
+  <!-- section for tagger 2 -->
+  <detector type="BoxSegment" name="vac_S2"
+    dx="vac_S2PL" dy="vac_DY" dz="vac_S2AL"
+    zpos="vac_zS2C" xpos="vac_xS2C" theta="vac_TQ3"
+    vis="0:1:0:2">
+  </detector>
+
+  <!-- drift section in front of tagger 2 -->
+  <detector type="VacDrift" name="vac_DS2"
+    ysiz="vac_DY-2*vac_wall_D"
+    z1T="vac_zS1ET" x1T="vac_xS1ET" z1B="vac_zS1ET" x1B="vac_xS1ET"
+    z0T="vac_zS2ST" x0T="vac_xS2ST" z0B="vac_zS2SB" x0B="vac_xS2SB"
+    vis="0:1:0:3">
+  </detector>
+
+  <!-- upper wall (along y) for drift section in front of tagger 2 -->
+  <detector type="VacDrift" name="vac_DS2_wall_up"
+    ysiz="vac_wall_D" ypos="0.5*vac_DY-0.5*vac_wall_D" mat_name="vac_wall_mat_name"
+    z1T="vac_zS1ET" x1T="vac_xS1ET" z1B="vac_zS1ET" x1B="vac_xS1ET"
+    z0T="vac_zS2ST" x0T="vac_xS2ST" z0B="vac_zS2SB" x0B="vac_xS2SB"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- lower wall (along y) for drift section in front of tagger 2 -->
+  <detector type="VacDrift" name="vac_DS2_wall_down"
+    ysiz="vac_wall_D" ypos="-0.5*vac_DY+0.5*vac_wall_D" mat_name="vac_wall_mat_name"
+    z1T="vac_zS1ET" x1T="vac_xS1ET" z1B="vac_zS1ET" x1B="vac_xS1ET"
+    z0T="vac_zS2ST" x0T="vac_xS2ST" z0B="vac_zS2SB" x0B="vac_xS2SB"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- outer wall (at lower x) for drift section in front of tagger 2 -->
+  <detector type="VacDrift" name="vac_DS2_wall_out"
+    ysiz="vac_DY" mat_name="vac_wall_mat_name"
+    z1T="vac_zS1ET" x1T="vac_xS1ET" z1B="vac_zS1ET" x1B="vac_xS1ET-vac_wall_D"
+    z0T="vac_zS2SB" x0T="vac_xS2SB" z0B="vac_zS2SB" x0B="vac_xS2SB-vac_wall_D"
+    vis="vac_wall_vis">
+  </detector>
+
+
+  <!-- exit window for tagger 2 -->
+
+  <!-- full axis length for tagger 2 exit window -->
+  <const name="vac_S2_ew_L" value="vac_S2PL/sin(vac_tag_ThetaEW)"/>
+
+  <!-- correction to axis length for tagger 2 exit window -->
+  <const name="vac_S2_ew_DeltaL" value="vac_tag_Dew/(2.*TMath::Tan(vac_tag_ThetaEW))"/>
+
+  <!-- axis projection along z for tagger 2 exit window -->
+  <const name="vac_S2_ew_Lz" value="vac_S2PL/TMath::Tan(vac_tag_ThetaEW)"/>
+
+  <!-- reach after axis projection along z for tagger 2 exit window -->
+  <const name="vac_S2_ew_DeltaLz" value="0.5*vac_tag_Dew*cos(0.5*TMath::Pi()-vac_tag_ThetaEW)"/>
+
+  <!-- tagger 2 exit window -->
+  <detector type="BoxSegment" name="vac_S2_ew"
+    dx="vac_tag_Dew" dy="vac_DY-2.*vac_wall_D" dz="vac_S2_ew_L-2*vac_S2_ew_DeltaL"
+    zpos="0.5*vac_S2AL-0.5*vac_S2_ew_Lz" place_into="vac_S2" mat_name="G4_Be"
+    theta="-vac_tag_ThetaEW" vis="vac_tag_ew_vis">
+  </detector>
+
+  <!-- upper wall along tagger 2 section (vac_S2), at positive y  -->
+  <detector type="VacDrift" name="vac_S2_wall_up"
+    ysiz="vac_wall_D" mat_name="vac_wall_mat_name"
+    place_into="vac_S2" ypos="0.5*vac_DY-0.5*vac_wall_D"
+    z1T="vac_S2AL/2." x1T="vac_S2PL/2." z1B="vac_S2AL/2." x1B="-vac_S2PL/2."
+    z0T="0.5*vac_S2AL-vac_S2_ew_Lz" x0T="vac_S2PL/2."
+    z0B="0.5*vac_S2AL-vac_S2_ew_Lz" x0B="vac_S2PL/2."
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- lower wall along tagger 2 section (vac_S2), at negative y  -->
+  <detector type="VacDrift" name="vac_S2_wall_down"
+    ysiz="vac_wall_D" mat_name="vac_wall_mat_name"
+    place_into="vac_S2" ypos="-0.5*vac_DY+0.5*vac_wall_D"
+    z1T="vac_S2AL/2." x1T="vac_S2PL/2." z1B="vac_S2AL/2." x1B="-vac_S2PL/2."
+    z0T="0.5*vac_S2AL-vac_S2_ew_Lz" x0T="vac_S2PL/2."
+    z0B="0.5*vac_S2AL-vac_S2_ew_Lz" x0B="vac_S2PL/2."
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- inner wall along tagger 2 section (vac_S2), along the beampipe  -->
+  <detector type="BoxSegment" name="vac_S2_wall_inner"
+    dx="vac_wall_D" dy="vac_DY" dz="vac_S2AL - vac_S2_ew_Lz - vac_S2_ew_DeltaLz"
+    zpos="-0.5*(vac_S2_ew_Lz + vac_S2_ew_DeltaLz)"
+    xpos="0.5*vac_S2PL-0.5*vac_wall_D" place_into="vac_S2" mat_name="vac_wall_mat_name"
+    vis="vac_wall_vis">
+  </detector>
+
+  <!-- inner wall along drift section (vac_B2Q3), at lower x, after Tagger 2 section till Q3eR  -->
   <const name="vac_B2Q3_wall_outer_dz"
-    value="TMath::Sqrt( (vac_zS1ET-vac_zQB)*(vac_zS1ET-vac_zQB) + (vac_xS1ET-vac_xQB)*(vac_xS1ET-vac_xQB) )"/>
+    value="TMath::Sqrt( (vac_zS2ET-vac_zQB)*(vac_zS2ET-vac_zQB) + (vac_xS2ET-vac_xQB)*(vac_xS2ET-vac_xQB) )"/>
 
   <detector type="BoxSegment" name="vac_B2Q3_wall_outer"
     dx="vac_wall_D" dy="vac_DY-2.*vac_wall_D" dz="vac_B2Q3_wall_outer_dz"
@@ -244,13 +363,6 @@
     place_into="vac_B2Q3" mat_name="vac_wall_mat_name"
     vis="vac_wall_vis"> <!-- 1:0:0:1 -->
   </detector>
-
-
-
-
-
-
-
 
 
 

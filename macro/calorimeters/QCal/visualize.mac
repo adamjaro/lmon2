@@ -5,24 +5,24 @@
 
 #detectors and components
 #/lmon/construct/geometry geom_A456.xml
-/lmon/construct/geometry geom_optics.xml
-#/lmon/construct/geometry geom_etag.xml
+#/lmon/construct/geometry geom_optics.xml
+/lmon/construct/geometry geom_etag.xml
 
 #input
-#/lmon/input/type gun
-#/gun/energy 18 GeV
+/lmon/input/type gun
+/gun/energy 18 GeV
 #/gun/particle e-
-#/gun/particle gamma
-#/gun/position 0 0 1 mm
-#/gun/direction 0.000913 0.052328 -0.99863
+/gun/particle gamma
+/gun/position 0 0 1 mm
+/gun/direction 0.000913 0.052328 -0.99863
 
-/gun/particle opticalphoton
-/gun/polarization 0 1 0
-/gun/energy 7.07 eV
+#/gun/particle opticalphoton
+#/gun/polarization 0 1 0
+#/gun/energy 7.07 eV
 #/gun/position 0 0 -0.1 mm
 #/gun/position -0.2 0 -0.1 mm
-/gun/position -4.2 -4 -0.1 mm
-/gun/direction 0.000913 0.2 -0.99863
+#/gun/position -4.2 -4 -0.1 mm
+#/gun/direction 0.000913 0.2 -0.99863
 #/gun/direction 0 0 -1
 
 #output
@@ -40,7 +40,7 @@
 # trajectories are established:
 /vis/viewer/set/autoRefresh false
 /vis/verbose errors
-/vis/viewer/set/background 1 1 1 0.
+#/vis/viewer/set/background 1 1 1 0.
 #/vis/viewer/set/lightsThetaPhi 120. 135. deg
 /vis/viewer/set/lightsThetaPhi -45 -45 deg
 #

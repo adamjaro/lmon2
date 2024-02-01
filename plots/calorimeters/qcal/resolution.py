@@ -31,16 +31,16 @@ def main():
 #_____________________________________________________________________________
 def yields(draw=True):
 
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal1ax1/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal1ax3/en_","/lmon.root"]
     #inp = ["/home/jaroslav/sim/lmon2-data/pwo/pwo1ax2/en_","/lmon.root"]
 
-    energy = [1, 5, 9, 14, 18]
+    energy = [1, 2.5, 5, 9, 14, 18]
     #energy = [1]
 
     #photon counts
     xmin = 0
-    xmax = 600
-    xbin = 4
+    xmax = 400
+    xbin = 3
     #xmax = 30000
     #xbin = 60
     #xmin = 17
@@ -54,7 +54,7 @@ def yields(draw=True):
     for i in energy:
 
         df = RDataFrame("DetectorTree", inp[0]+str(i)+inp[1])
-        df = df.Define("nphot", "lowQ2_s1_qcal_opdet_time.size()") # photon counts
+        df = df.Define("nphot", "0.41*lowQ2_s1_qcal_opdet_time.size()") # photon counts
         #df = df.Define("nphot", "pwo_cath_time.size()")
         #df = df.Define("nphot", "double en=0; for(auto& i:pwo_en) {en+=i;} return en;") # deposited energy
 
@@ -98,7 +98,7 @@ def yields(draw=True):
 #_____________________________________________________________________________
 def resolution():
 
-    energy = [1, 5, 9, 14, 18]
+    energy = [1, 2.5, 5, 9, 14, 18]
 
     func = yields(False)
     res = [func[i].GetParameter(2)/func[i].GetParameter(1) for i in range(len(func))]

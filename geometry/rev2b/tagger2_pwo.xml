@@ -1,0 +1,37 @@
+
+<main>
+
+  <!-- PWO calorimeters for tagger2 detector -->
+
+
+  <!-- number of towers along x and y in calorimeter module -->
+  <const name="tag2_pwo_nx" value="27"/>
+  <const name="tag2_pwo_ny" value="17"/>
+
+  <!-- size of calorimeter module in x and y -->
+  <const name="tag2_pwo_modx" value="tag2_pwo_nx*(tag_pwo_crystal_xy+2.*tag_pwo_wrapping_thickness)"/>
+  <const name="tag2_pwo_mody" value="tag2_pwo_ny*(tag_pwo_crystal_xy+2.*tag_pwo_wrapping_thickness)"/>
+
+  <!-- calorimeter (pwo) in tagger 2 section -->
+
+  <!-- local x position for tagger 2 pwo -->
+  <const name="tag_S2_pwo_pos_x" value="0.5*vac_S2PL-vac_wall_D - 0.5*tag2_pwo_modx"/>
+
+  <!-- local z position for tagger 2 pwo -->
+  <const name="tag_S2_pwo_pos_z" value="tag_S2_start_z-3.*tag_iz - tag_pwo_to_start_dz -0.5*tag_pwo_modz"/>
+
+  <!-- tagger 2 pwo -->
+  <detector type="CalPWO" name="lowQ2_s2_pwo"
+    crystal_xy = "tag_pwo_crystal_xy" crystal_z = "tag_pwo_crystal_z"
+    wrapping_thickness = "tag_pwo_wrapping_thickness"
+    nx = "tag2_pwo_nx" ny = "tag2_pwo_ny"
+    modx = "tag2_pwo_modx" mody = "tag2_pwo_mody" modz = "tag_pwo_modz"
+    zpos = "tag_S2_pwo_pos_z" xpos = "tag_S2_pwo_pos_x"
+    crystal_vis = "1:0:0:0.3" wrapping_vis = "0:1:0:2"
+    radius = "tag_pwo_phot_xy/2" dz = "tag_pwo_phot_z"
+    cath_lay_vis = "1:0:0:2" cath_main_vis = "0:0:1:0.4"
+    mod_vis = "0:0:1:3" place_into="vac_S2">
+  </detector>
+
+</main>
+

@@ -1,0 +1,70 @@
+
+<main>
+
+  <!-- Tagger2 detector -->
+
+  <!-- number of pixels along x and y -->
+  <const name="tag2_nx" value="4364"/>
+
+  <!-- number of pixels along x and y -->
+  <const name="tag2_ny" value="2728"/>
+
+  <!-- plane size in x set by pixels -->
+  <const name="tag2_size_x" value="tag_dxy*tag2_nx"/>
+
+
+
+
+  <!-- Tagger 2 planes 1 - 4, ordered in increasing z -->
+
+  <!-- local x position for the planes in tagger 2 -->  
+  <const name="tag_S2_pos_x" value="0.5*vac_S2PL-vac_wall_D-0.5*tag2_size_x-tag_ofs_x"/>
+
+  <!-- local z position for starting plane in tagger 2 -->
+  <const name="tag_S2_start_z" value="0.5*vac_S2AL-vac_S2_ew_Lz-vac_S2_ew_DeltaLz-tag_ofs"/>
+
+  <!-- tagger 2, plane 1 -->
+  <detector type="Timepix4v1" name="lowQ2_s2_1"
+    zpos="tag_S2_start_z-3.*tag_iz" xpos="tag_S2_pos_x"
+    dxy="tag_dxy" nx="tag2_nx" ny="tag2_ny" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S2">
+  </detector>
+
+  <!-- tagger 2, plane 2 -->
+  <detector type="Timepix4v1" name="lowQ2_s2_2"
+    zpos="tag_S2_start_z-2.*tag_iz" xpos="tag_S2_pos_x"
+    dxy="tag_dxy" nx="tag2_nx" ny="tag2_ny" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S2">
+  </detector>
+
+  <!-- tagger 2, plane 3 -->
+  <detector type="Timepix4v1" name="lowQ2_s2_3"
+    zpos="tag_S2_start_z-tag_iz" xpos="tag_S2_pos_x"
+    dxy="tag_dxy" nx="tag2_nx" ny="tag2_ny" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S2">
+  </detector>
+
+  <!-- tagger 2, plane 4 -->
+  <detector type="Timepix4v1" name="lowQ2_s2_4"
+    zpos="tag_S2_start_z" xpos="tag_S2_pos_x"
+    dxy="tag_dxy" nx="tag2_nx" ny="tag2_ny" dz="tag_size_z"
+    lay_vis="tag_planes_vis" place_into="vac_S2">
+  </detector>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</main>
+
+
+

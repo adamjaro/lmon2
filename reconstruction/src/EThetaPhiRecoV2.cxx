@@ -24,6 +24,7 @@
 
 //local classes
 #include "EThetaPhiRecoV2.h"
+#include "FoamCellFinder.h"
 
 using namespace std;
 using namespace boost;
@@ -148,15 +149,55 @@ void EThetaPhiRecoV2::Finalize() {
     for(Quantity& iq: i.lay_quant) {
 
       //binning for the layer and range for the quantity
-      string hnam = fNam+"_hx_"+to_string(i.lay_idx)+"_"+iq.nam;
+      iq.hx_nam = fNam+"_hx_"+to_string(i.lay_idx)+"_"+iq.nam;
       Double_t hmin = iq.quant_conf->min;
       Double_t hmax = iq.quant_conf->max;
       //quantity histogram, extend by one more bin
       Double_t binsiz = (hmax-hmin)/i.lay_nbins;
-      iq.hx = new TH1D(hnam.c_str(), hnam.c_str(), i.lay_nbins, hmin-binsiz, hmax+binsiz);
+      if( fUseFoamCellFinder ) {
+        iq.hx_init = new TH1D((iq.hx_nam+"_init").c_str(), (iq.hx_nam+"_init").c_str(), i.lay_nbins, hmin-binsiz, hmax+binsiz);
+      } else {
+        iq.hx = new TH1D(iq.hx_nam.c_str(), iq.hx_nam.c_str(), i.lay_nbins, hmin-binsiz, hmax+binsiz);
+      }
 
     }//quantity loop
   }//layer loop
+
+  //variable binning for quantity distributions when requested
+  if( fUseFoamCellFinder ) {
+
+    //turn off kinematics to read only the quantities
+    fCacheTree->SetBranchStatus("inp_en", false);
+    fCacheTree->SetBranchStatus("inp_theta", false);
+    fCacheTree->SetBranchStatus("inp_phi", false);
+
+    //cache loop for initial distribution
+    Long64_t ncache = fCacheTree->GetEntries();
+    for(Long64_t ic=0; ic<ncache; ic++) {
+      fCacheTree->GetEntry(ic);
+
+      for(Layer& i: fLayers) {
+        for(Quantity& iq: i.lay_quant) {
+          iq.hx_init->Fill( iq.quant_conf->cache_val );
+        }
+      }
+    }//cache loop for initial distribution
+
+    //enable the kinematics
+    fCacheTree->SetBranchStatus("inp_en", true);
+    fCacheTree->SetBranchStatus("inp_theta", true);
+    fCacheTree->SetBranchStatus("inp_phi", true);
+
+    //make the final quantity distributions
+    for(Layer& i: fLayers) {
+      for(Quantity& iq: i.lay_quant) {
+
+        //variable binning based on TFoam
+        FoamCellFinder finder(*iq.hx_init, 2*iq.hx_init->GetNbinsX());
+        iq.hx = new TH1D( finder.MakeH1D(iq.hx_nam.c_str()) );
+      }
+    }
+  }//variable binning condition
 
   //cache loop
   Long64_t ncache = fCacheTree->GetEntries();
@@ -180,17 +221,25 @@ void EThetaPhiRecoV2::Export() {
   for(Layer& i: fLayers) {
 
     //quantities for the layer
-    TList qlist;
+    TList qlist, qlist_init;
 
     //quantity loop
     for(Quantity& iq: i.lay_quant) {
 
       qlist.AddLast(iq.hx);
+      if(iq.hx_init) { qlist_init.AddLast(iq.hx_init); }
     }//quantity loop
 
     //export the quantities
     string qnam = fNam+"_quantities_"+to_string(i.lay_idx);
     qlist.Write(qnam.c_str(), TObject::kSingleKey);
+
+    //initial quantity distribution
+    if( qlist_init.GetEntries() > 0 ) {
+
+      qnam = fNam+"_quantities_init_"+to_string(i.lay_idx);
+      qlist_init.Write(qnam.c_str(), TObject::kSingleKey);
+    }
 
     //tree on links for the layer
     string tnam = fNam+"_links_"+to_string(i.lay_idx);

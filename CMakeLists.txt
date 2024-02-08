@@ -6,7 +6,7 @@ project(lmon2)
 set (BIN run_lmon2)
 
 #ROOT
-find_package(ROOT REQUIRED COMPONENTS Core RIO Tree MathCore EG)
+find_package(ROOT REQUIRED COMPONENTS Core RIO Tree MathCore EG Foam)
 include(${ROOT_USE_FILE})
 
 #Geant

@@ -19,10 +19,13 @@ class EThetaPhiRecoV2 {
     void Export();
 
     void Import(TFile *in);
+
     void SetMinNinp(Int_t n) { fMinNinp = n; }
     void SetMaxRelEn(Double_t e) { fMaxRelEn = e; }
     void SetMaxRelPhi(Double_t e) { fMaxRelPhi = e; }
     void SetMaxErrTheta(Double_t e) { fMaxErrTheta = e; }
+    void SetUseFoamCellFinder(bool u=true) { fUseFoamCellFinder = u; }
+
     Bool_t Reconstruct(Double_t *quant, Double_t& el_en, Double_t& el_theta, Double_t& el_phi, Int_t *ipar=0, Double_t *dpar=0);
 
   private:
@@ -46,13 +49,17 @@ class EThetaPhiRecoV2 {
     Double_t fMaxRelPhi=-1; // maximal relative error in reconstructed phi
     Double_t fMaxErrTheta=-1; // maximal (absolute) error in reconstructed theta (rad)
 
+    bool fUseFoamCellFinder = false; // flag to use variable quantity binning from TFoam
+
     //measured quantity
     class Quantity {
       public:
       Quantity(std::string qnam): nam(qnam) {}
 
       std::string nam; // quantity name
+      std::string hx_nam; // name for quantity distribution hx
       TH1D *hx=0x0; // quantity distribution from all inputs
+      TH1D *hx_init=0x0; // initial distribution when hx is set for variable binning
 
       Double_t cache_val; // value for input cache
 

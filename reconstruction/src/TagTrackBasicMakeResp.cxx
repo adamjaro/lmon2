@@ -49,6 +49,7 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
     ("main.max_chi2ndf", program_options::value<double>(), "Maximal tracks Chi2/NDF")
     ("main.min_cls_dist", program_options::value<double>(), "Minimal cluster distance")
     ("main.tracks_output", program_options::value<bool>()->default_value(true), "Write output for tracks")
+    ("main.use_FoamCellFinder", program_options::value<bool>()->default_value(false), "Binning by TFoam")
   ;
 
   //reconstruction for tagger stations
@@ -78,6 +79,9 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
   //initialize the reconstruction
   s1_rec->Initialize(&opt_map);
   s2_rec->Initialize(&opt_map);
+
+  s1_rec->SetUseFoamCellFinder( opt_map["main.use_FoamCellFinder"].as<bool>() );
+  s2_rec->SetUseFoamCellFinder( opt_map["main.use_FoamCellFinder"].as<bool>() );
 
   //inputs
   string input = GetStr(opt_map, "main.input");

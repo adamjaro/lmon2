@@ -24,7 +24,10 @@ class EThetaPhiRecoV2 {
     void SetMaxRelEn(Double_t e) { fMaxRelEn = e; }
     void SetMaxRelPhi(Double_t e) { fMaxRelPhi = e; }
     void SetMaxErrTheta(Double_t e) { fMaxErrTheta = e; }
-    void SetUseFoamCellFinder(bool u=true) { fUseFoamCellFinder = u; }
+
+    void SetUseFoamCellFinder(bool u=true) { if(u) { fCellFinder = CellFinder::kFoam; } }
+    void SetUseMedCellFinder(bool u=true) { if(u) { fCellFinder = CellFinder::kMed; } }
+    void SetUseSumCellFinder(bool u=true) { if(u) { fCellFinder = CellFinder::kSum; } }
 
     Bool_t Reconstruct(Double_t *quant, Double_t& el_en, Double_t& el_theta, Double_t& el_phi, Int_t *ipar=0, Double_t *dpar=0);
 
@@ -49,7 +52,9 @@ class EThetaPhiRecoV2 {
     Double_t fMaxRelPhi=-1; // maximal relative error in reconstructed phi
     Double_t fMaxErrTheta=-1; // maximal (absolute) error in reconstructed theta (rad)
 
-    bool fUseFoamCellFinder = false; // flag to use variable quantity binning from TFoam
+    //cell finder for variable quantity binning
+    enum class CellFinder { kNo=0, kFoam, kMed, kSum };
+    CellFinder fCellFinder = CellFinder::kNo;
 
     //measured quantity
     class Quantity {

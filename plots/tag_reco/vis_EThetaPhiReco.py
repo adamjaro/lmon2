@@ -16,13 +16,13 @@ def main():
 
     #response input
     inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/tag_resp.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/tag_resp_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/tag_resp_pass2.root"
 
     #layer index
-    ilay = 2
+    ilay = 0
 
     #maximal number of points to show
-    npoints = 1500
+    npoints = 2500
 
     #open the input
     infile = TFile.Open(inp)
@@ -89,6 +89,7 @@ def main():
         point = geom.MakeSphere("p_"+str(ipoint), med, 0, 1)
         point.SetLineColor(rt.kYellow)
         point.SetTransparency(0)
+        #point_y = 100*(TMath.Pi()-theta.value)*1e3/16 # mrad, bottom-up
         point_y = 100-100*(TMath.Pi()-theta.value)*1e3/16 # mrad, top-down
         point_r = 100*(en.value-2)/(18-2) # radial distance by energy, GeV
         point_x = point_r*TMath.Sin(TMath.Pi()+phi.value) # xz plane by phi, rad

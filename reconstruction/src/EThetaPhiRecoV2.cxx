@@ -25,6 +25,8 @@
 //local classes
 #include "EThetaPhiRecoV2.h"
 #include "FoamCellFinder.h"
+#include "MedCellFinder.h"
+#include "SumCellFinder.h"
 
 using namespace std;
 using namespace boost;
@@ -154,7 +156,7 @@ void EThetaPhiRecoV2::Finalize() {
       Double_t hmax = iq.quant_conf->max;
       //quantity histogram, extend by one more bin
       Double_t binsiz = (hmax-hmin)/i.lay_nbins;
-      if( fUseFoamCellFinder ) {
+      if( fCellFinder != CellFinder::kNo ) {
         iq.hx_init = new TH1D((iq.hx_nam+"_init").c_str(), (iq.hx_nam+"_init").c_str(), i.lay_nbins, hmin-binsiz, hmax+binsiz);
       } else {
         iq.hx = new TH1D(iq.hx_nam.c_str(), iq.hx_nam.c_str(), i.lay_nbins, hmin-binsiz, hmax+binsiz);
@@ -164,7 +166,7 @@ void EThetaPhiRecoV2::Finalize() {
   }//layer loop
 
   //variable binning for quantity distributions when requested
-  if( fUseFoamCellFinder ) {
+  if( fCellFinder != CellFinder::kNo ) {
 
     //turn off kinematics to read only the quantities
     fCacheTree->SetBranchStatus("inp_en", false);
@@ -192,11 +194,25 @@ void EThetaPhiRecoV2::Finalize() {
     for(Layer& i: fLayers) {
       for(Quantity& iq: i.lay_quant) {
 
-        //variable binning based on TFoam
-        FoamCellFinder finder(*iq.hx_init, 2*iq.hx_init->GetNbinsX());
-        iq.hx = new TH1D( finder.MakeH1D(iq.hx_nam.c_str()) );
-      }
-    }
+        //select the specific finder
+        switch(fCellFinder) {
+          case CellFinder::kFoam: {
+            //variable binning based on TFoam
+            FoamCellFinder finder(*iq.hx_init, 2*iq.hx_init->GetNbinsX());
+            iq.hx = new TH1D( finder.MakeH1D(iq.hx_nam.c_str()) );
+          } break;
+          case CellFinder::kMed: {
+            //variable binning based on median cell split
+            MedCellFinder finder(iq.hx_init, 2*iq.hx_init->GetNbinsX());
+            iq.hx = new TH1D( finder.MakeH1D(iq.hx_nam.c_str()) );
+          } break;
+          case CellFinder::kSum: {
+            //variable binning based on even sum per bin
+            iq.hx = new SumCellFinder(iq.hx_init, iq.hx_nam.c_str());
+          } break;
+        }//switch
+      }//quantity loop
+    }//layer loop
   }//variable binning condition
 
   //cache loop

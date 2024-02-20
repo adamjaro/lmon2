@@ -50,6 +50,8 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
     ("main.min_cls_dist", program_options::value<double>(), "Minimal cluster distance")
     ("main.tracks_output", program_options::value<bool>()->default_value(true), "Write output for tracks")
     ("main.use_FoamCellFinder", program_options::value<bool>()->default_value(false), "Binning by TFoam")
+    ("main.use_MedCellFinder", program_options::value<bool>()->default_value(false), "Binning by median split")
+    ("main.use_SumCellFinder", program_options::value<bool>()->default_value(false), "Binning by even sum per bin")
   ;
 
   //reconstruction for tagger stations
@@ -82,6 +84,12 @@ void TagTrackBasicMakeResp::Run(const char *conf) {
 
   s1_rec->SetUseFoamCellFinder( opt_map["main.use_FoamCellFinder"].as<bool>() );
   s2_rec->SetUseFoamCellFinder( opt_map["main.use_FoamCellFinder"].as<bool>() );
+
+  s1_rec->SetUseMedCellFinder( opt_map["main.use_MedCellFinder"].as<bool>() );
+  s2_rec->SetUseMedCellFinder( opt_map["main.use_MedCellFinder"].as<bool>() );
+
+  s1_rec->SetUseSumCellFinder( opt_map["main.use_SumCellFinder"].as<bool>() );
+  s2_rec->SetUseSumCellFinder( opt_map["main.use_SumCellFinder"].as<bool>() );
 
   //inputs
   string input = GetStr(opt_map, "main.input");

@@ -37,7 +37,7 @@ def energy():
 
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v4.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v6.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
@@ -95,7 +95,7 @@ def pitheta():
 
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v4.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v5.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
@@ -154,7 +154,7 @@ def phi():
 
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v4.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v6.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
@@ -179,7 +179,8 @@ def phi():
 
     hxy = ut.prepare_TH2D("hxy", xbin, xmin, xmax, xbin, xmin, xmax)
 
-    tree.Draw(det+"_rec_phi:"+det+"_true_phi >> hxy", sel)
+    #tree.Draw(det+"_rec_phi:"+det+"_true_phi >> hxy", sel)
+    tree.Draw("s1_tracks_rec_phi:s1_tracks_true_phi >> hxy", "s1_tracks_is_rec==1 && (TMath::Pi()-s1_tracks_rec_theta)>0.001")
     #tree.Draw(det+"_rec_phi:"+det+"_mcp_phi >> hxy", sel)
 
     print("On the plot:  ", hxy.Integral())

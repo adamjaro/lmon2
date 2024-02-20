@@ -29,7 +29,7 @@ using namespace std;
 //_____________________________________________________________________________
 FoamCellFinder::FoamCellFinder(const TH1D& hx, Int_t ncells): TFoam(hx.GetName()) {
 
-  //cout << "FoamCellFinder::FoamCellFinder" << endl;
+  cout << "FoamCellFinder: " << hx.GetName() << endl;
 
   fInpMin = hx.GetBinLowEdge(1);
   fInpMax = hx.GetBinLowEdge(hx.GetNbinsX())+hx.GetBinWidth(hx.GetNbinsX());

@@ -18,6 +18,7 @@ def main():
     func = {}
     func[0] = rate_xy
     func[1] = rate_1d
+    func[2] = rate_s1_s2
 
     func[iplot]()
 
@@ -26,7 +27,8 @@ def main():
 #_____________________________________________________________________________
 def rate_xy(show_plot=True):
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9a/hits_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9a/hits_v2.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax1/hits_s2.root"
 
     #number of simulated events
     nev = 1e6
@@ -63,7 +65,7 @@ def rate_xy(show_plot=True):
 
     ut.set_margin_lbtr(gPad, 0.11, 0.12, 0.03, 0.14)
 
-    hxy.SetZTitle("Hit rate (kHz)")
+    hxy.SetZTitle("Hit rate per pixel (kHz)")
     hxy.SetTitleOffset(1.2, "Z")
 
     gPad.SetLogz()
@@ -76,7 +78,12 @@ def rate_xy(show_plot=True):
 #_____________________________________________________________________________
 def rate_1d():
 
-    hx = ut.prepare_TH1D("hx", 0.05, 0, 1.5)
+    #xbin = 0.05
+    #xmax = 1.5
+    xbin = 0.07
+    xmax = 2.5
+
+    hx = ut.prepare_TH1D("hx", xbin, 0, xmax)
 
     infile, hxy = rate_xy(False)
 
@@ -90,7 +97,7 @@ def rate_1d():
 
     hx.Draw()
 
-    ut.put_yx_tit(hx, "Number of pixels", "Hit rate (kHz)", 1.9, 1.4)
+    ut.put_yx_tit(hx, "Number of pixels", "Hit rate per pixel (kHz)", 1.9, 1.4)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.02, 0.02)
 
@@ -104,6 +111,69 @@ def rate_1d():
 #rate_1d
 
 #_____________________________________________________________________________
+def rate_1d_inp(inp, nev, freq, hx):
+
+    infile = TFile.Open(inp)
+    hxy = infile.Get("h_counts")
+
+    scale = freq/nev
+
+    hxy.Scale(scale)
+
+    for ix in range(1, hxy.GetNbinsX()+1):
+        for iy in range(1, hxy.GetNbinsY()+1):
+            hx.Fill( hxy.GetBinContent(ix, iy) )
+
+#rate_1d_inp
+
+#_____________________________________________________________________________
+def rate_s1_s2():
+
+    inp_s1 = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax1/hits_s1.root"
+    inp_s2 = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax1/hits_s2.root"
+
+    xbin = 0.07
+    xmax = 2.5
+
+    #number of simulated events
+    nev = 1e6
+
+    #bunch crossing frequency
+    freq = 22676 # kHz
+
+    hs1 = ut.prepare_TH1D("hs1", xbin, 0, xmax)
+    hs2 = ut.prepare_TH1D("hs2", xbin, 0, xmax)
+
+    rate_1d_inp(inp_s1, nev, freq, hs1)
+    rate_1d_inp(inp_s2, nev, freq, hs2)
+
+    can = ut.box_canvas()
+
+    ut.set_H1D_col(hs1, rt.kBlue)
+    ut.set_H1D_col(hs2, rt.kRed)
+
+    hs1.Draw()
+    hs2.Draw("e1same")
+
+    ut.put_yx_tit(hs1, "Number of pixels", "Hit rate per pixel (kHz)", 1.9, 1.4)
+
+    ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.02, 0.02)
+
+    leg = ut.prepare_leg(0.7, 0.81, 0.24, 0.1, 0.035) # x, y, dx, dy, tsiz
+    leg.AddEntry(hs1, "Tagger 1", "lp")
+    leg.AddEntry(hs2, "Tagger 2", "lp")
+    leg.Draw("same")
+
+    gPad.SetLogy()
+
+    gPad.SetGrid()
+
+    #ut.invert_col(rt.gPad)
+    can.SaveAs("01fig.pdf")
+
+#rate_s1_s2
+
+#_____________________________________________________________________________
 if __name__ == "__main__":
 
     gROOT.SetBatch()
@@ -111,4 +181,15 @@ if __name__ == "__main__":
     gStyle.SetFrameLineWidth(2)
 
     main()
+
+
+
+
+
+
+
+
+
+
+
 

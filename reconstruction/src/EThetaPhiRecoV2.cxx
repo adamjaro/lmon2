@@ -42,6 +42,7 @@ EThetaPhiRecoV2::EThetaPhiRecoV2(string nam, program_options::options_descriptio
     ((fNam+".nlayers").c_str(), program_options::value<int>()->default_value(10), "Number of layers")
     ((fNam+".layer0_bins").c_str(), program_options::value<int>()->default_value(1000), "First layer #0 segmentation")
     ((fNam+".layer_dec").c_str(), program_options::value<int>()->default_value(100), "Decrement in bins to each next layer")
+    ((fNam+".layer0_bins_pow2").c_str(), program_options::value<int>()->default_value(0), "Segmentation in powers of 2")
   ;
 
 }//EThetaPhiRecoV2
@@ -82,10 +83,20 @@ void EThetaPhiRecoV2::Initialize(program_options::variables_map *opt_map) {
   Int_t layer0_bins = opt_map->at(fNam+".layer0_bins").as<int>(); // segmentation of the first layer #0
   Int_t layer_dec = opt_map->at(fNam+".layer_dec").as<int>(); // decrement in bins to each next layer
 
+  //segmentation in powers of 2 when requested by non-zero value
+  Int_t layer0_bins_pow2 = opt_map->at(fNam+".layer0_bins_pow2").as<int>();
+
   //create the layers
   for(Int_t i=0; i<nlayers; i++) {
-    cout << fNam << ", constructing layer #" << i << ", bins: " << layer0_bins-i*layer_dec << endl;
-    fLayers.push_back( Layer(i, layer0_bins-i*layer_dec) ); // layer number and segmentation
+
+    //bins for the layer
+    Int_t nbins = layer0_bins-i*layer_dec;
+
+    //bins in powers of 2 when requested
+    if( layer0_bins_pow2 > 0 ) { nbins = TMath::Power(2, layer0_bins_pow2-i*layer_dec); }
+
+    cout << fNam << ", constructing layer #" << i << ", bins: " << nbins << endl;
+    fLayers.push_back( Layer(i, nbins) ); // layer number and segmentation
   }
 
   //layer loop to initialize the quantities

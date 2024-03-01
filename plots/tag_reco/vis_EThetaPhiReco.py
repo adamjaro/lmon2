@@ -17,10 +17,10 @@ def main():
 
     #response input
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/tag_resp.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/tag_resp_pass3.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/tag_resp_pass5.root"
 
     #layer index
-    ilay = 0
+    ilay = 2
 
     #maximal number of points to show
     npoints = 1000

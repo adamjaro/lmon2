@@ -28,10 +28,12 @@ def main():
 def rate_xy(show_plot=True):
 
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9a/hits_v2.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax1/hits_s2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax1/hits_s2.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax2/hits_s2.root"
 
     #number of simulated events
-    nev = 1e6
+    #nev = 1e6
+    nev = 9980000
 
     #bunch crossing frequency
     freq = 22676 # kHz
@@ -78,9 +80,9 @@ def rate_xy(show_plot=True):
 #_____________________________________________________________________________
 def rate_1d():
 
-    #xbin = 0.05
+    xbin = 0.04
     #xmax = 1.5
-    xbin = 0.07
+    #xbin = 0.07
     xmax = 2.5
 
     hx = ut.prepare_TH1D("hx", xbin, 0, xmax)
@@ -129,14 +131,19 @@ def rate_1d_inp(inp, nev, freq, hx):
 #_____________________________________________________________________________
 def rate_s1_s2():
 
-    inp_s1 = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax1/hits_s1.root"
-    inp_s2 = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax1/hits_s2.root"
+    #inp_s1 = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax1/hits_s1.root"
+    #inp_s2 = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax1/hits_s2.root"
+    inp_s1 = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax2/hits_s1.root"
+    inp_s2 = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax2/hits_s2.root"
 
-    xbin = 0.07
-    xmax = 2.5
+    #xbin = 0.07
+    #xmax = 2.5
+    xbin = 0.04
+    xmax = 2.2
 
     #number of simulated events
-    nev = 1e6
+    #nev = 1e6
+    nev = 9980000
 
     #bunch crossing frequency
     freq = 22676 # kHz

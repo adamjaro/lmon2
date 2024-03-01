@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 2
+    iplot = 3
 
     func = {}
     func[0] = energy
@@ -37,7 +37,7 @@ def energy():
 
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v6.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v9.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
@@ -95,7 +95,7 @@ def pitheta():
 
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v5.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v9.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
@@ -154,7 +154,7 @@ def phi():
 
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v6.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v9.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
@@ -213,11 +213,11 @@ def logQ2():
     xmax = -1
 
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_pass1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v8.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
@@ -257,7 +257,7 @@ def logQ2():
 
     gPad.SetGrid()
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #logQ2

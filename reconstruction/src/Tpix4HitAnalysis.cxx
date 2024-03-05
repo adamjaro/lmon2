@@ -44,6 +44,7 @@ void Tpix4HitAnalysis::Run(const char *conf) {
     ("main.outfile", program_options::value<string>(), "Output from the analysis")
     ("main.nev", program_options::value<long>()->default_value(0), "Maximal number of events")
     ("main.nofs", program_options::value<long>()->default_value(0), "Offset in processed events")
+    ("main.make_tree", program_options::value<bool>()->default_value(true), "Make also output tree")
   ;
 
   //load the configuration file
@@ -73,16 +74,19 @@ void Tpix4HitAnalysis::Run(const char *conf) {
   cout << "Output: " << outfile << endl;
   TFile out(outfile.c_str(), "recreate");
 
+  //flag for output tree
+  bool make_tree = opt_map["main.make_tree"].as<bool>();
+
   //plane hits
   std::array<plane_hits, 8> ahits{
-    plane_hits("lowQ2_s1_1", &geo, &tree),
-    plane_hits("lowQ2_s1_2", &geo, &tree),
-    plane_hits("lowQ2_s1_3", &geo, &tree),
-    plane_hits("lowQ2_s1_4", &geo, &tree),
-    plane_hits("lowQ2_s2_1", &geo, &tree),
-    plane_hits("lowQ2_s2_2", &geo, &tree),
-    plane_hits("lowQ2_s2_3", &geo, &tree),
-    plane_hits("lowQ2_s2_4", &geo, &tree)
+    plane_hits("lowQ2_s1_1", &geo, &tree, make_tree),
+    plane_hits("lowQ2_s1_2", &geo, &tree, make_tree),
+    plane_hits("lowQ2_s1_3", &geo, &tree, make_tree),
+    plane_hits("lowQ2_s1_4", &geo, &tree, make_tree),
+    plane_hits("lowQ2_s2_1", &geo, &tree, make_tree),
+    plane_hits("lowQ2_s2_2", &geo, &tree, make_tree),
+    plane_hits("lowQ2_s2_3", &geo, &tree, make_tree),
+    plane_hits("lowQ2_s2_4", &geo, &tree, make_tree)
   };
 
   //number of events to analyze
@@ -122,14 +126,14 @@ void Tpix4HitAnalysis::Run(const char *conf) {
   //close the output
   for(const auto& i: ahits) {
     i.h_counts.Write(i.h_counts.GetName(), 0);
-    i.h_tree.Write(0, TObject::kOverwrite);
+    if( i.h_tree != nullptr ) i.h_tree->Write(0, TObject::kOverwrite);
   }
   out.Close();
 
 }//Run
 
 //_____________________________________________________________________________
-Tpix4HitAnalysis::plane_hits::plane_hits(std::string nam, GeoParser *geo, TTree *in_tree) {
+Tpix4HitAnalysis::plane_hits::plane_hits(std::string nam, GeoParser *geo, TTree *in_tree, bool make_tree) {
 
   //input hits
   hits = make_unique<TrkPlaneBasicHits::Coll>();
@@ -143,14 +147,17 @@ Tpix4HitAnalysis::plane_hits::plane_hits(std::string nam, GeoParser *geo, TTree 
   h_counts.SetNameTitle((nam+"_h_counts").c_str(), (nam+"_h_counts").c_str());
 
   //tree on individual hits
-  h_tree.SetNameTitle((nam+"_h_tree").c_str(), (nam+"_h_tree").c_str());
+  if( make_tree ) {
+    h_tree = make_unique<TTree>();
+    h_tree->SetNameTitle((nam+"_h_tree").c_str(), (nam+"_h_tree").c_str());
 
-  auto make_branch = [&](string nam, string type, auto *x) {
-    h_tree.Branch(nam.c_str(), x, (nam+"/"+type).c_str());
-  };
-  make_branch("ipix", "I", &ipix);
-  make_branch("irow", "I", &irow);
-  make_branch("en", "D", &en);
+    auto make_branch = [&](string nam, string type, auto *x) {
+      h_tree->Branch(nam.c_str(), x, (nam+"/"+type).c_str());
+    };
+    make_branch("ipix", "I", &ipix);
+    make_branch("irow", "I", &irow);
+    make_branch("en", "D", &en);
+  }
 
 }//plane_hits::plane_hits
 
@@ -163,12 +170,17 @@ void Tpix4HitAnalysis::plane_hits::run_event() {
   for(const TrkPlaneBasicHits::Hit& i: hits->GetReadData()) {
     if( i.en < 1e-12 ) continue;
 
+    //pixel location and energy
     ipix = i.ipix;
     irow = i.irow;
     en = i.en;
 
+    //fill the output tree when present
+    if( h_tree != nullptr ) {
+      h_tree->Fill();
+    }
+
     //cout << ipix << " " << irow << " " << en << endl;
-    h_tree.Fill();
 
     //threshold at 0.4 keV
     if( en > 0.4 ) {
@@ -196,7 +208,7 @@ string Tpix4HitAnalysis::GetStr(program_options::variables_map& opt_map, std::st
 void Tpix4HitAnalysis::ShowProgress(Double_t xi, Double_t xall) {
 
   //print proggress bar
-  Int_t pbar = 40;
+  Int_t pbar = 43;
 
   Double_t prog = xi/xall;
   Int_t pos = prog*pbar;

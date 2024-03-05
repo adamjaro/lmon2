@@ -28,7 +28,7 @@ class Tpix4HitAnalysis {
 
       public: 
 
-        plane_hits(std::string nam, GeoParser *geo, TTree *in_tree);
+        plane_hits(std::string nam, GeoParser *geo, TTree *in_tree, bool make_tree=true);
 
         void run_event();
 
@@ -38,7 +38,7 @@ class Tpix4HitAnalysis {
         std::unique_ptr<TrkPlaneBasicHits::Coll> hits;
 
         TH2D h_counts;
-        TTree h_tree;
+        std::unique_ptr<TTree> h_tree;
 
     }; // plane hits
 

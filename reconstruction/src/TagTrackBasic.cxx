@@ -107,8 +107,6 @@ void TagTrackBasic::Run(const char *conf) {
     cout << "Response input: " << input_resp << endl;
 
     //create the response for both taggers
-    //s1_rec = new EThetaPhiReco("s1");
-    //s2_rec = new EThetaPhiReco("s2");
     s1_rec = new EThetaPhiRecoV2("s1");
     s2_rec = new EThetaPhiRecoV2("s2");
 
@@ -116,6 +114,15 @@ void TagTrackBasic::Run(const char *conf) {
     TFile in_resp(input_resp.c_str(), "read");
     s1_rec->Import(&in_resp);
     s2_rec->Import(&in_resp);
+
+    //error limits in reconstruction (optional)
+    s1_rec->SetMaxRelEn( opt_map["main.max_resp_rel_en"].as<double>() );
+    s1_rec->SetMaxRelPhi( opt_map["main.max_resp_rel_phi"].as<double>() );
+    s1_rec->SetMaxErrTheta( opt_map["main.max_resp_err_theta"].as<double>() );
+    s2_rec->SetMaxRelEn( opt_map["main.max_resp_rel_en"].as<double>() );
+    s2_rec->SetMaxRelPhi( opt_map["main.max_resp_rel_phi"].as<double>() );
+    s2_rec->SetMaxErrTheta( opt_map["main.max_resp_err_theta"].as<double>() );
+
   }
   if( s1_rec and opt_map.find("main.min_resp_ninp") != opt_map.end() ) {
 
@@ -123,14 +130,6 @@ void TagTrackBasic::Run(const char *conf) {
     s2_rec->SetMinNinp( opt_map["main.min_resp_ninp"].as<int>() );
 
   }
-
-  //error limits in reconstruction
-  s1_rec->SetMaxRelEn( opt_map["main.max_resp_rel_en"].as<double>() );
-  s1_rec->SetMaxRelPhi( opt_map["main.max_resp_rel_phi"].as<double>() );
-  s1_rec->SetMaxErrTheta( opt_map["main.max_resp_err_theta"].as<double>() );
-  s2_rec->SetMaxRelEn( opt_map["main.max_resp_rel_en"].as<double>() );
-  s2_rec->SetMaxRelPhi( opt_map["main.max_resp_rel_phi"].as<double>() );
-  s2_rec->SetMaxErrTheta( opt_map["main.max_resp_err_theta"].as<double>() );
 
   //output
   string outfile = GetStr(opt_map, "main.outfile");

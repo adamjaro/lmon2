@@ -11,6 +11,9 @@
 #include "glob.h"
 #include <array>
 #include <time.h>
+#include <atomic>
+#include <future>
+#include <thread>
 
 //Boost
 #include <boost/program_options.hpp>
@@ -102,15 +105,26 @@ void Tpix4HitAnalysis::Run(const char *conf) {
   cout << "Number of events: " << nev << endl;
   if( nofs != 0 ) { cout << "Offset: " << nofs << endl; }
 
-  clock_t cdelta = CLOCKS_PER_SEC*0.5; //clock ticks per 0.5 sec
-  clock_t ctim = clock();
+  //print progress bar at regular intervals
+  atomic<Long64_t> prog_iev(0);
+  atomic<bool> prog_keep(true);
+  auto prog_bar = [this, nev, &prog_iev, &prog_keep]() {
+    while(prog_keep.load() == true) {
+      this_thread::sleep_for(1s);
+      this->ShowProgress(prog_iev.load(), nev);
+    }
+    this->ShowProgress(nev, nev);
+    cout << endl;
+  };
+
+  //async task for the progress bar
+  future prog_fut = async(prog_bar);
+
   //event loop
   for(Long64_t iev=nofs; iev<nev+nofs; iev++) {
 
-    if( (clock()-ctim) > cdelta ) {
-      ShowProgress(iev-nofs, nev);
-      ctim = clock();
-    }
+    //current event for progress bar
+    prog_iev.store(iev-nofs);
 
     tree.GetEntry(iev);
 
@@ -120,8 +134,8 @@ void Tpix4HitAnalysis::Run(const char *conf) {
 
   }//event loop
 
-  ShowProgress(nev, nev);
-  cout << endl;
+  //stop the task for progress bar
+  prog_keep.store(false);
 
   //close the output
   for(const auto& i: ahits) {

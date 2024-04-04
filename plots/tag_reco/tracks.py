@@ -12,7 +12,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 8
+    iplot = 3
 
     func = {}
     func[0] = theta_x
@@ -169,12 +169,12 @@ def chi2():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax3/trk_v1.root"
 
-    det = "s1_tracks"
-    #det = "s2_tracks"
+    #det = "s1_tracks"
+    det = "s2_tracks"
 
     infile = TFile.Open(inp)
     tree = infile.Get("event")
@@ -193,7 +193,7 @@ def chi2():
 
     gPad.SetGrid()
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #chi2

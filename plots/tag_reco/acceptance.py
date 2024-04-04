@@ -13,13 +13,14 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 2
+    iplot = 4
 
     func = {}
     func[0] = energy_1d
     func[1] = energy_pitheta
     func[2] = logx_logQ2
     func[3] = energy_mlt
+    func[4] = energy_1d_s12
 
     func[iplot]()
 
@@ -77,13 +78,13 @@ def energy_pitheta():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax4/trk_v0.root"
 
     #tagger 1 or 2
-    tag = 1
+    tag = 2
 
     #bins in energy, GeV
     xbin = 0.3
@@ -101,8 +102,8 @@ def energy_pitheta():
         #sel = "s1_ntrk>0 && s1_nrec==0"
         lab_sel = "Tagger 1"
     elif tag == 2:
-        #sel = "s2_ntrk>0"
-        sel = "s2_nrec>0"
+        sel = "s2_ntrk>0"
+        #sel = "s2_nrec>0"
         lab_sel = "Tagger 2"
     elif tag == 3:
         sel = "s1_ntrk>0 || s2_ntrk>0"
@@ -147,7 +148,7 @@ def energy_pitheta():
     leg.AddEntry("", "#bf{"+lab_sel+"}", "")
     #leg.Draw("same")
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #energy_pitheta
@@ -268,6 +269,71 @@ def energy_mlt():
     can.SaveAs("01fig.pdf")
 
 #energy_mlt
+
+#_____________________________________________________________________________
+def energy_1d_s12():
+
+    #acceptance on energy for both taggers in one plot
+
+    #GeV
+    xmin = 0
+    xmax = 18.5
+
+    amin = 1e-6
+    amax = 2
+
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax3/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax4/trk_v0.root"
+
+    infile = TFile.Open(inp)
+    tree = infile.Get("event")
+
+    as1 = rt.acalc(tree, "true_el_E", "s1_ntrk")
+    #as1.prec = 0.6
+    #as1.bmin = 0.1
+    as1.prec = 0.3
+    as1.bmin = 0.01
+    #as1.nev = int(1e4)
+    ga1 = as1.get()
+
+    as2 = rt.acalc(tree, "true_el_E", "s2_ntrk")
+    #as2.prec = 0.4
+    #as2.bmin = 0.01
+    as2.prec = 0.3
+    as2.bmin = 0.01
+    #as2.nev = int(1e4)
+    ga2 = as2.get()
+
+    can = ut.box_canvas()
+    frame = gPad.DrawFrame(xmin, amin, xmax, amax)
+
+    ut.put_yx_tit(frame, "Tagger acceptance", "Electron energy #it{E} (GeV)", 1.5, 1.3)
+
+    frame.Draw()
+
+    ut.set_margin_lbtr(gPad, 0.11, 0.1, 0.03, 0.02)
+
+    ut.set_graph(ga1, rt.kBlue)
+    ga1.Draw("psame")
+
+    ut.set_graph(ga2, rt.kRed)
+    ga2.Draw("psame")
+
+    #leg = ut.prepare_leg(0.48, 0.68, 0.2, 0.1, 0.035) # 0.035
+    leg = ut.prepare_leg(0.14, 0.83, 0.2, 0.1, 0.035) # 0.035
+    leg.AddEntry(ga1, "Tagger 1", "lp")
+    leg.AddEntry(ga2, "Tagger 2", "lp")
+    leg.Draw("same")
+
+    gPad.SetGrid()
+
+    gPad.SetLogy()
+
+    ut.invert_col(rt.gPad)
+    can.SaveAs("01fig.pdf")
+
+#energy_1d
 
 #_____________________________________________________________________________
 if __name__ == "__main__":

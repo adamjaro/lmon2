@@ -24,6 +24,7 @@ using namespace std;
 
 //_____________________________________________________________________________
 SumCellFinder::SumCellFinder(TH1D *hx, const char *name_title, int ndiv): TH1D() {
+//SumCellFinder::SumCellFinder(shared_ptr<TH1D> hx, const char *name_title, int ndiv): TH1D() {
 
   cout << "SumCellFinder: " << hx->GetName() << endl;
 

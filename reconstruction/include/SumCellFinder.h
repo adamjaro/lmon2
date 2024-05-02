@@ -11,6 +11,7 @@ class SumCellFinder: public TH1D {
   public:
 
     SumCellFinder(TH1D *hx, const char *name_title, int ndiv=1e6);
+    //SumCellFinder(std::shared_ptr<TH1D> hx, const char *name_title, int ndiv=1e6);
 
 };
 

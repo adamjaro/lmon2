@@ -10,7 +10,7 @@
 
 #input
 /lmon/input/type gun
-/gun/energy 18 GeV
+/gun/energy 1 GeV
 #/gun/particle e-
 /gun/particle gamma
 /gun/position 0 0 1 mm

@@ -19,6 +19,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax3/trk_v1.root"
     inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax4/trk_v0.root"
 
     #tagger 1 or 2
@@ -71,8 +72,11 @@ def main():
             for iz in range(1, hAcc.GetNbinsZ()+1):
 
                 ibin = hAcc.GetBin(ix, iy, iz)
+                acc = hAcc.GetBinContent(ibin)
 
-                if( hAcc.GetBinContent(ibin) < 1e-3 ): continue
+                #acc = 1-acc
+
+                #if( acc < 1e-12 ): continue
                 #if( hAcc.GetBinContent(ibin) < 0.1 ): continue
 
                 #print(ix, iy, iz, ibin, hAcc.GetBinContent(ibin))
@@ -89,7 +93,7 @@ def main():
                 p1 = hAcc.GetZaxis().GetBinLowEdge(iz)
                 p2 = p1 + hAcc.GetZaxis().GetBinWidth(iz)
 
-                tp = int( 100*(1-hAcc.GetBinContent(ibin)) )
+                tp = int( 100*(1-acc) )
 
                 #tp = 0
 
@@ -149,6 +153,7 @@ def draw_bin(e1, e2, t1, t2, p1, p2, tp, ipoint, en_min, en_max, pitheta_max, ge
 
     tbin = geom.MakeTubs("tbin"+str(ipoint), med_bin, r1, r2, (y1-y2)/2, phi[0], phi[1])
     tbin.SetLineColor(rt.kGreen)
+    #tbin.SetLineColor(rt.kRed)
     tbin.SetTransparency(tp)
     top.AddNode(tbin, ipoint, TGeoCombiTrans("tbin_trans", 0, y1-(y1-y2)/2, 0, TGeoRotation("tbin_rot", 0, 90, 90)))
     ipoint += 1

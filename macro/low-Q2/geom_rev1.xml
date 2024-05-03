@@ -1,0 +1,9 @@
+
+<main>
+
+  <include_directory name="/home/jaroslav/sim/lmon2/geometry/rev1"/>
+
+  <include ref="main.xml"/>
+
+</main>
+

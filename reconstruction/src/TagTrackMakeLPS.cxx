@@ -53,7 +53,8 @@ void TagTrackMakeLPS::Run(const char *conf) {
   ;
 
   //reconstruction for tagger stations
-  LookupProblemSolver *s1_rec = new LookupProblemSolver(3, "s1", opt);
+  LookupProblemSolver *s1_rec = new LookupProblemSolver(3, "s1", &opt);
+  LookupProblemSolver *s2_rec = new LookupProblemSolver(3, "s2", &opt);
 
   //quantities measured by the taggers
   s1_rec->MakeQuantity("x"); // x position, mm
@@ -61,16 +62,26 @@ void TagTrackMakeLPS::Run(const char *conf) {
   s1_rec->MakeQuantity("theta_x"); // theta_x angle, rad
   s1_rec->MakeQuantity("theta_y"); // theta_y angle, rad
 
+  s2_rec->MakeQuantity("x"); // x position, mm
+  s2_rec->MakeQuantity("y"); // y position, mm
+  s2_rec->MakeQuantity("theta_x"); // theta_x angle, rad
+  s2_rec->MakeQuantity("theta_y"); // theta_y angle, rad
+
   //load the configuration file
   variables_map opt_map;
   store(parse_config_file(conf, opt), opt_map);
 
   //initialize the reconstruction
   s1_rec->Initialize(opt_map);
+  s2_rec->Initialize(opt_map);
 
   s1_rec->SetUseFoamCellFinder( opt_map["main.use_FoamCellFinder"].as<bool>() );
   s1_rec->SetUseMedCellFinder( opt_map["main.use_MedCellFinder"].as<bool>() );
   s1_rec->SetUseSumCellFinder( opt_map["main.use_SumCellFinder"].as<bool>() );
+
+  s2_rec->SetUseFoamCellFinder( opt_map["main.use_FoamCellFinder"].as<bool>() );
+  s2_rec->SetUseMedCellFinder( opt_map["main.use_MedCellFinder"].as<bool>() );
+  s2_rec->SetUseSumCellFinder( opt_map["main.use_SumCellFinder"].as<bool>() );
 
   //inputs
   string input = GetStr(opt_map, "main.input");
@@ -152,7 +163,7 @@ void TagTrackMakeLPS::Run(const char *conf) {
     s2.ProcessEvent();
 
     AddInput(&s1, s1_rec);
-    //AddInput(&s2, s2_rec);
+    AddInput(&s2, s2_rec);
 
     s1.FinishEvent();
     s2.FinishEvent();
@@ -170,13 +181,13 @@ void TagTrackMakeLPS::Run(const char *conf) {
 
   cout << "Finalizing..." << endl;
   s1_rec->Finalize();
-  //s2_rec->Finalize();
+  s2_rec->Finalize();
 
   otree.Write(0, TObject::kOverwrite);
 
   cout << "Exporting..." << endl;
   s1_rec->Export();
-  //s2_rec->Export();
+  s2_rec->Export();
 
   out.Close();
 

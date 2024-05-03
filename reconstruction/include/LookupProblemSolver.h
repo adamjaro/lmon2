@@ -8,7 +8,7 @@ class LookupProblemSolver {
 
   public:
 
-    LookupProblemSolver(size_t nsol, std::string nam, boost::program_options::options_description& opt);
+    LookupProblemSolver(size_t nsol, std::string nam, boost::program_options::options_description *opt=nullptr);
 
     void MakeQuantity(std::string qnam);
     void Initialize(boost::program_options::variables_map& opt_map);
@@ -20,6 +20,14 @@ class LookupProblemSolver {
     void SetUseMedCellFinder(bool u=true) { if(u) { fCellFinder = CellFinder::kMed; } }
     void SetUseSumCellFinder(bool u=true) { if(u) { fCellFinder = CellFinder::kSum; } }
 
+    void Import(TFile& in);
+
+    void SetMinNinp(Int_t n) { fMinNinp = n; }
+    void SetMaxErr(size_t isol, double v) { fMaxErr[isol].first = true; fMaxErr[isol].second = v; }
+    void SetMaxRel(size_t isol, double v) { fMaxRel[isol].first = true; fMaxRel[isol].second = v; }
+
+    bool Solve(std::vector<double>& quant, std::vector<double>& sol, std::vector<double> *err=nullptr, Int_t *ipar=nullptr);
+
   private:
 
     std::string fNam; // tool name
@@ -27,6 +35,16 @@ class LookupProblemSolver {
     //cache for inputs
     std::unique_ptr<TFile> fCacheFile;
     std::unique_ptr<TTree> fCacheTree;
+
+    //input cache for solutions, holding also its dimensionality
+    std::vector<double> fSolCache;
+
+    //minimal number of inputs for desired solution
+    Int_t fMinNinp=0;
+
+    //criteria for absolute and relative errors on individual solutions
+    std::vector<std::pair<bool, double>> fMaxErr;
+    std::vector<std::pair<bool, double>> fMaxRel;
 
     //cell finder for variable binning in independent quantities
     enum class CellFinder { kNo=0, kFoam, kMed, kSum };
@@ -53,10 +71,8 @@ class LookupProblemSolver {
 
     };//Quantity
 
-    std::vector<Quantity> fQuantConf; // quantities configuration
-
-    size_t fNsol; // solution dimensionality
-    std::vector<double> fSolCache; // input cache for solutions
+    //quantities configuration
+    std::vector<Quantity> fQuantConf;
 
     //link from indepentent quantities to solutions
     class Link {

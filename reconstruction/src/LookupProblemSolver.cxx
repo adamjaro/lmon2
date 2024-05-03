@@ -28,19 +28,25 @@ using namespace std;
 using namespace boost;
 
 //_____________________________________________________________________________
-LookupProblemSolver::LookupProblemSolver(size_t nsol, std::string nam, program_options::options_description& opt):
-  fNsol(nsol), fNam(nam) {
+LookupProblemSolver::LookupProblemSolver(size_t nsol, std::string nam, program_options::options_description *opt):
+  fNam(nam) {
 
   //program options for layers configuration with default values
-  opt.add_options()
-    ((fNam+".nlayers").c_str(), program_options::value<int>()->default_value(3), "Number of layers")
-    ((fNam+".layer0_bins").c_str(), program_options::value<int>()->default_value(100), "First layer #0 segmentation")
-    ((fNam+".layer_dec").c_str(), program_options::value<int>()->default_value(40), "Decrement in bins to each next layer")
-    ((fNam+".layer0_bins_pow2").c_str(), program_options::value<int>()->default_value(0), "Segmentation in powers of 2")
-  ;
+  if( opt != nullptr ) {
+    opt->add_options()
+      ((fNam+".nlayers").c_str(), program_options::value<int>()->default_value(3), "Number of layers")
+      ((fNam+".layer0_bins").c_str(), program_options::value<int>()->default_value(100), "First layer #0 segmentation")
+      ((fNam+".layer_dec").c_str(), program_options::value<int>()->default_value(40), "Decrement in bins to each next layer")
+      ((fNam+".layer0_bins_pow2").c_str(), program_options::value<int>()->default_value(0), "Segmentation in powers of 2")
+    ;
+  }
 
-  //initialize the solutions input
-  fSolCache.assign(fNsol, 0);
+  //initialize the solutions input for its dimensionality
+  fSolCache.assign(nsol, 0);
+
+  //initialize selection criteria for absolute and relative errors in solution
+  fMaxErr.assign(nsol, std::make_pair(false, 0));
+  fMaxRel.assign(nsol, std::make_pair(false, 0));
 
 }//LookupProblemSolver
 
@@ -99,7 +105,6 @@ void LookupProblemSolver::Initialize(program_options::variables_map& opt_map) {
 
     cout << fNam << ", constructing layer #" << i << ", bins: " << nbins << endl;
     fLayers.push_back( Layer(i, nbins) ); // layer number and segmentation
-    //fLayers.back().sol_cache = make_shared<vector<double>>(fSolCache);
     fLayers.back().sol_cache = &fSolCache;
   }
 
@@ -147,8 +152,6 @@ void LookupProblemSolver::AddInput(const vector<double>& quant, const vector<dou
       if( i.cache_val > i.max ) i.max = i.cache_val;
     }
 
-    //cout << i.min << " " << i.max << endl;
-    //cout << fQuantConf[iquant].min << " " << fQuantConf[iquant].max << endl;
   }//quantity loop
 
   //input solution
@@ -332,6 +335,150 @@ void LookupProblemSolver::Export() {
 }//Export
 
 //_____________________________________________________________________________
+void LookupProblemSolver::Import(TFile& in) {
+
+  //import from file
+
+  cout << "LPS::Import, " << fNam << endl;
+
+  //count how many layers are there
+  Int_t nlay=0;
+  while( in.Get( (fNam+"_quantities_"+to_string(nlay)).c_str() ) ) {
+    nlay++;
+  }
+
+  cout << fNam << ", layers to import: " << nlay << endl;
+
+  //layers loop
+  for(Int_t ilay=0; ilay<nlay; ilay++) {
+
+    //make the layer
+    fLayers.push_back( Layer(ilay) );
+    Layer& lay = fLayers.back();
+
+    //set the quantities for the layer
+    TList *qlist = dynamic_cast<TList*>(in.Get( (fNam+"_quantities_"+to_string(ilay)).c_str() ));
+
+    //quantity loop to attach them to the layer
+    for(Int_t iq=0; iq<qlist->GetEntries(); iq++) {
+
+      lay.lay_quant.push_back( Quantity(qlist->At(iq)->GetName()) );
+      lay.lay_quant.back().hx = make_shared<TH1D>( *dynamic_cast<TH1D*>(qlist->At(iq)) );
+    }//quantity loop
+
+    //import the links for the layer
+    TTree *link_tree = dynamic_cast<TTree*>(in.Get( (fNam+"_links_"+to_string(ilay)).c_str() ));
+    ULong64_t idx;
+    Int_t ninp;
+    vector<double> sol_tree, sol_err_tree;
+    link_tree->SetBranchAddress("idx", &idx);
+    link_tree->SetBranchAddress("ninp", &ninp);
+
+    //solution branches
+    sol_tree.resize(fSolCache.size());
+    sol_err_tree.resize(fSolCache.size());
+    for(size_t i=0; i<fSolCache.size(); i++) {
+
+      link_tree->SetBranchAddress(("sol_"+to_string(i)).c_str(), &sol_tree[i]);
+      link_tree->SetBranchAddress(("sol_err_"+to_string(i)).c_str(), &sol_err_tree[i]);
+    }
+
+    //links tree loop
+    for(Long64_t i=0; i<link_tree->GetEntries(); i++) {
+      link_tree->GetEntry(i);
+
+      //make the link for the layer from the tree entry
+      map<ULong64_t, Link>::iterator ilnk = lay.links.insert( make_pair(idx, Link(fSolCache.size())) ).first;
+
+      //set the link
+      Link& lnk = (*ilnk).second;
+      lnk.ninp = ninp;
+      lnk.ilay = ilay;
+      lnk.solution = sol_tree;
+      lnk.solution_err = sol_err_tree;
+
+    }//links tree loop
+
+  }//layers loop
+
+}//Import
+
+//_____________________________________________________________________________
+bool LookupProblemSolver::Solve(vector<double>& quant, vector<double>& sol, vector<double> *err, Int_t *ipar) {
+
+  //cout << "LPS::Solve" << endl;
+
+  //layer loop to find the first one meeting selection criteria
+  for(Layer& lay: fLayers) {
+
+    //link on the given layer
+    map<ULong64_t, Link>::iterator ilnk = lay.links.find( lay.GetLinkIdx(quant) );
+
+    //link is present
+    if( ilnk == lay.links.end() ) continue;
+
+    //get the link
+    Link& lnk = (*ilnk).second;
+
+    //selection criteria
+
+    //minimal number of inputs
+    if( lnk.ninp < fMinNinp ) continue;
+
+    //maximal absolute error
+    bool stat = true;
+    for(size_t i=0; i<fMaxErr.size(); i++) {
+
+      //test whether condition is requested
+      if( !fMaxErr[i].first ) continue;
+
+      //error availability
+      if( lnk.solution_err[i] < 0 ) stat = false;
+
+      //apply the condition for absolute error
+      if( lnk.solution_err[i] > fMaxErr[i].second ) stat = false;
+    }
+    if( !stat ) continue;
+
+    //maximal relative error
+    stat = true;
+    for(size_t i=0; i<fMaxRel.size(); i++) {
+
+      //test whether relative error is requested and division is possible
+      if( !fMaxRel[i].first or lnk.solution[i] == 0 ) continue;
+
+      //error availability
+      if( lnk.solution_err[i] < 0 ) stat = false;
+
+      //condition on relative error
+      if( TMath::Abs(lnk.solution_err[i]/lnk.solution[i]) > fMaxRel[i].second ) stat = false;
+
+    }
+    if( !stat ) continue;
+
+    //return the solution
+    sol = lnk.solution;
+
+    //errors on the solution if requested
+    if( err != nullptr ) {
+      *err = lnk.solution_err;
+    }
+
+    //integer parameters if requested
+    if(ipar) {
+      ipar[0] = lnk.ninp;
+      ipar[1] = lnk.ilay;
+    }
+
+    return true;
+
+  }
+
+  return false;
+
+}//Solve
+
+//_____________________________________________________________________________
 void LookupProblemSolver::Layer::AddInput() {
 
   //add input for the layer
@@ -440,11 +587,10 @@ void LookupProblemSolver::Link::Evaluate() {
     for(size_t isol=0; isol<solution.size(); isol++) {
 
       solution[isol] = input_solutions[0][isol];
+      solution_err[isol] = -1;
 
     }//solutions loop
-
   }
-
 
 }//Link::Evaluate
 

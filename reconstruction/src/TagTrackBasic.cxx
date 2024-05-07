@@ -47,6 +47,7 @@ void TagTrackBasic::Run(const char *conf) {
   program_options::options_description opt("opt");
   opt.add_options()
     ("main.input", program_options::value<string>(), "Analysis input")
+    ("main.nev", program_options::value<Long64_t>()->default_value(0), "Max number of events")
     ("main.geo", program_options::value<string>(), "Geometry configuration")
     ("main.outfile", program_options::value<string>(), "Output from the analysis")
     ("main.max_chi2ndf", program_options::value<double>(), "Maximal tracks Chi2/NDF")
@@ -197,9 +198,16 @@ void TagTrackBasic::Run(const char *conf) {
   Long64_t ncls_s1=0, ncls_s2=0, ntrk_s1=0, ntrk_s2=0; // tracking counters
   Long64_t ncal_cls_s1=0; // calorimeter counters
 
-  //event loop
-  Long64_t nev = tree.GetEntries();
+  //number of events
+  Long64_t nev = opt_map["main.nev"].as<Long64_t>();
+  if( nev == 0 ) {
+    //number of events not requested, set from the tree
+    nev = tree.GetEntries();
+  }
   //Long64_t nev = 4;
+  cout << "Events to analyze: " << nev << endl;
+
+  //event loop
   Long64_t iprint = nev/12;
   for(Long64_t iev=0; iev<nev; iev++) {
 

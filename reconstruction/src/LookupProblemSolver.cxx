@@ -1,7 +1,8 @@
 
 //_____________________________________________________________________________
 //
-// LookupProblemSolver, generalized from EThetaPhiRecoV2
+// LookupProblemSolver (LPS) implementation, handles trained links from independent
+// quantities to solutions, public functions give usage instructions
 //
 //_____________________________________________________________________________
 
@@ -31,6 +32,10 @@ using namespace boost;
 LookupProblemSolver::LookupProblemSolver(size_t nsol, std::string nam, program_options::options_description *opt):
   fNam(nam) {
 
+  //nsol: solution dimensionality
+  //nam: name for the LPS instance, is used for export and import
+  //opt: program_options to configure layer structure
+
   //program options for layers configuration with default values
   if( opt != nullptr ) {
     opt->add_options()
@@ -53,12 +58,20 @@ LookupProblemSolver::LookupProblemSolver(size_t nsol, std::string nam, program_o
 //_____________________________________________________________________________
 void LookupProblemSolver::MakeQuantity(std::string qnam) {
 
+  //add a new independent quantity
+
+  //qnam: name for the quantity
+
   fQuantConf.push_back( Quantity(qnam) );
 
 }//MakeQuantity
 
 //_____________________________________________________________________________
 void LookupProblemSolver::Initialize(program_options::variables_map& opt_map) {
+
+  //initialize before adding training inputs
+
+  //opt_map: variables_map holding layers configuration
 
   cout << "LPS::Initialize, " << fNam << endl;
 
@@ -128,6 +141,13 @@ void LookupProblemSolver::Initialize(program_options::variables_map& opt_map) {
 //_____________________________________________________________________________
 void LookupProblemSolver::AddInput(const vector<double>& quant, const vector<double>& sol) {
 
+  //add training input as known solution for a given independent quantities
+
+  //quant: independent quantities, dimension by number of calls to MakeQuantity, ordering
+  //       by sequence of the calls
+
+  //sol: known solution for the quant, dimension by nsol parameter in constructor
+
   //cout << "LPS: AddInput: ";
   //cout << quant[0] << " " << quant[1] << " " << quant[2] << " " << quant[3] << " ";
   //cout << sol[0] << " " << sol[1] << " " << sol[2] << " " << endl;
@@ -169,6 +189,8 @@ void LookupProblemSolver::AddInput(const vector<double>& quant, const vector<dou
 void LookupProblemSolver::Finalize() {
 
   //add inputs to layers from cached values
+
+  //cout << "LPS::Finalize, " << fNam << endl;
 
   //layer loop to set quantity distributions
   for(Layer& i: fLayers) {
@@ -247,10 +269,27 @@ void LookupProblemSolver::Finalize() {
 
   }//cache loop
 
+  //remove the cache tree
+  fCacheTree->ResetBranchAddresses();
+  fCacheTree.reset();
+
+  //close and remove the cache file
+  fCacheFile->Close();
+
+  string rm_command("rm -f ");
+  rm_command += fCacheFile->GetName();
+  int stat = system( rm_command.c_str() );
+  if( stat != 0 ) {
+    cout << fNam << ", can't remove cache file: " << fCacheFile->GetName() << endl;
+    cout << "Status code: " << stat << endl;
+  }
+
 }//Finalize
 
 //_____________________________________________________________________________
 void LookupProblemSolver::Export() {
+
+  //export trained links to a file (assumed to be open before the call)
 
   //layer loop
   for(Layer& i: fLayers) {
@@ -321,23 +360,14 @@ void LookupProblemSolver::Export() {
 
   }//layer loop
 
-  //close and remove the cache file
-  fCacheFile->Close();
-
-  string rm_command("rm -f ");
-  rm_command += fCacheFile->GetName();
-  int stat = system( rm_command.c_str() );
-  if( stat != 0 ) {
-    cout << fNam << ", can't remove cache file: " << fCacheFile->GetName() << endl;
-    cout << "Status code: " << stat << endl;
-  }
-
 }//Export
 
 //_____________________________________________________________________________
 void LookupProblemSolver::Import(TFile& in) {
 
-  //import from file
+  //import trained links from file
+
+  //in: input file
 
   cout << "LPS::Import, " << fNam << endl;
 
@@ -405,6 +435,14 @@ void LookupProblemSolver::Import(TFile& in) {
 
 //_____________________________________________________________________________
 bool LookupProblemSolver::Solve(vector<double>& quant, vector<double>& sol, vector<double> *err, Int_t *ipar) {
+
+  //get solution for provided independent quantities
+
+  //quant: independent quantities, dimension by number of calls to MakeQuantity, ordering
+  //       by sequence of the calls
+
+  //sol: solution satisfying optional criteria for the quant, dimension by nsol parameter in constructor,
+  //     ordering is the same as in calls to AddInput
 
   //cout << "LPS::Solve" << endl;
 

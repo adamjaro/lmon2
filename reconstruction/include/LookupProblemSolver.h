@@ -8,24 +8,30 @@ class LookupProblemSolver {
 
   public:
 
+    //constructor for both training and solving
     LookupProblemSolver(size_t nsol, std::string nam, boost::program_options::options_description *opt=nullptr);
 
-    void MakeQuantity(std::string qnam);
-    void Initialize(boost::program_options::variables_map& opt_map);
-    void AddInput(const std::vector<double>& quant, const std::vector<double>& sol);
-    void Finalize();
-    void Export();
+    //training functions
+    void MakeQuantity(std::string qnam); // add a new independent quantity
+    void Initialize(boost::program_options::variables_map& opt_map); // initialize adding inputs
+    void AddInput(const std::vector<double>& quant, const std::vector<double>& sol); // add input known solution
+    void Finalize(); // process all added inputs before exporting
+    void Export(); // export trained links to a file (opened outside before calling)
 
+    //cell finders for processing the added inputs
     void SetUseFoamCellFinder(bool u=true) { if(u) { fCellFinder = CellFinder::kFoam; } }
     void SetUseMedCellFinder(bool u=true) { if(u) { fCellFinder = CellFinder::kMed; } }
     void SetUseSumCellFinder(bool u=true) { if(u) { fCellFinder = CellFinder::kSum; } }
 
-    void Import(TFile& in);
+    //solving functions
+    void Import(TFile& in); // import trained links from input file
 
-    void SetMinNinp(Int_t n) { fMinNinp = n; }
-    void SetMaxErr(size_t isol, double v) { fMaxErr[isol].first = true; fMaxErr[isol].second = v; }
-    void SetMaxRel(size_t isol, double v) { fMaxRel[isol].first = true; fMaxRel[isol].second = v; }
+    //selection criteria for solutions
+    void SetMinNinp(Int_t n) { fMinNinp = n; } // minimal number of inputs for a given solution
+    void SetMaxErr(size_t isol, double v) { fMaxErr[isol].first = true; fMaxErr[isol].second = v; } // maximal allowed error
+    void SetMaxRel(size_t isol, double v) { fMaxRel[isol].first = true; fMaxRel[isol].second = v; } // maximal relative error
 
+    //get solution for a given quantities, optionally provide error on the solution and integer parameters
     bool Solve(std::vector<double>& quant, std::vector<double>& sol, std::vector<double> *err=nullptr, Int_t *ipar=nullptr);
 
   private:

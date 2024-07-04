@@ -21,7 +21,7 @@ void training() {
   program_options::store(parse_config_file("conf.ini", opt), opt_map);
 
   //optional non-uniform segmentation in quantities
-  //solver.SetUseMedCellFinder();
+  solver.SetUseMedCellFinder();
 
   //initialize the LPS for training
   solver.Initialize(opt_map);
@@ -59,14 +59,16 @@ void training() {
 
   solver.Export();
 
-  out.Close();
-
-
+  //out.Close();
 
   //draw the Gaussian which was used for the training
   TCanvas can("can", "can", 768, 768);
 
   gauss2.Draw("colz");
+
+  gauss2.Write();
+
+  out.Close();
 
   can.SaveAs("gauss.pdf");
 

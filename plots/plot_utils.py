@@ -10,9 +10,25 @@ from ROOT import std, vector
 #_____________________________________________________________________________
 def prepare_TH1D(name, binsiz, xmin, xmax):
 
+  #fixed bin size binsiz
+
   nbins, xmax = get_nbins(binsiz, xmin, xmax)
 
   return prepare_TH1D_n(name, nbins, xmin, xmax)
+
+#_____________________________________________________________________________
+def prepare_TH1D_mid(name, bin1, bin2, xmin, xmax, xmid):
+
+  #bin size bin1 below xmid and bin2 above xmid
+
+  return prepare_TH1D_vec(name, get_bins_vec_2pt(bin1, bin2, xmin, xmax, xmid))
+
+#_____________________________________________________________________________
+def prepare_TH1D_3pt(name, bin1, bin2, bin3, xmin, xmax, xmid1, xmid2):
+
+  #binning with bin1 below xmid1, bin2 between xmid1 and xmid2 and bin3 above xmid2
+
+  return prepare_TH1D_vec(name, get_bins_vec_3pt(bin1, bin2, bin3, xmin, xmax, xmid1, xmid2))
 
 #_____________________________________________________________________________
 def get_nbins(binsiz, xmin, xmax):
@@ -139,12 +155,22 @@ def set_graph(tx, col=rt.kBlack, style=rt.kFullCircle):
     tx.SetLineWidth(2)
 
 #_____________________________________________________________________________
-def h1_to_graph(hx):
+def set_line_graph(tx, col=rt.kBlack, style=rt.kSolid, width=2):
+
+    tx.SetLineColor(col)
+    tx.SetLineStyle(style)
+    tx.SetLineWidth(width)
+
+#_____________________________________________________________________________
+def h1_to_graph(hx, col=None, style=rt.kSolid, width=2):
 
     tx = TGraphErrors(hx.GetNbinsX())
     for ibin in range(1,hx.GetNbinsX()+1):
         #print ibin, hx.GetBinContent(ibin)
         tx.SetPoint(ibin-1, hx.GetBinCenter(ibin), hx.GetBinContent(ibin))
+
+    if col is not None:
+        set_line_graph(tx, col, style, width)
 
     return tx
 
@@ -219,6 +245,38 @@ def graph_to_arrays(gx):
 
         yp.append( yv.value )
         yp.append( yv.value )
+
+    return xp, yp
+
+#_____________________________________________________________________________
+def h1_to_arrays(hx):
+
+    xp = []
+    yp = []
+
+    for ibin in range(1,hx.GetNbinsX()+1):
+
+        xp.append( hx.GetBinLowEdge(ibin) )
+        xp.append( hx.GetBinLowEdge(ibin)+hx.GetBinWidth(ibin) )
+
+        yp.append( hx.GetBinContent(ibin) )
+        yp.append( hx.GetBinContent(ibin) )
+
+    return xp, yp
+
+#_____________________________________________________________________________
+def h1_to_arrays_centers(hx):
+
+    xp = []
+    yp = []
+
+    for ibin in range(1,hx.GetNbinsX()+1):
+
+        xp.append( hx.GetBinCenter(ibin) )
+        #xp.append( hx.GetBinLowEdge(ibin)+hx.GetBinWidth(ibin) )
+
+        yp.append( hx.GetBinContent(ibin) )
+        #yp.append( hx.GetBinContent(ibin) )
 
     return xp, yp
 
@@ -338,11 +396,18 @@ def norm_to_den_w(hx, den):
 
     #divide bins by denominator den and bin width
 
-    for ibin in xrange(hx.GetNbinsX()+1):
+    for ibin in range(hx.GetNbinsX()+1):
         hx.SetBinContent(ibin, hx.GetBinContent(ibin)/(den*hx.GetBinWidth(ibin)))
         hx.SetBinError(ibin, hx.GetBinError(ibin)/(den*hx.GetBinWidth(ibin)))
 
     set_H1D(hx)
+
+#_____________________________________________________________________________
+def norm_to_integral_list(hlist, ival):
+
+    for i in hlist:
+        norm_to_den_w(i, 1)
+        norm_to_integral(i, ival)
 
 #_____________________________________________________________________________
 def fill_h1_tf(hx, func, col=rt.kBlue):

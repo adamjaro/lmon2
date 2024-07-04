@@ -47,6 +47,12 @@ void solve() {
 
   can.SaveAs("gauss2.pdf");
 
+  TFile out("gauss_solve.root", "recreate");
+
+  g2.Write();
+
+  out.Close();
+
 
 }//solve
 

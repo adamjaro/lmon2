@@ -1,0 +1,16 @@
+
+<main>
+
+  <!-- prototype beam pipe -->
+  <detector type="BeamAndrii20240604" name="beam">
+  </detector>
+
+  <!-- top volume, mm  G4_AIR  G4_Galactic -->
+  <detector
+    name="topv" type="top"
+    xsiz = "10000" ysiz="10000" zsiz="50000"
+    material="G4_AIR">
+  </detector>
+
+</main>
+

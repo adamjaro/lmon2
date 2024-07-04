@@ -83,7 +83,7 @@ if __name__ == "__main__":
     gInterpreter.Declare('#include <boost/program_options.hpp>')
 
     #header for LPS
-    gInterpreter.AddIncludePath("../../../reconstruction/include/");
+    gInterpreter.AddIncludePath("../../../reconstruction/include/")
     gInterpreter.Declare('#include "LookupProblemSolver.h"')
 
     #run the 'main' function

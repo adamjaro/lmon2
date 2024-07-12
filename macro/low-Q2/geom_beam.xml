@@ -2,15 +2,173 @@
 <main>
 
   <!-- prototype beam pipe -->
-  <detector type="BeamAndrii20240604" name="beam">
+
+<!--
+  <detector type="BeamAndrii20240604" name="beam"
+    xmlFileName="../../geometry/dev/lattice_20240604/simParameters_v6.3.xml">
   </detector>
+-->
+
+  <!-- Lattice inputs, V6.3 closed orbit, ir6twiss.tfs -->
+  <const name="beam_gamma" value="34924.26476"/>
+
+  <!-- IP6 position, mm -->
+  <const name="lat_IP6_X" value="-589771.63830392"/>
+  <const name="lat_IP6_Z" value="-3.5527136788005e-12"/>
+
+  <!-- Lattice data for Q1ER, mm -->
+  <const name="lat_O0ER_X" value="-589814.03785166"/>
+  <const name="lat_O0ER_Z" value="-5299.8304009045"/>
+  <const name="lat_Q1ER_X" value="-589828.43769806"/>
+  <const name="lat_Q1ER_Z" value="-7099.7728012117"/>
+
+
+  <!-- Rotation angle at IP6, rad -->
+  <const name="lat_IP6_theta" value="TMath::ATan((lat_IP6_X-lat_O0ER_X)/(lat_IP6_Z-lat_O0ER_Z))"/>
+  <!-- <const name="lat_IP6_theta" value="0.008"/> -->
+  <!-- <const name="lat_IP6_theta" value="0.00000800017"/> -->
+
+  <!-- Start position for Q1ER, mm -->
+  <const name="lat_Q1ER_SX" value="lat_O0ER_X-lat_IP6_X"/> <!-- shift and angle at IP -->
+  <const name="lat_Q1ER_SZ" value="lat_O0ER_Z-lat_IP6_Z"/>
+
+  <const name="Q1ER_SX" value="lat_Q1ER_SZ*TMath::Sin(-lat_IP6_theta)+lat_Q1ER_SX*TMath::Cos(-lat_IP6_theta)"/>
+  <const name="Q1ER_SZ" value="lat_Q1ER_SZ*TMath::Cos(-lat_IP6_theta)-lat_Q1ER_SX*TMath::Sin(-lat_IP6_theta)"/>
+
+  <!-- End position for Q1ER, mm -->
+  <const name="lat_Q1ER_EX" value="lat_Q1ER_X-lat_IP6_X"/>
+  <const name="lat_Q1ER_EZ" value="lat_Q1ER_Z-lat_IP6_Z"/>
+
+  <const name="Q1ER_EX" value="lat_Q1ER_EZ*TMath::Sin(-lat_IP6_theta)+lat_Q1ER_EX*TMath::Cos(-lat_IP6_theta)"/>
+  <const name="Q1ER_EZ" value="lat_Q1ER_EZ*TMath::Cos(-lat_IP6_theta)-lat_Q1ER_EX*TMath::Sin(-lat_IP6_theta)"/>
+
+  <const name="Q1ER_length" value="TMath::Sqrt(TMath::Power((Q1ER_SZ-Q1ER_EZ),2)+TMath::Power((Q1ER_SX-Q1ER_EX),2))"/>
+  <const name="Q1ER_zpos" value="(Q1ER_SZ+Q1ER_EZ)/2"/>
+  <const name="Q1ER_diameter" value="111.4"/>
+
+  <detector type="QDMagnet" name="Q1ER"
+    length="Q1ER_length" dr="Q1ER_diameter/2"
+    dx="200" dy="200" zpos="Q1ER_zpos"
+    K1L="-0.000414" gamma="beam_gamma"
+    vessel_vis="0:0:1:2" inner_vis="1:1:0:2">
+  </detector>
+
+  <!-- Lattice data for Q2ER, mm -->
+  <const name="lat_O1ER_X" value="-589832.43765539"/>
+  <const name="lat_O1ER_Z" value="-7599.7568012971"/>
+  <const name="lat_Q2ER_X" value="-589843.63753592"/>
+  <const name="lat_Q2ER_Z" value="-8999.712001536"/>
+
+  <!-- Start position for Q2ER, mm -->
+  <const name="lat_Q2ER_SX" value="lat_O1ER_X-lat_IP6_X"/> <!-- shift and angle at IP -->
+  <const name="lat_Q2ER_SZ" value="lat_O1ER_Z-lat_IP6_Z"/>
+
+  <const name="Q2ER_SX" value="lat_Q2ER_SZ*TMath::Sin(-lat_IP6_theta)+lat_Q2ER_SX*TMath::Cos(-lat_IP6_theta)"/>
+  <const name="Q2ER_SZ" value="lat_Q2ER_SZ*TMath::Cos(-lat_IP6_theta)-lat_Q2ER_SX*TMath::Sin(-lat_IP6_theta)"/>
+
+  <!-- End position for Q2ER, mm -->
+  <const name="lat_Q2ER_EX" value="lat_Q2ER_X-lat_IP6_X"/>
+  <const name="lat_Q2ER_EZ" value="lat_Q2ER_Z-lat_IP6_Z"/>
+
+  <const name="Q2ER_EX" value="lat_Q2ER_EZ*TMath::Sin(-lat_IP6_theta)+lat_Q2ER_EX*TMath::Cos(-lat_IP6_theta)"/>
+  <const name="Q2ER_EZ" value="lat_Q2ER_EZ*TMath::Cos(-lat_IP6_theta)-lat_Q2ER_EX*TMath::Sin(-lat_IP6_theta)"/>
+
+  <const name="Q2ER_length" value="TMath::Sqrt(TMath::Power((Q2ER_SZ-Q2ER_EZ),2)+TMath::Power((Q2ER_SX-Q2ER_EX),2))"/>
+  <const name="Q2ER_zpos" value="(Q2ER_SZ+Q2ER_EZ)/2"/>
+  <const name="Q2ER_diameter" value="128.6"/>
+
+  <detector type="QDMagnet" name="Q2ER"
+    length="Q2ER_length" dr="Q2ER_diameter/2"
+    dx="300" dy="300" zpos="Q2ER_zpos"
+    K1L="0.0003164" gamma="beam_gamma"
+    vessel_vis="0:0:1:2" inner_vis="1:1:0:2">
+  </detector>
+
+  <!-- Lattice data for D2ER, mm -->
+  <const name="lat_O2ER_X" value="-589905.63687459"/>
+  <const name="lat_O2ER_Z" value="-16749.464002859"/>
+  <const name="lat_D2ER_X" value="-590004.63152868"/>
+  <const name="lat_D2ER_Z" value="-22248.573026915"/>
+
+  <!-- Start position for D2ER, mm -->
+  <const name="lat_D2ER_SX" value="lat_O2ER_X-lat_IP6_X"/> <!-- shift and angle at IP -->
+  <const name="lat_D2ER_SZ" value="lat_O2ER_Z-lat_IP6_Z"/>
+
+  <const name="D2ER_SX" value="lat_D2ER_SZ*TMath::Sin(-lat_IP6_theta)+lat_D2ER_SX*TMath::Cos(-lat_IP6_theta)"/>
+  <const name="D2ER_SZ" value="lat_D2ER_SZ*TMath::Cos(-lat_IP6_theta)-lat_D2ER_SX*TMath::Sin(-lat_IP6_theta)"/>
+
+  <!-- End position for D2ER, mm -->
+  <const name="lat_D2ER_EX" value="lat_D2ER_X-lat_IP6_X"/>
+  <const name="lat_D2ER_EZ" value="lat_D2ER_Z-lat_IP6_Z"/>
+
+  <const name="D2ER_EX" value="lat_D2ER_EZ*TMath::Sin(-lat_IP6_theta)+lat_D2ER_EX*TMath::Cos(-lat_IP6_theta)"/>
+  <const name="D2ER_EZ" value="lat_D2ER_EZ*TMath::Cos(-lat_IP6_theta)-lat_D2ER_EX*TMath::Sin(-lat_IP6_theta)"/>
+
+  <const name="D2ER_length" value="TMath::Sqrt(TMath::Power((D2ER_SZ-D2ER_EZ),2)+TMath::Power((D2ER_SX-D2ER_EX),2))"/>
+  <const name="D2ER_theta" value="TMath::ATan( (D2ER_SX-D2ER_EX)/(D2ER_SZ-D2ER_EZ) )"/>
+  <const name="D2ER_xpos" value="(D2ER_SX+D2ER_EX)/2"/>
+  <const name="D2ER_zpos" value="(D2ER_SZ+D2ER_EZ)/2"/>
+  <const name="D2ER_diameter" value="196"/>
+
+  <detector type="QDMagnet" name="D2ER"
+    length="D2ER_length" theta="D2ER_theta" dr="D2ER_diameter/2"
+    dx="400" dy="300"
+    xpos="D2ER_xpos" zpos="D2ER_zpos"
+    magnet_angle="0.02" gamma="beam_gamma">
+  </detector>
+
+  <!-- Lattice data for Q3ER, mm -->
+  <const name="lat_OWW_SH_X" value="-590570.5663731"/>
+  <const name="lat_OWW_SH_Z" value="-42455.249421411"/>
+  <const name="lat_Q3ER_X" value="-590587.36417798"/>
+  <const name="lat_Q3ER_Z" value="-43055.014236777"/>
+
+  <!-- Start position for Q3ER, mm -->
+  <const name="lat_Q3ER_SX" value="lat_OWW_SH_X-lat_IP6_X"/> <!-- shift and angle at IP -->
+  <const name="lat_Q3ER_SZ" value="lat_OWW_SH_Z-lat_IP6_Z"/>
+
+  <const name="Q3ER_SX" value="lat_Q3ER_SZ*TMath::Sin(-lat_IP6_theta)+lat_Q3ER_SX*TMath::Cos(-lat_IP6_theta)"/>
+  <const name="Q3ER_SZ" value="lat_Q3ER_SZ*TMath::Cos(-lat_IP6_theta)-lat_Q3ER_SX*TMath::Sin(-lat_IP6_theta)"/>
+
+  <!-- End position for Q3ER, mm -->
+  <const name="lat_Q3ER_EX" value="lat_Q3ER_X-lat_IP6_X"/>
+  <const name="lat_Q3ER_EZ" value="lat_Q3ER_Z-lat_IP6_Z"/>
+
+  <const name="Q3ER_EX" value="lat_Q3ER_EZ*TMath::Sin(-lat_IP6_theta)+lat_Q3ER_EX*TMath::Cos(-lat_IP6_theta)"/>
+  <const name="Q3ER_EZ" value="lat_Q3ER_EZ*TMath::Cos(-lat_IP6_theta)-lat_Q3ER_EX*TMath::Sin(-lat_IP6_theta)"/>
+
+  <const name="Q3ER_length" value="TMath::Sqrt(TMath::Power((Q3ER_SZ-Q3ER_EZ),2)+TMath::Power((Q3ER_SX-Q3ER_EX),2))"/>
+  <const name="Q3ER_theta" value="TMath::ATan( (Q3ER_SX-Q3ER_EX)/(Q3ER_SZ-Q3ER_EZ) )"/>
+  <const name="Q3ER_xpos" value="(Q3ER_SX+Q3ER_EX)/2"/>
+  <const name="Q3ER_zpos" value="(Q3ER_SZ+Q3ER_EZ)/2"/>
+  <const name="Q3ER_diameter" value="128"/>
+
+  <detector type="QDMagnet" name="Q3ER"
+    length="Q3ER_length" theta="Q3ER_theta" dr="Q3ER_diameter/2"
+    dx="300" dy="300"
+    xpos="Q3ER_xpos" zpos="Q3ER_zpos"
+    gamma="beam_gamma"
+    vessel_vis="0:0:1:2" inner_vis="1:1:0:2">
+  </detector>
+
 
   <!-- top volume, mm  G4_AIR  G4_Galactic -->
   <detector
     name="topv" type="top"
     xsiz = "10000" ysiz="10000" zsiz="50000"
-    material="G4_AIR">
+    material="G4_Galactic">
   </detector>
 
 </main>
+
+
+
+
+
+
+
+
+
+
+
 

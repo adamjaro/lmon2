@@ -1,0 +1,314 @@
+<xml>
+	<!-- world sizes -->
+	<world>
+		<sec desc="size X" name="x" unit="m">20.0</sec>
+		<sec desc="size Y" name="y" unit="m">20.0</sec>
+		<sec desc="size Z" name="z" unit="m">200.0</sec>
+	</world>
+
+	<!-- beam pipe vacuum -->
+		<!-- sec desc="beam pipe file [nosrmask]" name="fname">../geometry/beam_pipe_211004_ePICorient.obj</sec -->
+	<beampipe>
+		<sec desc="beam pipe file [srmask5]" name="fname">../geometry/beam_pipe_211004_1_mask_in_q0_ePICorient.obj</sec>
+	</beampipe>
+
+	<!-- beam pipe extension -->
+	<extension>
+		<sec desc="length" name="l" unit="cm">370.0</sec>
+		<sec desc="radius" name="r" unit="cm">20.0</sec>
+		<sec desc="endpoint position Z" name="e" unit="cm">3350.0</sec>
+	</extension>
+
+	<!-- ip beam pipe - gold -->
+	<ipbeampipe>
+		<sec desc="fwd Z" name="zmin" unit="cm">-80</sec>
+		<sec desc="bwd Z" name="zmax" unit="cm">67</sec>
+	</ipbeampipe>
+
+	<!-- synrad model -->
+	<srmodel>
+		<sec desc="1 - G4SynchrotronRadiation; 2 - G4SynchrotronRadiationInMat" name="model">1</sec>
+		<sec desc="SR photon reflection process: 0 - Geant4 (Xray,Névot-Croce); 1 - Synrad+ (Gamma,Debye-Waller); 2 - Synrad+ (Gamma,perturb norm - old model); 3 - Synrad+ (Gamma,Debye-Waller,perturb refl - new model)" name="type">3</sec>
+		<sec desc="Print SR photon reflection data: 1 - true; 0 - false" name="print">1</sec>
+		<sec desc="Surface roughness" name="roughness" unit="m">50e-9</sec>
+		<sec desc="Surface autocorrelation length" name="corrlength" unit="m">10000e-9</sec>
+		<sec desc="Surface roughness ratio" name="sigma" unit="">5e-3</sec>
+	</srmodel>
+
+	<!-- store photon trajectories -->
+	<storetrj>
+		<sec desc="Store trajectories: 1 - true; 0 - false" name="store">1</sec>
+		<sec desc="Zmin for the region of interest (where the photon stopped)" name="Zmin" unit="cm">-80</sec>
+		<sec desc="Zmax for the region of interest (where the photon stopped)" name="Zmax" unit="cm">67</sec>
+		<sec desc="Emin for the tracked photon" name="Emin" unit="GeV">10e-6</sec>
+	</storetrj>
+
+	<!-- tracked gamma cuts -->
+	<gammacut>
+		<sec desc="gamma energy cut" name="ecut" unit="eV">30</sec>
+		<sec desc="gamma straight track kill: 1 - true; 0 - false" name="trackkill">0</sec>
+		<sec desc="gamma straight track Dmin" name="Dmin" unit="mm">43.0</sec>
+		<sec desc="gamma straight track Zend" name="Zend" unit="cm">-2227.0</sec>
+	</gammacut>
+
+	<!-- scale the number of SR gammas per electron -->
+	<meanfreepath>
+		<sec desc="gamma production scale factor to modify MeanFreePath" name="MeanFreePathFactor" unit="">10</sec>
+	</meanfreepath>
+
+	<!-- tracking time cut -->
+	<timecut>
+		<sec desc="simulation time cut" name="tcut" unit="s">10e-6</sec>
+	</timecut>
+
+	<!-- stop tracking on the backward side -->
+	<bwdgeocut>
+		<sec desc="tracking geometry cut on the bwd side" name="bwdTrkCutZ" unit="m">-5</sec>
+	</bwdgeocut>
+
+	<!-- beam parameters: from esr-survey-doug.tfs and esr-ring-norad.tfs (2IR, 18 GeV, Jan. 2024) -->
+	<!-- for the start position of the beam use the end position for the previous element in the lattice -->
+	<!-- here, 'start position' means at the beginning of the previous element (SQ2EF_6), -->
+	<!-- while 'end position' means at the beginning of the current element (OWW_SH, same for optics functions) -->
+	<generator>
+		<sec desc="particle generator: Beam or HepMC" name="genname">Beam</sec>
+		<sec desc="particle" name="part">e-</sec>
+		<sec desc="start position X in a global ref. system" name="posx1" unit="m">-589.557294783830</sec>
+		<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0.0</sec>
+		<sec desc="start position Z in a global ref. system" name="posz1" unit="m">37.300275379762</sec>
+		<sec desc="end position X in a global ref. system" name="posx2" unit="m">-589.554565354470</sec>
+		<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0.0</sec>
+		<sec desc="end position Z in a global ref. system" name="posz2" unit="m">37.150300214433</sec>
+		<sec desc="gamma = E/mc^2" name="gamma" unit="">34924.26476</sec>
+		<sec desc="momentum spread" name="spread" unit="">0.109e-2</sec>
+		<sec desc="alpha X" name="alphax" unit="">-7.031809489000</sec>
+		<sec desc="alpha Y" name="alphay" unit="">-1.228417153000</sec>
+		<sec desc="beta X" name="betax" unit="m">161.794286000000</sec>
+		<sec desc="beta Y" name="betay" unit="m">121.630397700000</sec>
+		<sec desc="dispersion X" name="etax" unit="m">-7.969464074000e-02</sec>
+		<sec desc="dispersion Y" name="etay" unit="m">1.442910784000e-09</sec>
+		<sec desc="dispersion PX" name="etapx" unit="">2.621736904000e-02</sec>
+		<sec desc="dispersion PY" name="etapy" unit="">-1.297850364000e-11</sec>
+		<sec desc="emittance X" name="emitx" unit="nm">24.0</sec>
+		<sec desc="emittance Y" name="emity" unit="nm">2.0</sec>
+		<sec desc="type: core or tail" name="type">core</sec>
+		<sec desc="tail fit parameter X" name="tailkx" unit="">0.0</sec>
+		<sec desc="tail fit parameter Y" name="tailky" unit="">25e-7</sec>
+		<sec desc="tail min sigma" name="tailmin" unit="">5</sec>
+		<sec desc="tail max sigma" name="tailmax" unit="">20</sec>
+		<sec desc="hepmc file" name="hepmcfilename">../LowQ2_Pythia_HepMC3/pythia_ep_noradcor_18x275_q2_0.000000001_1.0_run1.ab.hepmc</sec>
+	</generator>
+
+	<!-- gamma absorbers attached to the vacuum beam pipe ends -->
+	<!-- the last absorber is built only if there is no far-bwd beam pipe -->
+
+	<absorbers>
+		<absorber>
+			<sec desc="size X" name="x" unit="cm">10</sec>
+			<sec desc="size Y" name="y" unit="cm">10</sec>
+			<sec desc="size Z" name="z" unit="cm">5</sec>
+			<sec desc="position X" name="posx" unit="cm">12</sec>
+			<sec desc="position Y" name="posy" unit="cm">0</sec>
+			<sec desc="position Z" name="posz" unit="cm">-475</sec>
+		</absorber>
+		<absorber>
+			<sec desc="size X" name="x" unit="cm">10</sec>
+			<sec desc="size Y" name="y" unit="cm">10</sec>
+			<sec desc="size Z" name="z" unit="cm">5</sec>
+			<sec desc="position X" name="posx" unit="cm">-14</sec>
+			<sec desc="position Y" name="posy" unit="cm">0</sec>
+			<sec desc="position Z" name="posz" unit="cm">550</sec>
+		</absorber>
+		<absorber>
+			<sec desc="size X" name="x" unit="cm">50</sec>
+			<sec desc="size Y" name="y" unit="cm">50</sec>
+			<sec desc="size Z" name="z" unit="cm">5</sec>
+			<sec desc="position X" name="posx" unit="cm">0</sec>
+			<sec desc="position Y" name="posy" unit="cm">0</sec>
+			<sec desc="position Z" name="posz" unit="cm">3720</sec>
+		</absorber>
+		<absorber>
+			<sec desc="size X" name="x" unit="cm">30</sec>
+			<sec desc="size Y" name="y" unit="cm">30</sec>
+			<sec desc="size Z" name="z" unit="cm">5</sec>
+			<sec desc="position X" name="posx" unit="cm">0</sec>
+			<sec desc="position Y" name="posy" unit="cm">0</sec>
+			<sec desc="position Z" name="posz" unit="cm">-2227</sec>
+		</absorber>
+	</absorbers>
+
+	<!-- magnet parameters: from esr-survey-doug.tfs and esr-ring-norad.tfs (2IR, 18 GeV, Jan. 2024) -->
+	<!-- for the start position of the magnets use the end position for the previous element in the lattice -->
+	<!-- TWISS ANGLE < 0 -> GEANT4 ANGLE > 0  and TWISS K1L < 0 -> GEANT4 K1L < 0 -->
+	<!-- detector solenoid data based on: https://wiki.bnl.gov/EPIC/index.php?title=Experimental_Solenoid -->
+	<!-- list the magnets, then solenoid, and IP -->
+
+	<magnets>
+		<magnet>
+			<sec desc="magnet name" name="name">D2EF1</sec>
+			<sec desc="magnet type" name="type">D-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">2.726017320163</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-589.554565354470</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">37.150300214433</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-589.521791718650</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">34.424497233879</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0.012348600000</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">0</sec>
+		</magnet>
+		<magnet>
+			<sec desc="magnet name" name="name">D2EF2</sec>
+			<sec desc="magnet type" name="type">D-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">2.726017320163</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-589.520280449030</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">34.166101653298</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-589.521168307210</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">31.440101797885</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0.012348600000</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">0</sec>
+		</magnet>
+		<magnet>
+			<sec desc="magnet name" name="name">D1EF</sec>
+			<sec desc="magnet type" name="type">D-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">0.891400083569</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-589.522847895390</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">31.181707256566</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-589.529310488770</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">30.290330683570</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0.001500000000</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">0</sec>
+		</magnet>
+		<magnet>
+			<sec desc="magnet name" name="name">Q1EF</sec>
+			<sec desc="magnet type" name="type">Q-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">1.610000000000</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-589.672679359490</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">12.369604162111</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-589.685559222110</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">10.759655681836</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">0.161138459200</sec>
+		</magnet>
+		<magnet>
+			<sec desc="magnet name" name="name">Q0EF</sec>
+			<sec desc="magnet type" name="type">Q-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">1.200000000000</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-589.715638901250</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">6.999776001195</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-589.725238798850</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">5.799814400990</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">-0.261830778000</sec>
+		</magnet>
+		<magnet>
+			<sec desc="magnet name" name="name">Q1ER</sec>
+			<sec desc="magnet type" name="type">Q-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">1.800000000000</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-589.814037851660</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">-5.299830400904</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-589.828437698060</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">-7.099772801212</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">-0.414000000000</sec>
+		</magnet>
+		<magnet>
+			<sec desc="magnet name" name="name">Q2ER</sec>
+			<sec desc="magnet type" name="type">Q-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">1.400000000000</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-589.832437655390</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">-7.599756801297</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-589.843637535920</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">-8.999712001536</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">0.316400000000</sec>
+		</magnet>
+		<magnet>
+			<sec desc="magnet name" name="name">D2ER</sec>
+			<sec desc="magnet type" name="type">D-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">5.500091667736</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-589.905636874590</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">-16.749464002859</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-590.004631528680</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">-22.248573026915</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0.020000000000</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">0</sec>
+		</magnet>
+		<magnet>
+			<sec desc="magnet name" name="name">Q3ER</sec>
+			<sec desc="magnet type" name="type">Q-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">0.600000000000</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-590.570566373100</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">-42.455249421411</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-590.587364177980</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">-43.055014236777</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">0.092420910960</sec>
+		</magnet>
+		<magnet>
+			<sec desc="magnet name" name="name">Q4ER</sec>
+			<sec desc="magnet type" name="type">Q-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">0.600000000000</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-590.696549909740</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">-46.953485536656</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-590.713347714630</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">-47.553250352022</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">0.001745740028</sec>
+		</magnet>
+		<magnet>
+			<sec desc="magnet name" name="name">Q5ER</sec>
+			<sec desc="magnet type" name="type">Q-pole</sec>
+			<sec desc="magnet length" name="length" unit="m">0.600000000000</sec>
+			<sec desc="start position X in a global ref. system" name="posx1" unit="m">-590.822533446390</sec>
+			<sec desc="start position Y in a global ref. system" name="posy1" unit="m">0</sec>
+			<sec desc="start position Z in a global ref. system" name="posz1" unit="m">-51.451721651901</sec>
+			<sec desc="end position X in a global ref. system" name="posx2" unit="m">-590.839331251270</sec>
+			<sec desc="end position Y in a global ref. system" name="posy2" unit="m">0</sec>
+			<sec desc="end position Z in a global ref. system" name="posz2" unit="m">-52.051486467267</sec>
+			<sec desc="deflection angle" name="angle" unit="rad">0</sec>
+			<sec desc="integrated quadrupole strength" name="k1l" unit="1/m">-0.056914044970</sec>
+		</magnet>
+		<solenoid>
+			<sec desc="magnet name" name="name">MARCO</sec>
+			<sec desc="magnet type" name="type">SOL</sec>
+			<sec desc="a flag to build the solenoid field: 1 - true; 0 - false (turned off since compensation skew-quads are not included)" name="build">0</sec>
+			<sec desc="solenoid field map file in the /geometry/ directory" name="fname">../geometry/MARCO_v.6.4.1.1.3_1.7T_Magnetic_Field_Map_2022_11_14_rad_coords_cm_T.txt</sec>
+			<sec desc="maximum radius of the fielf" name="rmax" unit="m">5.0</sec>
+			<sec desc="minimum position in z of the fielf" name="zmin" unit="m">-5.0</sec>
+			<sec desc="maximum position in z of the fielf" name="zmax" unit="m">5.0</sec>
+			<sec desc="print the field map: 1 - true; 0 - false" name="print">0</sec>
+			<sec desc="solenoid origin position in x (custom-built syst.)" name="origposx" unit="cm">0.0</sec>
+			<sec desc="solenoid origin position in y (custom-built syst.)" name="origposy" unit="cm">0.0</sec>
+			<sec desc="solenoid origin position in z (custom-built syst.)" name="origposz" unit="cm">-8.0</sec>
+			<sec desc="solenoid field flip xz coord." name="flipxz">0</sec>
+		</solenoid>
+		<ip>
+			<sec desc="position X in a global ref. system" name="posx" unit="m">-589.771638303920</sec>
+			<sec desc="position Y in a global ref. system" name="posy" unit="m">0</sec>
+			<sec desc="position Z in a global ref. system" name="posz" unit="m">0</sec>
+			<sec desc="hor. angle in a global ref. system" name="theta" unit="rad">3.149592653590</sec>
+		</ip>
+		<monitor>
+			<sec desc="the name of the magnet in front of the beam monitor" name="magname">Q2ER</sec>
+		</monitor>
+	</magnets>
+</xml>

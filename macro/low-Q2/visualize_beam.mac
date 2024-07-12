@@ -10,8 +10,8 @@
 
 #input
 /lmon/input/type gun
-#/gun/energy 18 GeV
-/gun/energy 12 GeV
+/gun/energy 18 GeV
+#/gun/energy 12 GeV
 #/gun/energy 10 MeV
 /gun/particle e-
 #/gun/particle gamma
@@ -51,15 +51,17 @@
 /vis/viewer/set/viewpointThetaPhi -45 -45
 #/vis/viewer/set/viewpointThetaPhi 45 45 deg
 
-#/vis/viewer/set/targetPoint 0 0 -10000 mm
-#/vis/viewer/set/targetPoint 0 0 -14865 mm # B2BeR end
+#/vis/viewer/set/targetPoint 0 0 1675 cm
+#/vis/viewer/set/targetPoint 0 0 -20000 mm # B2BeR end
+
+#/vis/viewer/set/targetPoint 0 0 -7000 mm # Q1 and Q2
 
 #/vis/viewer/set/targetPoint -181 0 -20500 mm  # Tagger 1
 #/vis/viewer/set/targetPoint -238 100 -21500 mm
 
 #/vis/viewer/set/targetPoint -480 0 -35500 mm  # Tagger 2
 
-#/vis/viewer/set/targetPoint -460 0 -37696 mm # Q3eR
+/vis/viewer/set/targetPoint -460 0 -42760 mm # Q3eR
 
 #/vis/viewer/set/targetPoint -460 0 -38000 mm
 

@@ -151,6 +151,12 @@
     vessel_vis="0:0:1:2" inner_vis="1:1:0:2">
   </detector>
 
+  <detector type="ParticleCounter" name="Q3ER_counter"
+    dz="1" outer_r="Q3ER_diameter/2"
+    zpos="(Q3ER_length/2)-1/2" remove_tracks="1"
+    place_into1="Q3ER_vessel" place_into2="Q3ER_inner">
+  </detector>
+
 
   <!-- top volume, mm  G4_AIR  G4_Galactic -->
   <detector

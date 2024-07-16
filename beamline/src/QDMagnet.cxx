@@ -2,7 +2,7 @@
 //_____________________________________________________________________________
 //
 // Universal quadrupole - dipole beam magnet, rectangular outer vessel,
-// circular inner magnet volume
+// circular inner magnet volume, field formula by Andrii Natochii
 //
 //_____________________________________________________________________________
 

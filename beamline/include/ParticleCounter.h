@@ -29,6 +29,7 @@ class ParticleCounter: public Detector, public G4VSensitiveDetector {
   private:
 
     G4LogicalVolume* GetMotherVolume(G4String mother_nam, G4LogicalVolume *top);
+    G4LogicalVolume* GetMotherVolume2(G4String m1, G4String m2, G4LogicalVolume *top);
 
     G4String fNam; //detector name
 

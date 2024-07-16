@@ -74,6 +74,10 @@ ParticleCounter::ParticleCounter(const G4String& nam, GeoParser *geo, G4LogicalV
   if( geo->GetOptS(fNam, "place_into", mother_nam) ) {
     mvol = GetMotherVolume(mother_nam, top);
   }
+  //two levels of volume to place, volume 'place_into2' inside 'place_into1'
+  if( geo->GetOptS(fNam, "place_into1", mother_nam) ) {
+    mvol = GetMotherVolume2(mother_nam, geo->GetS(fNam, "place_into2"), top);
+  }
 
   //placement in mother volume
   G4double rotate_y = 0; // rotation along y axis
@@ -102,9 +106,22 @@ G4LogicalVolume* ParticleCounter::GetMotherVolume(G4String mother_nam, G4Logical
     }
   }
 
-  return 0x0;
+  return nullptr;
 
 }//GetMotherVolume
+
+//_____________________________________________________________________________
+G4LogicalVolume* ParticleCounter::GetMotherVolume2(G4String m1, G4String m2, G4LogicalVolume *top) {
+
+  //recursive search for volume m2 in m1 with m1 itself in top
+
+  G4LogicalVolume *vol1 = GetMotherVolume(m1, top);
+
+  if(!vol1) return nullptr;
+
+  return GetMotherVolume(m2, vol1);
+
+}//GetMotherVolume2
 
 //_____________________________________________________________________________
 G4bool ParticleCounter::ProcessHits(G4Step *step, G4TouchableHistory*) {

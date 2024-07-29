@@ -254,12 +254,12 @@ void BeamAndrii20240604::BuildMagnets() {
 
     //if( simPar->GetMagType(iMag) == "SOL" ) continue;
 
-    //if( simPar->GetMagName(iMag) != "Q1ER" && simPar->GetMagName(iMag) != "Q2ER" &&
-      //simPar->GetMagName(iMag) != "D2ER" && simPar->GetMagName(iMag) != "Q3ER" ) continue;
+    if( simPar->GetMagName(iMag) != "Q1ER" && simPar->GetMagName(iMag) != "Q2ER" &&
+      simPar->GetMagName(iMag) != "D2ER" && simPar->GetMagName(iMag) != "Q3ER" ) continue;
 
     //if( simPar->GetMagName(iMag) != "D2ER" ) continue;
     //if( simPar->GetMagName(iMag) != "Q1ER" ) continue;
-    if( simPar->GetMagName(iMag) != "Q2ER" ) continue;
+    //if( simPar->GetMagName(iMag) != "Q2ER" ) continue;
 
     G4cout << "Magnet: " << simPar->GetMagType(iMag) << " " << simPar->GetMagName(iMag) << G4endl;
     //continue;
@@ -349,6 +349,9 @@ void BeamAndrii20240604::BuildMagnets() {
 
 		// magnet logic volume
 		G4LogicalVolume* mag_log = new G4LogicalVolume(mag_solid,mat_vac, simPar->GetMagName(iMag)+"_log");
+
+    G4cout << "Logical volume name: " << mag_log->GetName() << endl;
+
 		// set tracking time limit in the volume
 		mag_log->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,simPar->GetTrackTcut()));
 		// magnet placement
@@ -474,7 +477,6 @@ G4MagneticField* BeamAndrii20240604::GetMagField(G4int iMag, G4LogicalVolume* ma
 
     G4cout << "quadrupole field: " << mass << " " << simPar->GetBeamName() << " " << gamma << " ";
     G4cout << simPar->GetMagLength(iMag) << " " << simPar->GetMagK1L(iMag) << " " << grad << G4endl;
-
 		//- Visualization
 		G4VisAttributes* mag_vis = new G4VisAttributes(G4Color::Yellow());
 		mag_vis->SetVisibility(visibility);

@@ -110,9 +110,17 @@ QDMagnet::QDMagnet(const G4String& nam, GeoParser *geo, G4LogicalVolume *top):
   if(field) {
 
     G4FieldManager *fieldman = new G4FieldManager(field);
+
+    //fieldman->SetMinimumEpsilonStep(1e-6);
+    //fieldman->SetMaximumEpsilonStep(1e-5);
+    //fieldman->SetDeltaOneStep(0.5e-4*mm);
+
     fieldman->SetDetectorField(field);
     fieldman->CreateChordFinder(field);
     vol_inner->SetFieldManager(fieldman, true);
+
+    G4cout << "Min, max epsilon step: " << fieldman->GetMinimumEpsilonStep() << ", " << fieldman->GetMaximumEpsilonStep() << G4endl;
+    G4cout << "DeltaOneStep: " << fieldman->GetDeltaOneStep() << G4endl;
 
   } else {
     G4cout << "No field applied for " << fNam << G4endl;

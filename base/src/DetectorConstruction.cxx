@@ -33,6 +33,7 @@
 #include "GeoParser.h"
 #include "ComponentBuilder.h"
 #include "MCParticleAction.h"
+#include "ColorDecoder.h"
 
 using namespace boost;
 
@@ -117,11 +118,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
   geo.GetOptS(topnam, "material", top_mat_name);
   G4Material* top_m = G4NistManager::Instance()->FindOrBuildMaterial(top_mat_name);
   G4LogicalVolume *top_l = new G4LogicalVolume(top_s, top_m, topnam+"_l");
-  top_l->SetVisAttributes( G4VisAttributes::GetInvisible() );
-  //G4VisAttributes *vis = new G4VisAttributes();
-  //vis->SetForceAuxEdgeVisible(false);
-  //vis->SetLineStyle(G4VisAttributes::dotted);
-  //top_l->SetVisAttributes(vis);
+  ColorDecoder top_vis("1:1:1:3");
+  top_vis.SetAuxEdgeVisible(false);
+  top_l->SetVisAttributes(top_vis.MakeVis(&geo, topnam, "vis"));
 
   G4VPhysicalVolume *top_p = new G4PVPlacement(0, G4ThreeVector(), top_l, topnam+"_p", 0, false, 0);
 

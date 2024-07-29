@@ -19,7 +19,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 1
+    iplot = 2
 
     func = {}
     func[0] = beta_xy
@@ -153,6 +153,11 @@ def divergence_xy():
     df_ip6 = df.loc[ df["NAME"]=="IP6" ]
     print("IP6 div_x (urad):", beam_divergence(eps_x, df_ip6["ALFX"].values[0], df_ip6["BETX"].values[0]))
     print("IP6 div_y (urad):", beam_divergence(eps_y, df_ip6["ALFY"].values[0], df_ip6["BETY"].values[0]))
+
+    #front of Q3ER
+    df_oww = df.loc[ df["NAME"]=="OWW_SH" ]
+    print("Q3ER front div_x (urad):", beam_divergence(eps_x, df_oww["ALFX"].values[0], df_oww["BETX"].values[0]))
+    print("Q3ER front div_y (urad):", beam_divergence(eps_y, df_oww["ALFY"].values[0], df_oww["BETY"].values[0]))
 
     #print("IP6 sigma_y (mm):", beam_sigma(eps_y, df.loc[ df["NAME"]=="IP6" ]["BETY"].values[0]))
 

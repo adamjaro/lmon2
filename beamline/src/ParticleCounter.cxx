@@ -146,8 +146,11 @@ G4bool ParticleCounter::ProcessHits(G4Step *step, G4TouchableHistory*) {
   //hit position
   const G4ThreeVector hp = step->GetPreStepPoint()->GetPosition();
 
+  //track direction
+  const G4ThreeVector& hdir = track->GetMomentumDirection();
+
   //add the hit
-  ParticleCounterHits::Hit& hit = fHits.Add( ParticleCounterHits::Hit() );
+  ParticleCounterHits::Hit& hit = fHits.Add();
 
   //hit parameters
   hit.pdg = track->GetDynamicParticle()->GetPDGcode();
@@ -155,12 +158,16 @@ G4bool ParticleCounter::ProcessHits(G4Step *step, G4TouchableHistory*) {
   hit.x = hp.x()/mm;
   hit.y = hp.y()/mm;
   hit.z = hp.z()/mm;
+  hit.xdir = hdir.x();
+  hit.ydir = hdir.y();
+  hit.zdir = hdir.z();
   hit.parentID = track->GetParentID();
   hit.itrk = track->GetTrackID();
   hit.is_prim = track->GetParentID() > 0 ? kFALSE : kTRUE;
 
   //G4cout << track->GetTrackID() << " " << track->GetDynamicParticle()->GetPDGcode() << " " << track->GetTotalEnergy()/GeV;
   //G4cout << " " << hp.x() << " " << hp.y() << " " << hp.z() << G4endl;
+  //G4cout << " " << hdir.x() << " " << hdir.y() << " " << hdir.z() << G4endl;
 
   return true;
 

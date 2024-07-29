@@ -11,14 +11,17 @@ namespace ParticleCounterHits {
 //hit representation
 struct Hit {
 
-  Int_t pdg; // particle pdg
-  Double_t en; // hit energy, GeV
-  Double_t x; // hit position in x, mm
-  Double_t y; // hit position in y, mm
-  Double_t z; // hit position in z, mm
-  Int_t parentID; // parent ID for track in hit
-  Int_t itrk; // track index
-  Bool_t is_prim; // hit by primary particle
+  Int_t pdg=0; // particle pdg
+  Double_t en=0; // hit energy, GeV
+  Double_t x=0; // hit position in x, mm
+  Double_t y=0; // hit position in y, mm
+  Double_t z=0; // hit position in z, mm
+  Double_t xdir=0; // track direction in x
+  Double_t ydir=0; // track direction in y
+  Double_t zdir=0; // track direction in z
+  Int_t parentID=0; // parent ID for track in hit
+  Int_t itrk=0; // track index
+  Bool_t is_prim=0; // hit by primary particle
 
 };//Hit
 
@@ -30,14 +33,18 @@ class Coll : public DetectorData<Hit> {
     Coll() {
 
       //hits memory representation
-      AddUnitAttr("_HitPdg", fUnitIO.pdg);
-      AddUnitAttr("_HitEn", fUnitIO.en);
-      AddUnitAttr("_HitX", fUnitIO.x);
-      AddUnitAttr("_HitY", fUnitIO.y);
-      AddUnitAttr("_HitZ", fUnitIO.z);
-      AddUnitAttr("_HitParentID", fUnitIO.parentID);
-      AddUnitAttr("_HitItrk", fUnitIO.itrk);
-      AddUnitAttr("_HitPrim", fUnitIO.is_prim);
+      DATA_ADD_UNIT_ATTR( pdg )
+      DATA_ADD_UNIT_ATTR( en )
+      DATA_ADD_UNIT_ATTR( x )
+      DATA_ADD_UNIT_ATTR( y )
+      DATA_ADD_UNIT_ATTR( z )
+      DATA_ADD_UNIT_ATTR( xdir )
+      DATA_ADD_UNIT_ATTR( ydir )
+      DATA_ADD_UNIT_ATTR( zdir )
+      DATA_ADD_UNIT_ATTR( parentID )
+      DATA_ADD_UNIT_ATTR( itrk )
+      DATA_ADD_UNIT_ATTR( is_prim )
+
     }
 };//Coll
 

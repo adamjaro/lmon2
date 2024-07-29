@@ -852,7 +852,20 @@ def frame_pow10_labels_float(frame, minl, maxl, xy="x", step=1, offset=-1):
 
 #frame_pow10_labels_float
 
+#_____________________________________________________________________________
+def print_projections_xy(hxy):
 
+    hvx = hxy.ProjectionX()
+    print("Projection along x:")
+    print("mean:", hvx.GetMean(), "+/-", hvx.GetMeanError())
+    print("sigma:", hvx.GetStdDev(), "+/-", hvx.GetStdDevError())
+
+    htx = hxy.ProjectionY()
+    print("Projection along y:")
+    print("mean:", htx.GetMean(), "+/-", htx.GetMeanError())
+    print("sigma:", htx.GetStdDev(), "+/-", htx.GetStdDevError())
+
+#print_projections_xy
 
 
 

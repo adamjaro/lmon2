@@ -49,7 +49,7 @@ G4VisAttributes *ColorDecoder::MakeVis(GeoParser *geo, G4String nam, G4String pa
   } else {
     //wire frame for alpha > 1
     vis->SetColor(red, green, blue);
-    vis->SetForceAuxEdgeVisible(true);
+    vis->SetForceAuxEdgeVisible(fAuxEdge);
   }
 
   return vis;

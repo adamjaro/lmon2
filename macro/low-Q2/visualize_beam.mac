@@ -16,10 +16,22 @@
 #/gun/particle e-
 #/gun/particle gamma
 #/gun/direction 0 0 -1
+#/gun/direction 0 0 1
 #/gun/position 0 0 1 mm
 
-/lmon/input/type tparticle
-/lmon/input/tparticle/name /home/jaroslav/sim/test/GETaLM/el_beam/el_beam_18GeV.root
+#/lmon/input/type tparticle
+#/lmon/input/tparticle/name /home/jaroslav/sim/test/GETaLM/el_beam/el_beam_18GeV.root
+
+/lmon/input/type gps
+/gps/ang/type beam2d
+/gps/ang/sigma_x 0.0002017 rad # 201.7 urad
+/gps/ang/sigma_y 0.0001873 rad # 187.3 urad
+/gps/pos/type Beam
+/gps/pos/sigma_x 0.119 mm
+/gps/pos/sigma_y 0.0107 mm
+/gps/energy 18 GeV
+/gps/particle e-
+#/gps/direction 0 0 1
 
 #output
 /lmon/output/name lmon.root
@@ -52,7 +64,7 @@
 #/vis/viewer/set/viewpointThetaPhi 45 45 deg
 
 #/vis/viewer/set/targetPoint 0 0 1675 cm
-#/vis/viewer/set/targetPoint 0 0 -20000 mm # B2BeR end
+#/vis/viewer/set/targetPoint 0 0 18000 mm # D2ER
 
 #/vis/viewer/set/targetPoint 0 0 -7000 mm # Q1 and Q2
 
@@ -61,7 +73,7 @@
 
 #/vis/viewer/set/targetPoint -480 0 -35500 mm  # Tagger 2
 
-/vis/viewer/set/targetPoint -460 0 -42760 mm # Q3eR
+/vis/viewer/set/targetPoint -465.26 0 -42760.2 mm # Q3eR
 
 #/vis/viewer/set/targetPoint -460 0 -38000 mm
 

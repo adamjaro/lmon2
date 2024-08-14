@@ -31,10 +31,12 @@ def main():
 #_____________________________________________________________________________
 def yields(draw=True):
 
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal1ax3/en_","/lmon.root"]
+    #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal1ax3/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal1a/en_","/lmon.root"]
     #inp = ["/home/jaroslav/sim/lmon2-data/pwo/pwo1ax2/en_","/lmon.root"]
 
-    energy = [1, 2.5, 5, 9, 14, 18]
+    #energy = [1, 2.5, 5, 9, 14, 18]
+    energy = [1, 5, 9, 14, 18]
     #energy = [1]
 
     #photon counts
@@ -90,7 +92,7 @@ def yields(draw=True):
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #yields
@@ -98,7 +100,8 @@ def yields(draw=True):
 #_____________________________________________________________________________
 def resolution():
 
-    energy = [1, 2.5, 5, 9, 14, 18]
+    #energy = [1, 2.5, 5, 9, 14, 18]
+    energy = [1, 5, 9, 14, 18]
 
     func = yields(False)
     res = [func[i].GetParameter(2)/func[i].GetParameter(1) for i in range(len(func))]

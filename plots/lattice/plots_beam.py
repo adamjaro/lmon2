@@ -19,7 +19,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 2
+    iplot = 1
 
     func = {}
     func[0] = beta_xy
@@ -85,6 +85,7 @@ def sigma_xy():
     #col = "black"
 
     fig = plt.figure()
+    fig.set_size_inches(6, 5)
     ax = fig.add_subplot(1, 1, 1)
     set_axes_color(ax, col)
     set_grid(plt, col)
@@ -100,6 +101,17 @@ def sigma_xy():
     plt.plot(xs, [sig_ix(i) for i in xs], "-", color="blue", lw=1)
     plt.plot(xs, [sig_iy(i) for i in xs], "--", color="red", lw=1)
 
+    plt.rc("text", usetex = True)
+    plt.rc('text.latex', preamble=r'\usepackage{amsmath}')
+    ax.set_xlabel("$s$ (meters)")
+    ax.set_ylabel(r"Beam $\sigma$ (mm)")
+
+    leg = legend()
+    leg.add_entry(leg_lin("blue"), "15$\sigma_x$")
+    leg.add_entry(leg_lin("red", "--"), "23$\sigma_y$")
+    leg.add_entry(leg_txt(), "$\epsilon_{x/y}$ = 24/2 nm")
+    leg.draw(plt, col)
+
     #print beam size at IP with BETX and Y at IP6 from the dataframe
     print("IP6 sigma_x (mm):", beam_sigma(eps_x, df.loc[ df["NAME"]=="IP6" ]["BETX"].values[0]))
     print("IP6 sigma_y (mm):", beam_sigma(eps_y, df.loc[ df["NAME"]=="IP6" ]["BETY"].values[0]))
@@ -108,6 +120,7 @@ def sigma_xy():
 
     #front of Q3ER
     df_oww = df.loc[ df["NAME"]=="OWW_SH" ]
+    #df_oww = df.loc[ df["NAME"]=="Q3ER_6" ]
     print("Q3 front sigma_x (mm):", beam_sigma(eps_x, df_oww["BETX"].values[0]))
     print("Q3 front sigma_y (mm):", beam_sigma(eps_y, df_oww["BETY"].values[0]))
 
@@ -134,6 +147,7 @@ def divergence_xy():
     #col = "black"
 
     fig = plt.figure()
+    fig.set_size_inches(6, 5)
     ax = fig.add_subplot(1, 1, 1)
     set_axes_color(ax, col)
     set_grid(plt, col)
@@ -148,6 +162,17 @@ def divergence_xy():
 
     plt.plot(xs, [div_ix(i) for i in xs], "-", color="blue", lw=1)
     plt.plot(xs, [div_iy(i) for i in xs], "--", color="red", lw=1)
+
+    plt.rc("text", usetex = True)
+    plt.rc('text.latex', preamble=r'\usepackage{amsmath}')
+    ax.set_xlabel("$s$ (meters)")
+    ax.set_ylabel(r"Angular divergence $\sigma_\theta$ ($\mathrm{\mu}$rad)")
+
+    leg = legend()
+    leg.add_entry(leg_lin("blue"), r"$\sigma_{\theta x}$")
+    leg.add_entry(leg_lin("red", "--"), r"$\sigma_{\theta y}$")
+    leg.add_entry(leg_txt(), "$\epsilon_{x/y}$ = 24/2 nm")
+    leg.draw(plt, col)
 
     #print beam divergence at IP with ALFX and Y BETX and Y at IP6 from the dataframe
     df_ip6 = df.loc[ df["NAME"]=="IP6" ]
@@ -260,6 +285,34 @@ def set_grid(px, col="lime"):
     px.grid(True, color = col, linewidth = 0.5, linestyle = "--")
 
 #set_grid
+
+#_____________________________________________________________________________
+class legend:
+    def __init__(self):
+        self.items = []
+        self.data = []
+    def add_entry(self, i, d):
+        self.items.append(i)
+        self.data.append(d)
+    def draw(self, px, col=None, **kw):
+        leg = px.legend(self.items, self.data, **kw)
+        if col is not None:
+            px.setp(leg.get_texts(), color=col)
+            if col != "black":
+                leg.get_frame().set_edgecolor("orange")
+        return leg
+
+#_____________________________________________________________________________
+def leg_lin(col, sty="-"):
+    return Line2D([0], [0], lw=2, ls=sty, color=col)
+
+#_____________________________________________________________________________
+def leg_txt():
+    return Line2D([0], [0], lw=0)
+
+#_____________________________________________________________________________
+def leg_dot(fig, col, siz=8):
+    return Line2D([0], [0], marker="o", color=fig.get_facecolor(), markerfacecolor=col, markersize=siz)
 
 #_____________________________________________________________________________
 if __name__ == "__main__":

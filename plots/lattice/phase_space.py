@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 4
+    iplot = 3
 
     func = {}
     func[0] = generated_horizontal
@@ -107,7 +107,10 @@ def gen_theta_x():
 #_____________________________________________________________________________
 def Q3ER_xy(get_df=False):
 
-    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/lmon.root"
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/lmon.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/beam/v6p3_20240729/lmon.root"
+    inp = "/home/jaroslav/sim/lmon2-data/beam/v6p3_20240802/lmon.root"
+
 
     #mm
     xbin = 0.1
@@ -119,11 +122,19 @@ def Q3ER_xy(get_df=False):
 
     df = RDataFrame("DetectorTree", inp)
 
+    #df = df.Range(12)
+
     gROOT.ProcessLine("Double_t zpos, xpos, theta, length;")
-    rt.zpos = -42760.222219 # Q3ER.zpos
-    rt.xpos = -465.263731 # Q3ER.xpos
-    rt.length = 600 # Q3ER.length
+    #rt.zpos = -42760.222219 # Q3ER.zpos
+    #rt.xpos = -465.263731 # Q3ER.xpos
+    #rt.length = 600 # Q3ER.length
     rt.theta = 0.020000 # Q3ER.theta
+    rt.zpos = -42460.282217
+    rt.xpos = -459.264131
+    rt.length = 0
+
+    #Q3ER_SZ 1 -42460.3 -42460.282217
+    #Q3ER_SX 1 -459.264 -459.264131
 
     gROOT.ProcessLine('auto to_local = [](const auto& zvec, const auto& xvec) {\
         vector<double> zxloc = {9999, 9999};\
@@ -133,7 +144,7 @@ def Q3ER_xy(get_df=False):
           zxloc[0] = v.X();\
           zxloc[1] = v.Y();\
         }\
-        cout << "hi " << zxloc[0] << " " << zxloc[1] << " " << xpos << endl;\
+        /*cout << "hi " << zxloc[0] << " " << zxloc[1] << " " << xpos << endl;*/\
         return zxloc;}')
 
     df = df.Define("Q3ER_counter_zxloc", "to_local(Q3ER_counter_z, Q3ER_counter_x)")
@@ -176,14 +187,14 @@ def Q3ER_xy(get_df=False):
 def Q3ER_vertical():
 
     #mm
-    xbin = 0.1
+    xbin = 0.02
     xmin = -2
     xmax = 2
 
     #urad
     ybin = 0.3
-    ymin = -60
-    ymax = 60
+    ymin = -70
+    ymax = 70
 
     df = Q3ER_xy(True)
     df = df.Define("Q3ER_theta_y", "1e6*TMath::ATan(Q3ER_counter_ydir[0]/Q3ER_counter_zdir[0])") # urad
@@ -192,13 +203,20 @@ def Q3ER_vertical():
     hx = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, ybin, ymin, ymax) )
     hx = df.Histo2D(hx, "Q3ER_counter_yloc", "Q3ER_theta_y").GetValue()
 
+    ut.put_yx_tit(hx, "#it{#theta}_{y} (#murad)", "#it{y} (mm)", 1.7, 1.3)
+
+    ut.set_margin_lbtr(gPad, 0.12, 0.1, 0.03, 0.11)
+
     ut.print_projections_xy(hx)
 
     hx.SetMinimum(0.8)
+    hx.SetContour(300)
 
     hx.Draw("colz")
 
     gPad.SetGrid()
+
+    gPad.SetLogz()
 
     ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
@@ -210,13 +228,17 @@ def Q3ER_horizontal():
 
     #mm
     xbin = 0.1
-    xmin = -5
-    xmax = 20
+    #xmin = 3
+    #xmax = 17
+    xmin = -8
+    xmax = 8
 
     #urad
-    ybin = 0.3
+    ybin = 1
+    #ymin = -470
+    #ymax = 200
     ymin = -350
-    ymax = 300
+    ymax = 350
 
     df = Q3ER_xy(True)
     df = df.Define("Q3ER_theta_x", "1e6*TMath::ATan(Q3ER_counter_xdir[0]/Q3ER_counter_zdir[0])-1e6*0.02") # urad
@@ -225,13 +247,20 @@ def Q3ER_horizontal():
     hx = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, ybin, ymin, ymax) )
     hx = df.Histo2D(hx, "Q3ER_counter_xloc", "Q3ER_theta_x").GetValue()
 
+    ut.put_yx_tit(hx, "#it{#theta}_{x} (#murad)", "#it{x} (mm)", 1.7, 1.3)
+
+    ut.set_margin_lbtr(gPad, 0.12, 0.1, 0.03, 0.11)
+
     ut.print_projections_xy(hx)
 
     hx.SetMinimum(0.8)
+    hx.SetContour(300)
 
     hx.Draw("colz")
 
     gPad.SetGrid()
+
+    gPad.SetLogz()
 
     ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")

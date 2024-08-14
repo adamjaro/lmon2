@@ -1,0 +1,39 @@
+
+<main>
+
+  <!-- Example of 4 layers for LumiSpecCAL -->
+
+  <!-- number of layers in calorimeter module -->
+  <const name="LumiSpecCAL_nlay" value="4"/>
+
+  <!-- number of cells in layer -->
+  <const name="LumiSpecCAL_ncells" value="4"/>
+
+  <!-- cell perpendicular size, mm -->
+  <const name="LumiSpecCAL_cell_xy" value="4.3"/>
+
+  <!-- module perpendicular size by number of cells and cell size -->
+  <const name="LumiSpecCAL_mod_xy" value="LumiSpecCAL_ncells*LumiSpecCAL_cell_xy"/>
+
+  <!-- module longitudinal size (along z) by number of layers and cell size -->
+  <const name="LumiSpecCAL_mod_z" value="LumiSpecCAL_nlay*LumiSpecCAL_cell_xy"/>
+
+  <detector
+    type="FiberXYCal" name="LumiSpecCAL"
+    cell_xy="LumiSpecCAL_cell_xy" ncells="LumiSpecCAL_ncells"
+    nlay="LumiSpecCAL_nlay"
+    mod_xy="LumiSpecCAL_mod_xy" mod_z="LumiSpecCAL_mod_z"
+    fiber_core_r="0.25" fiber_dx="1"
+    zpos="-0.5*LumiSpecCAL_mod_z"
+    cell_vis="1:0.8:0:2" core_vis="1:0:0:0.4"
+    opdet_vis="1:1:0:1" mirror_vis="0:1:0:0.4">
+  </detector>
+
+  <!-- top volume -->
+  <detector
+    name="topv" type="top"
+    xsiz = "500" ysiz="500" zsiz = "10000"> <!-- mm -->
+  </detector>
+
+</main>
+

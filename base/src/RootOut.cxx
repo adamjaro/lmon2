@@ -59,6 +59,8 @@ void RootOut::Open() {
   //output detector tree
   fDetTree = new TTree("DetectorTree", "DetectorTree");
 
+  //G4cout << "RootOut::Open, DetectorTree created: " << fDetTree->GetCurrentFile()->GetName() << G4endl;
+
 }//Open
 
 //_____________________________________________________________________________
@@ -70,6 +72,8 @@ void RootOut::FillTree() {
 
 //_____________________________________________________________________________
 void RootOut::Close() {
+
+  fOut->cd();
 
   //write the tree
   if(fDetTree) fDetTree->Write(0, TObject::kOverwrite);

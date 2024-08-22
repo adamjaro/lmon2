@@ -1,7 +1,7 @@
 
 //_____________________________________________________________________________
 //
-// generator reader for HepMC3 ascii
+// generator reader for HepMC3 ROOT Tree
 //
 //_____________________________________________________________________________
 
@@ -14,7 +14,7 @@
 #include <map>
 
 //HepMC3
-#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/ReaderRootTree.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
 
@@ -26,17 +26,17 @@
 #include "G4SystemOfUnits.hh"
 
 //local classes
-#include "HepMC3AsciiReader.h"
+#include "HepMC3RootTreeReader.h"
 #include "MCAttribData.h"
 
 using namespace HepMC3;
 
 //_____________________________________________________________________________
-HepMC3AsciiReader::HepMC3AsciiReader(): G4VPrimaryGenerator(), fRead(nullptr),
+HepMC3RootTreeReader::HepMC3RootTreeReader(): G4VPrimaryGenerator(), fRead(nullptr),
   fIev(0) {
 
   //command for input name
-  fMsg = new G4GenericMessenger(this, "/lmon/input/hepmc_ascii/");
+  fMsg = new G4GenericMessenger(this, "/lmon/input/hepmc_root_tree/");
   fMsg->DeclareProperty("name", fInputName);
 
   //event attributes, name in hepmc (first) and name in event output (second)
@@ -56,7 +56,14 @@ HepMC3AsciiReader::HepMC3AsciiReader(): G4VPrimaryGenerator(), fRead(nullptr),
 }//HepMC3AsciiReader
 
 //_____________________________________________________________________________
-void HepMC3AsciiReader::GeneratePrimaryVertex(G4Event *evt) {
+HepMC3RootTreeReader::~HepMC3RootTreeReader() {
+
+  if(fRead) fRead->close();
+
+}//~HepMC3RootTreeReader
+
+//_____________________________________________________________________________
+void HepMC3RootTreeReader::GeneratePrimaryVertex(G4Event *evt) {
 
   //open at the first call
   if(fRead == nullptr) OpenInput();
@@ -162,11 +169,11 @@ void HepMC3AsciiReader::GeneratePrimaryVertex(G4Event *evt) {
 }//GeneratePrimaryVertex
 
 //_____________________________________________________________________________
-void HepMC3AsciiReader::OpenInput() {
+void HepMC3RootTreeReader::OpenInput() {
 
-  G4cout << "HepMC3AsciiReader::OpenInput: " << fInputName << G4endl;
+  G4cout << "HepMC3RootTreeReader::OpenInput: " << fInputName << G4endl;
 
-  fRead = make_shared<ReaderAscii>(fInputName.data());
+  fRead = make_shared<ReaderRootTree>(fInputName.data());
 
 }//OpenInput
 

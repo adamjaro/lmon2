@@ -188,13 +188,13 @@ def Q3ER_vertical():
 
     #mm
     xbin = 0.02
-    xmin = -2
-    xmax = 2
+    xmin = -1.3
+    xmax = 1.3
 
     #urad
     ybin = 0.3
-    ymin = -70
-    ymax = 70
+    ymin = -80
+    ymax = 80
 
     df = Q3ER_xy(True)
     df = df.Define("Q3ER_theta_y", "1e6*TMath::ATan(Q3ER_counter_ydir[0]/Q3ER_counter_zdir[0])") # urad

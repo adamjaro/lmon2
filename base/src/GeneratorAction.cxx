@@ -22,12 +22,13 @@
 #include "use_hepmc3.h"
 #ifdef USE_HEPMC3
   #include "HepMC3AsciiReader.h"
+  #include "HepMC3RootTreeReader.h"
 #endif
 
 using namespace std;
 
 //_____________________________________________________________________________
-GeneratorAction::GeneratorAction() : G4VUserPrimaryGeneratorAction(), fGenType("gun"), fGen(0) {
+GeneratorAction::GeneratorAction() : G4VUserPrimaryGeneratorAction(), fGenType("gun"), fGen(nullptr) {
 
   //command for generator reader type
   fMsg = new G4GenericMessenger(this, "/lmon/input/");
@@ -36,12 +37,13 @@ GeneratorAction::GeneratorAction() : G4VUserPrimaryGeneratorAction(), fGenType("
   //prepare the generators
   //fGenAll.insert( make_pair("tx", new TxReader()) );
   //fGenAll.insert( make_pair("pythia6", new Pythia6Reader()) );
-  fGenAll.insert( make_pair("tparticle", new TParticleReader()) );
-  fGenAll.insert( make_pair("gun", new G4ParticleGun()) );
-  fGenAll.insert( make_pair("gps", new G4GeneralParticleSource()) );
-  fGenAll.insert( make_pair("hepevt", new HEPEvtInterface()) );
+  fGenAll.insert( make_pair("tparticle", make_unique<TParticleReader>()) );
+  fGenAll.insert( make_pair("gun", make_unique<G4ParticleGun>()) );
+  fGenAll.insert( make_pair("gps", make_unique<G4GeneralParticleSource>()) );
+  fGenAll.insert( make_pair("hepevt", make_unique<HEPEvtInterface>()) );
   #ifdef USE_HEPMC3
-    fGenAll.insert( make_pair("hepmc_ascii", new HepMC3AsciiReader()) );
+    fGenAll.insert( make_pair("hepmc_ascii", make_unique<HepMC3AsciiReader>()) );
+    fGenAll.insert( make_pair("hepmc_root_tree", make_unique<HepMC3RootTreeReader>()) );
   #endif
 
 }//GenReader
@@ -60,10 +62,10 @@ void GeneratorAction::GeneratePrimaries(G4Event *evt) {
 
   //select the reader at the first call
   if(!fGen) {
-    map<G4String, G4VPrimaryGenerator*>::iterator igen = fGenAll.find(fGenType);
+    map<G4String, unique_ptr<G4VPrimaryGenerator>>::iterator igen = fGenAll.find(fGenType);
     if (igen == fGenAll.end()) return;
 
-    fGen = (*igen).second;
+    fGen = move( (*igen).second );
   }
 
   //generate the event

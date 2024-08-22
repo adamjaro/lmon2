@@ -61,6 +61,8 @@ DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction(), fD
 //_____________________________________________________________________________
 DetectorConstruction::~DetectorConstruction() {
 
+  //G4cout << "DetectorConstruction::~DetectorConstruction" << G4endl;
+
   //write the tree and close output file
   fOut->Close();
 

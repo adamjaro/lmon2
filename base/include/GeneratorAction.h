@@ -8,6 +8,7 @@
 #include "G4String.hh"
 
 #include <map>
+#include <memory>
 
 class G4VPrimaryGenerator;
 class G4GenericMessenger;
@@ -27,9 +28,9 @@ class GeneratorAction : public G4VUserPrimaryGeneratorAction {
 
     G4GenericMessenger *fMsg; // messenger for generator reader type
 
-    G4VPrimaryGenerator *fGen; // generator reader
+    std::unique_ptr<G4VPrimaryGenerator> fGen; // generator reader
 
-    std::map<G4String, G4VPrimaryGenerator*> fGenAll; // all generators
+    std::map<G4String, std::unique_ptr<G4VPrimaryGenerator>> fGenAll; // all generators
 
 };
 

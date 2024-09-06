@@ -281,6 +281,13 @@ def h1_to_arrays_centers(hx):
     return xp, yp
 
 #_____________________________________________________________________________
+def h1_to_arrays_norm(hx, norm):
+
+    norm_to_integral_list([hx], norm)
+
+    return h1_to_arrays_centers(hx)
+
+#_____________________________________________________________________________
 def prepare_TH2D(name, xbin, xmin, xmax, ybin, ymin, ymax):
 
   #bins along x and y

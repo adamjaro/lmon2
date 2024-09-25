@@ -23,6 +23,7 @@
 #include "CylSegment.h"
 #include "GeoParser.h"
 #include "ColorDecoder.h"
+#include "LogicVolFinder.h"
 
 using namespace std;
 
@@ -32,8 +33,10 @@ CylSegment::CylSegment(const G4String& nam, GeoParser *geo, G4LogicalVolume *top
 
   G4cout << "CylSegment: " << fNam << G4endl;
 
-  //center position along z, mm
-  G4double zpos = 0;
+  //center position along x, y and z, mm
+  G4double xpos=0, ypos=0, zpos=0;
+  geo->GetOptD(fNam, "xpos", xpos, GeoParser::Unit(mm));
+  geo->GetOptD(fNam, "ypos", ypos, GeoParser::Unit(mm));
   geo->GetOptD(fNam, "zpos", zpos, GeoParser::Unit(mm));
 
   //full length along z, mm
@@ -43,7 +46,12 @@ CylSegment::CylSegment(const G4String& nam, GeoParser *geo, G4LogicalVolume *top
   G4double rmin = geo->GetD(fNam, "rmin")*mm;
   G4double rmax = geo->GetD(fNam, "rmax")*mm;
 
-  G4Tubs *shape = new G4Tubs(fNam, rmin, rmax, dz/2., 0., 360.*deg);
+  //starting azimuthal angle sphi and angular size dphi
+  G4double sphi=0, dphi=2*CLHEP::pi;
+  geo->GetOptD(fNam, "sphi", sphi, GeoParser::Unit(rad));
+  geo->GetOptD(fNam, "dphi", dphi, GeoParser::Unit(rad));
+
+  G4Tubs *shape = new G4Tubs(fNam, rmin, rmax, dz/2., sphi, dphi);
 
   //logical volume
   G4String mat_name = "G4_Al";
@@ -56,8 +64,11 @@ CylSegment::CylSegment(const G4String& nam, GeoParser *geo, G4LogicalVolume *top
   ColorDecoder dec("0:0:1:2"); //red:green:blue:alpha
   vol->SetVisAttributes( dec.MakeVis(geo, fNam, "vis") );
 
+  //optional mother volume for the segment
+  G4LogicalVolume *mvol = LogicVolFinder::GetMotherVolume("place_into", top, geo, fNam);
+
   //segment in the top volume
-  new G4PVPlacement(0, G4ThreeVector(0, 0, zpos), vol, fNam, top, false, 0);
+  new G4PVPlacement(0, G4ThreeVector(xpos, ypos, zpos), vol, fNam, mvol, false, 0);
 
 }//CylSegment
 

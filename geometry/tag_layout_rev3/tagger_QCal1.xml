@@ -1,0 +1,93 @@
+
+<main>
+
+  <!-- QCal1 implemented in tagger1 and tagger2 section -->
+
+  <!-- calorimeter cells, mm -->
+  <const name="tag_qcal_cell_xy" value="12"/>
+  <const name="tag_qcal_cell_z" value="350"/>
+
+  <!-- free space after each cell, mm -->
+  <const name="tag_qcal_cell_phot_z" value="2"/>
+
+  <!-- number of cells along x and y in calorimeter module -->
+  <const name="tag_qcal_nx" value="12"/>
+  <const name="tag_qcal_ny" value="5"/>
+
+  <!-- size of calorimeter module in x, y and z -->
+  <const name="tag_qcal_modx" value="tag_qcal_cell_xy*tag_qcal_nx"/>
+  <const name="tag_qcal_mody" value="tag_qcal_cell_xy*tag_qcal_ny"/>
+  <const name="tag_qcal_modz" value="tag_qcal_cell_z+tag_qcal_cell_phot_z"/>
+
+  <!-- distance along z from last tagger plane to start of calorimeter module, mm -->
+  <const name="tag_qcal_to_start_dz" value="200."/>
+
+  <!-- calorimeter QCal1 for the tagger 1 section -->
+
+  <!-- local x position for QCal1 in tagger 1 -->
+  <const name="tag_S1_qcal_pos_x" value="0.5*vac_S1PL - 0.5*tag_qcal_modx"/>
+
+  <!-- local z position for tagger 1 QCal1 -->
+  <const name="tag_S1_qcal_pos_z" value="tag_S1_start_z-3.*tag_iz - tag_qcal_to_start_dz -0.5*tag_qcal_modz"/>
+
+  <!-- put the calorimeter QCal1 for the tagger1 section -->
+  <detector
+    type="QCal1" name="lowQ2_s1_qcal"
+    modx="tag_qcal_modx" mody="tag_qcal_mody"
+    modz="tag_qcal_modz" zpos="tag_S1_qcal_pos_z"
+    xpos="tag_S1_qcal_pos_x"
+    nx="tag_qcal_nx" ny="tag_qcal_ny"
+    cell_xy="tag_qcal_cell_xy" cell_z="tag_qcal_cell_z"
+    cell_mat_name="QCal1_Copper"
+    fiber_clad_D="1.54" fiber_core_D="1.5" fiber_dx="4"
+    mod_vis="0:1:0:3" core_vis="1:0:0:0.3" cell_vis="0:1:0:2"
+    place_into1="vac_B2Q3"  place_into2="vac_S1">
+  </detector>
+
+  <!-- calorimeter QCal1 for the tagger 2 section -->
+
+  <!-- local x position for QCal1 in tagger 2 -->
+  <const name="tag_S2_qcal_pos_x" value="0.5*vac_S2PL - 0.5*tag_qcal_modx"/>
+
+  <!-- local z position for tagger 2 QCal1 -->
+  <const name="tag_S2_qcal_pos_z" value="tag_S2_start_z-3.*tag_iz - tag_qcal_to_start_dz -0.5*tag_qcal_modz"/>
+
+  <!-- put the calorimeter QCal1 for the tagger 2 section -->
+  <detector
+    type="QCal1" name="lowQ2_s2_qcal"
+    modx="tag_qcal_modx" mody="tag_qcal_mody"
+    modz="tag_qcal_modz" zpos="tag_S2_qcal_pos_z"
+    xpos="tag_S2_qcal_pos_x"
+    nx="tag_qcal_nx" ny="tag_qcal_ny"
+    cell_xy="tag_qcal_cell_xy" cell_z="tag_qcal_cell_z"
+    cell_mat_name="QCal1_Copper"
+    fiber_clad_D="1.54" fiber_core_D="1.5" fiber_dx="4"
+    mod_vis="0:1:0:3" core_vis="1:0:0:0.3" cell_vis="0:1:0:2"
+    place_into1="vac_B2Q3"  place_into2="vac_S2">
+  </detector>
+
+
+
+
+
+
+
+
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

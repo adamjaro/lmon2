@@ -42,6 +42,7 @@
 #include "GeoParser.h"
 #include "ColorDecoder.h"
 #include "OpSiDet.h"
+#include "LogicVolFinder.h"
 #include "QCal1.h"
 
 //_____________________________________________________________________________
@@ -93,11 +94,12 @@ QCal1::QCal1(const G4String& nam, GeoParser *geo, G4LogicalVolume *top): Detecto
   geo->GetOptD(fNam, "zpos", zpos, GeoParser::Unit(mm));
 
   //module in its mother volume
-  G4LogicalVolume *mother_vol = top;
-  G4String mother_nam;
-  if( geo->GetOptS(fNam, "place_into", mother_nam) ) {
-    mother_vol = GetMotherVolume(mother_nam, top);
+  G4LogicalVolume *mother_vol = LogicVolFinder::GetMotherVolume("place_into", top, geo, fNam);
+  //case of two levels of volume to place, volume 'place_into2' inside 'place_into1'
+  if( geo->HasParameter(fNam, "place_into2") ) {
+    mother_vol = LogicVolFinder::GetMotherVolume2("place_into1", "place_into2", top, geo, fNam);
   }
+
   new G4PVPlacement(0, G4ThreeVector(xpos, ypos, zpos), mod_vol, mod_vol->GetName(), mother_vol, false, 0);
 
 }//QCal1
@@ -308,21 +310,7 @@ void QCal1::Add(std::vector<Detector*> *vec) {
 
 }//Add
 
-//_____________________________________________________________________________
-G4LogicalVolume* QCal1::GetMotherVolume(G4String mother_nam, G4LogicalVolume *top) {
 
-  for(size_t i=0; i<top->GetNoDaughters(); i++) {
-
-    G4LogicalVolume *dv = top->GetDaughter(i)->GetLogicalVolume();
-
-    if( dv->GetName() == mother_nam ) {
-      return dv;
-    }
-  }
-
-  return 0x0;
-
-}//GetMotherVolume
 
 
 

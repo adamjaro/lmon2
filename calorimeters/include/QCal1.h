@@ -27,8 +27,6 @@ class QCal1 : public Detector, public G4VSensitiveDetector {
 
     G4LogicalVolume* MakeCell(GeoParser *geo);
 
-    G4LogicalVolume* GetMotherVolume(G4String mother_nam, G4LogicalVolume *top);
-
     G4String fNam; // name of detector sensitive logical volume
 
     CalPWOHits::Coll fHits; // hits in fibers as in PWO

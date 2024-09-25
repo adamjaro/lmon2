@@ -73,7 +73,7 @@ void RootOut::FillTree() {
 //_____________________________________________________________________________
 void RootOut::Close() {
 
-  fOut->cd();
+  if(fOut) fOut->cd();
 
   //write the tree
   if(fDetTree) fDetTree->Write(0, TObject::kOverwrite);

@@ -23,6 +23,7 @@
 #include "CylBeam.h"
 #include "GeoParser.h"
 #include "ColorDecoder.h"
+#include "LogicVolFinder.h"
 
 using namespace std;
 
@@ -73,10 +74,19 @@ CylBeam::CylBeam(const G4String& nam, GeoParser *geo, G4LogicalVolume *top):
   ColorDecoder dec("0.5:0.5:0.5:1");
   vol_wall->SetVisAttributes( dec.MakeVis(geo, fNam, "vis") );
 
-  //outer volume in the top
-  new G4PVPlacement(0, G4ThreeVector(0, 0, zpos), vol_outer, fNam, top, false, 0);
+  //optional mother volume for the beampipe section
+  G4LogicalVolume *mvol = LogicVolFinder::GetMotherVolume("place_into", top, geo, fNam);
+
+  //outer volume in its mother volume
+  new G4PVPlacement(0, G4ThreeVector(0, 0, zpos), vol_outer, fNam, mvol, false, 0);
 
 }//CylBeam
+
+
+
+
+
+
 
 
 

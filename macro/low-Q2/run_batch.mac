@@ -1,18 +1,18 @@
 
 #detector
-#/lmon/construct/geometry geom.xml
-/lmon/construct/geometry geom_beam.xml
+/lmon/construct/geometry geom.xml
+#/lmon/construct/geometry geom_beam.xml
 #/lmon/construct/geometry geom_tpix.xml
 #/lmon/construct/geometry geom_rev1b.xml
 
 #input
-#/lmon/input/type gun
-#/gun/energy 18 GeV
+/lmon/input/type gun
+/gun/energy 18 GeV
 #/gun/energy 12 GeV
 #/gun/energy 10 MeV
-#/gun/particle e-
+/gun/particle e-
 #/gun/particle gamma
-#/gun/direction 0 0 -1
+/gun/direction 0 0 -1
 #/gun/position 0 0 1 mm
 
 #/lmon/input/type gps
@@ -30,9 +30,9 @@
 #/lmon/input/hepmc_ascii/name /home/jaroslav/sim/test/GETaLM/lumi/lumi.hepmc
 #/lmon/input/hepmc_ascii/name /home/jaroslav/sim/test/GETaLM/qr/qr.hepmc
 
-/lmon/input/type hepmc_root_tree
+#/lmon/input/type hepmc_root_tree
 #/lmon/input/hepmc_root_tree/name /home/jaroslav/sim/test/GETaLM/lumi/lumi.hepmc3.tree.root
-/lmon/input/hepmc_root_tree/name /home/jaroslav/sim/test/GETaLM/lumi/lumi.hepmc3.tree.root
+#/lmon/input/hepmc_root_tree/name /home/jaroslav/sim/test/GETaLM/lumi/lumi.hepmc3.tree.root
 
 #/lmon/input/type tparticle
 #/lmon/input/tparticle/name /home/jaroslav/sim/GETaLM/cards/qr_bx.root
@@ -47,5 +47,5 @@
 
 #/process/optical/boundary/setInvokeSD true
 
-/run/beamOn 4
+#/run/beamOn 4
 

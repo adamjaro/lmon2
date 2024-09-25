@@ -109,8 +109,9 @@ def Q3ER_xy(get_df=False):
 
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/lmon.root"
     #inp = "/home/jaroslav/sim/lmon2-data/beam/v6p3_20240729/lmon.root"
-    inp = "/home/jaroslav/sim/lmon2-data/beam/v6p3_20240802/lmon.root"
-
+    #inp = "/home/jaroslav/sim/lmon2-data/beam/v6p3_20240802/lmon.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/beam/v6p3_20240911/lmon.root"
+    inp = "/home/jaroslav/sim/lmon2-data/beam/v6p3_20240916/lmon.root"
 
     #mm
     xbin = 0.1

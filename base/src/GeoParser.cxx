@@ -274,6 +274,17 @@ G4bool GeoParser::GetOptS(G4String name, G4String par, G4String& val) {
 }//GetOptS
 
 //_____________________________________________________________________________
+G4bool GeoParser::HasParameter(G4String name, G4String par) {
+
+  //test for existence of parameter 'par' for detector named 'name'
+
+  if( fPar.find(name+"."+par) == fPar.end() ) return false;
+
+  return true;
+
+}//HasParameter
+
+//_____________________________________________________________________________
 G4String GeoParser::GetConst(std::string nam) {
 
   //retrieve the value of the constant for geometry development

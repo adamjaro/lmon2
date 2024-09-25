@@ -26,8 +26,6 @@ class Timepix4v1 : public Detector, public G4VSensitiveDetector {
     G4LogicalVolume* MakeSensorLayer(G4int nx, G4int ny, G4double dxy, G4double dz, G4double layx, G4double layy);
     G4LogicalVolume* MakeMaterialLayer(G4double, G4double, G4double, G4String, G4String, G4String, G4String);
 
-    G4LogicalVolume* GetMotherVolume(G4String mother_nam, G4LogicalVolume *top);
-
     G4String fNam; // name of detector sensitive logical volume
     GeoParser *fGeo; // geometry parser
 

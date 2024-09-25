@@ -26,9 +26,9 @@ def pitheta():
 
     #mrad
     xbin1 = 0.01
-    xbin2 = 0.05
+    xbin2 = 0.07
     xbin3 = 0.3
-    xmax = 4.5
+    xmax = 4.2
     xmid1 = 0.2
     xmid2 = 1.1
 
@@ -40,7 +40,7 @@ def pitheta():
 
     sigma_zeus = 276.3467 # mb
 
-    #nmax = 1000000
+    #nmax = 100000
     nmax = 0
 
     #hmod = rt.RDF.TH1DModel( ut.prepare_TH1D("hx", xbin, 0, xmax) )
@@ -73,14 +73,25 @@ def pitheta():
     fig.set_size_inches(5, 5)
     ax = fig.add_subplot(1, 1, 1)
 
+    ax.set_xlabel(r"Photon polar angle $\pi-\theta_\gamma$ (mrad)")
+    ax.set_ylabel(r"Cross section $\frac{\mathrm{d}\sigma}{\mathrm{d}\theta_\gamma}$ (mb/mrad)")
+
     set_axes_color(ax, col)
     plt.grid(True, color = col, linewidth = 0.5, linestyle = "--")
 
     plt.semilogy(gzeus_true[0], gzeus_true[1], "-", label="zeus_true", color="blue")
     plt.semilogy(gzeus_beff[0], gzeus_beff[1], "-.", label="zeus_beff", color="blue")
 
-    plt.semilogy(glifbx_true[0], glifbx_true[1], "--", label="zeus_true", color="red")
-    plt.semilogy(glifbx_beff[0], glifbx_beff[1], "-.", label="zeus_beff", color="red")
+    plt.semilogy(glifbx_true[0], glifbx_true[1], "--", label="lifbx_true", color="red")
+    plt.semilogy(glifbx_beff[0], glifbx_beff[1], ":", label="lifbx_beff", color="red")
+
+    leg = legend()
+    leg.add_entry(leg_txt(), "18x275 GeV")
+    leg.add_entry(leg_lin("blue", "-"), "ZEUS true")
+    leg.add_entry(leg_lin("blue", "-."), "ZEUS with divergence")
+    leg.add_entry(leg_lin("red", "--"), "Lifshitz true")
+    leg.add_entry(leg_lin("red", ":"), "Lifshitz with divergence")
+    leg.draw(plt, col)
 
     plt.savefig("01fig.pdf", bbox_inches = "tight")
 

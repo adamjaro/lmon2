@@ -138,7 +138,7 @@ G4MagneticField* QDMagnet::MakeDipoleField(G4double length, G4double angle) {
     ((length/m)/(2.*sin(angle/2.))))*tesla;
 
   G4cout << "QDMagnet::MakeDipoleField for " << fNam << ", ";
-  G4cout << length << " " << angle << " " << fMass << " " << fGamma << " " << By << G4endl;;
+  G4cout << length << " " << angle << " " << fMass << " " << fGamma << " " << By/tesla << G4endl;;
 
   return new G4UniformMagField( G4ThreeVector(0, By, 0) );
 

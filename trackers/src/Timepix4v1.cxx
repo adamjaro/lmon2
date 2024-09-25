@@ -40,6 +40,7 @@
 #include "ColorDecoder.h"
 #include "MCParticleAction.h"
 #include "Timepix4v1.h"
+#include "LogicVolFinder.h"
 
 //_____________________________________________________________________________
 Timepix4v1::Timepix4v1(const G4String& nam, GeoParser *geo, G4LogicalVolume *top):
@@ -80,11 +81,11 @@ Timepix4v1::Timepix4v1(const G4String& nam, GeoParser *geo, G4LogicalVolume *top
   ColorDecoder lay_vis("0:0:1:2");
   main_vol->SetVisAttributes(lay_vis.MakeVis(geo, fNam, "lay_vis"));
 
-  //mother volume for main layer
-  G4LogicalVolume *mother_vol = top;
-  G4String mother_nam;
-  if( geo->GetOptS(fNam, "place_into", mother_nam) ) {
-    mother_vol = GetMotherVolume(mother_nam, top);
+  //optional mother volume for the layer (top assigned as default)
+  G4LogicalVolume *mother_vol = LogicVolFinder::GetMotherVolume("place_into", top, geo, fNam);
+  //case of two levels of volume to place, volume 'place_into2' inside 'place_into1'
+  if( geo->HasParameter(fNam, "place_into2") ) {
+    mother_vol = LogicVolFinder::GetMotherVolume2("place_into1", "place_into2", top, geo, fNam);
   }
 
   //center position for the main layer in x, y and z, mm
@@ -214,22 +215,6 @@ G4LogicalVolume* Timepix4v1::MakeMaterialLayer(G4double layx, G4double layy, G4d
   return layv;
 
 }//MakeMaterialLayer
-
-//_____________________________________________________________________________
-G4LogicalVolume* Timepix4v1::GetMotherVolume(G4String mother_nam, G4LogicalVolume *top) {
-
-  for(size_t i=0; i<top->GetNoDaughters(); i++) {
-
-    G4LogicalVolume *dv = top->GetDaughter(i)->GetLogicalVolume();
-
-    if( dv->GetName() == mother_nam ) {
-      return dv;
-    }
-  }
-
-  return 0x0;
-
-}//GetMotherVolume
 
 //_____________________________________________________________________________
 G4bool Timepix4v1::ProcessHits(G4Step *step, G4TouchableHistory*) {

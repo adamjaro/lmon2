@@ -1,0 +1,45 @@
+
+<main>
+
+  <!-- representation of backward Ecal -->
+  <!-- mm -->
+  <const name="ecal_front_z" value="-2100."/>
+  <const name="ecal_front_rmin" value="42."/>
+
+  <const name="ecal_middle_z" value="-2300."/>
+  <const name="ecal_middle_rmin" value="128."/>
+
+  <const name="ecal_rear_z" value="-2650."/>
+  <const name="ecal_rmax" value="950."/>
+
+  <!-- Ecal, part 1 -->
+  <detector
+    type="CylSegment" name="cen_ecal1"
+    zpos="(ecal_front_z+ecal_middle_z)/2." dz="ecal_front_z-ecal_middle_z"
+    rmin="ecal_front_rmin" rmax="ecal_rmax" mat_name="G4_PbWO4">
+  </detector>
+
+  <!-- Ecal, part 2 -->
+  <detector
+    type="CylSegment" name="cen_ecal2"
+    zpos="(ecal_middle_z+ecal_rear_z)/2." dz="ecal_middle_z-ecal_rear_z"
+    rmin="ecal_middle_rmin" rmax="ecal_rmax" mat_name="G4_PbWO4"
+    vis="1:0:0:2">
+  </detector>
+
+  <!-- representation of backward Hcal -->
+  <!-- mm -->
+  <const name="hcal_front_z" value="-3550."/>
+  <const name="hcal_rear_z" value="-4600."/>
+
+  <const name="hcal_rmin" value="140."/>
+  <const name="hcal_rmax" value="3300."/>
+
+  <detector
+    type="CylSegment" name="cen_hcal"
+    zpos="(hcal_front_z+hcal_rear_z)/2." dz="hcal_front_z-hcal_rear_z"
+    rmin="hcal_rmin" rmax="hcal_rmax" mat_name="G4_Fe">
+  </detector>
+
+</main>
+

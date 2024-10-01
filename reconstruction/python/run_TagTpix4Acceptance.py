@@ -6,13 +6,10 @@ import sys
 import os
 
 import ROOT as rt
-from ROOT import gSystem, gInterpreter
+from ROOT import gSystem, gInterpreter, std
 
 #_____________________________________________________________________________
 def main():
-
-    #configuration from command line
-    #config = get_config()
 
     #analysis library
     gSystem.Load("liblmon2Reco.so")
@@ -24,8 +21,7 @@ def main():
 
     #run the task    
     task = rt.TagTpix4Acceptance()
-    #task.Run(config)
-    task.Run()
+    task.Run(get_config())
 
 #main
 
@@ -33,13 +29,16 @@ def main():
 def get_config():
 
     #command line options
-    args = sys.argv
-    if len(args) < 2:
+    if len(sys.argv) < 2:
         print("No configuration specified.")
         quit()
-    args.pop(0)
 
-    return args.pop(0)
+    #store command line options in vector to pass to the task
+    x=std.vector(str)()
+    for i in sys.argv:
+        x.push_back(i)
+
+    return x
 
 #get_config
 

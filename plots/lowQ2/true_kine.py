@@ -25,7 +25,7 @@ def lQ2():
     qmin = -8
     qmax = -1
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10a/acc.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax1/acc.root"
 
     infile = TFile.Open(inp)
     tree = infile.Get("event")

@@ -51,10 +51,13 @@
 /vis/viewer/set/viewpointThetaPhi -45 -45
 #/vis/viewer/set/viewpointThetaPhi 45 45 deg
 
-/vis/viewer/set/targetPoint 0 0 -3000 mm
+#/vis/viewer/set/targetPoint 0 0 -3000 mm
 #/vis/viewer/set/targetPoint 0 0 -22250 mm # B2eR end
 
 #/vis/viewer/set/targetPoint -307 0 -27248.2 mm  # Tagger 1
+#/vis/viewer/set/targetPoint -295.135 0 -27597.1 mm  # Tagger 1 middle
+#/vis/viewer/set/targetPoint -271.996 0 -26847.8 mm  # Tagger 1, plane 4
+/vis/viewer/set/targetPoint -281.255 0 -27147.6 mm  # Tagger 1, plane 3
 
 #/vis/viewer/set/targetPoint -307 0 -42249 mm  # Tagger 2
 
@@ -66,8 +69,8 @@
 #/vis/viewer/zoom 2.
 
 # Draw coordinate axes:
-#/vis/scene/add/axes -501.574 0 -37695.3 10. mm
-#/vis/scene/add/axes 0 0 0 12.5 mm
+#/vis/scene/add/axes -271.996 0 -26847.8 30 mm
+/vis/scene/add/axes -281.255 0 -27147.6 30 mm
 #/vis/scene/add/axes 0 0 0 79.1 mm
 
 # Draw smooth trajectories at end of event, showing trajectory points

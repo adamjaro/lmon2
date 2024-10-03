@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 4
+    iplot = 2
 
     func = {}
     func[0] = energy_1d
@@ -161,16 +161,17 @@ def logx_logQ2():
     #log_10(x)
     xbin = 0.05
     xmin = -12
-    xmax = 0
+    xmax = -1
 
     #log_10(GeV^2)
     ybin = 0.05
-    ymin = -9
+    ymin = -8
     ymax = 0
 
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax1/acc.root"
 
     infile = TFile.Open(inp)
     tree = infile.Get("event")
@@ -182,7 +183,9 @@ def logx_logQ2():
 
     val = "(TMath::Log10(true_Q2)):(TMath::Log10(true_x))"
 
-    tree.Draw(val+" >> hxy_sel", "s1_ntrk>0")
+    #tree.Draw(val+" >> hxy_sel", "s1_ntrk>0")
+    #tree.Draw(val+" >> hxy_sel", "s1_allhit==1")
+    tree.Draw(val+" >> hxy_sel", "s2_allhit==1")
     tree.Draw(val+" >> hxy_all")
 
     hxy_sel.Divide(hxy_all)
@@ -195,7 +198,7 @@ def logx_logQ2():
     hxy_sel.SetZTitle("Acceptance")
     hxy_sel.SetTitleOffset(1.4, "Z")
 
-    ut.set_margin_lbtr(gPad, 0.1, 0.1, 0.015, 0.15)
+    ut.set_margin_lbtr(gPad, 0.11, 0.11, 0.03, 0.16)
 
     gPad.SetGrid()
 
@@ -205,7 +208,12 @@ def logx_logQ2():
 
     hxy_sel.Draw("colz")
 
-    #ut.invert_col(rt.gPad)
+    leg = ut.prepare_leg(0.12, 0.85, 0.2, 0.1, 0.035) # 0.035
+    #leg.AddEntry("", "Tagger 1, V6.3", "")
+    leg.AddEntry("", "Tagger 2, V6.3", "")
+    leg.Draw("same")
+
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #logx_logQ2

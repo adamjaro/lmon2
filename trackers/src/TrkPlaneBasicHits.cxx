@@ -30,6 +30,27 @@ void TrkPlaneBasicHits::Hit::Translate(Double_t xp, Double_t yp, Double_t zp) {
 }//Hit::Translate
 
 //_____________________________________________________________________________
+void TrkPlaneBasicHits::Hit::TranslateXZ(Double_t xp, Double_t zp) {
+
+  //hit translation in x and z
+  x += xp;
+  z += zp;
+
+}//Hit::TranslateXZ
+
+//_____________________________________________________________________________
+void TrkPlaneBasicHits::Hit::RotateZX(Double_t theta) {
+
+  //hit rotation in z-x plane
+  TVector2 zx = TVector2(z, x).Rotate(theta);
+
+  //the TVector2 is given in z-x plane
+  x = zx.Y();
+  z = zx.X();
+
+}//RotateZX
+
+//_____________________________________________________________________________
 void TrkPlaneBasicHits::Hit::RotateXY(Double_t tx, Double_t ty) {
 
   TVector3 pos(x, y, z);

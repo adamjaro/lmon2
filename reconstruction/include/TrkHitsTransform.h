@@ -22,6 +22,8 @@ class TrkHitsTransform {
 
     TrkPlaneBasicHits::Coll& GetHits() { return fHits; }
 
+    const std::string& GetName() { return fNam; }
+
   private:
 
     TrkPlaneBasicHits::Coll fHits; // input hits

@@ -22,6 +22,7 @@ class TagTrackFinder {
     Double_t GetMaxChi2ndf() { return fChi2ndfMax; }
 
     void ProcessEvent();
+    void PrintCounts();
 
   private:
 
@@ -40,6 +41,9 @@ class TagTrackFinder {
     TagTracks::Coll fTracks; // tracks collection
 
     Double_t fChi2ndfMax=0; // maximal reduced chi2 for tracks
+
+    //counter for tracks
+    unsigned long fNall=0;
 
 };
 

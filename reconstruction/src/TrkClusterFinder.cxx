@@ -121,6 +121,9 @@ void TrkClusterFinder::ProcessEvent() {
   for(vector<TrkPlaneClusters::Cluster>::iterator icls = fClusters.GetStore().begin(); icls != fClusters.GetStore().end(); icls++) {
     TrkPlaneClusters::Cluster& cls = *icls;
 
+    //increment processed clusters
+    fNall++;
+
     //inner loop
     for(vector<TrkPlaneClusters::Cluster>::iterator i2 = fClusters.GetStore().begin(); i2 != fClusters.GetStore().end(); i2++) {
       if( icls == i2 ) continue; // same cluster
@@ -137,6 +140,9 @@ void TrkClusterFinder::ProcessEvent() {
 
     //cluster status
     if( cls.min_dist > 0 and cls.min_dist < fClsMinLimMdist ) cls.stat = kFALSE; // limit on minimal distance to another cluster
+
+    //increment selected clusters
+    if( cls.stat ) fNsel++;
 
     //cout << cls.x << " " << cls.y << " " << cls.en << " " << cls.min_dist << " " << cls.stat << endl;
 
@@ -346,6 +352,13 @@ void TrkClusterFinder::GradientTest(TrkPlaneClusters::Cluster& cls) {
 
 }//GradientTest
 
+//_____________________________________________________________________________
+void TrkClusterFinder::PrintCounts() {
+
+  cout << "TrkClusterFinder::PrintCounts for " << fNam << ", all, sel: ";
+  cout << fNall << ", " << fNsel << ", fraction: " << (float)fNsel/(float)fNall << endl;
+
+}//PrintCounts
 
 
 

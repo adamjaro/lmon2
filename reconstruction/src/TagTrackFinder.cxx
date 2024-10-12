@@ -97,6 +97,9 @@ void TagTrackFinder::ProcessEvent() {
           //the track is selected, add it for the event
           TagTracks::Track& trk = fTracks.Add(init_trk);
 
+          //increment track counter
+          fNall++;
+
           //evaluate clusters making the track
           TrkPlaneClusters::Cluster *cls[] = {&c1, &c2, &c3, &c4};
           ClusterAnalysis(cls, trk);
@@ -198,7 +201,12 @@ template<size_t N> void TagTrackFinder::ClusterAnalysis(TrkPlaneClusters::Cluste
 
 }//ClusterAnalysis
 
+//_____________________________________________________________________________
+void TagTrackFinder::PrintCounts() {
 
+  cout << "TagTrackFinder::PrintCounts for " << fNam << ", all: " << fNall << endl;
+
+}//PrintCounts
 
 
 

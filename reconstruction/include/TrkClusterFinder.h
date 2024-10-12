@@ -15,6 +15,7 @@ class TrkClusterFinder {
 
     void ProcessEvent();
     void FinishEvent() { fClusters.FinishEvent(); }
+    void PrintCounts();
 
     void SetLimMdist(Double_t d) { fClsMinLimMdist = d; }
     Double_t GetLimMdist() { return fClsMinLimMdist; }
@@ -39,6 +40,10 @@ class TrkClusterFinder {
 
     //selection criteria for clusters
     Double_t fClsMinLimMdist=0; // limit on minimal distance to another cluster, mm
+
+    //counters for processed clusters
+    unsigned long fNall=0;
+    unsigned long fNsel=0;
 
 };
 

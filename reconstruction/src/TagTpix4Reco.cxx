@@ -47,6 +47,7 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
     ("geo", program_options::value<string>(), "Geometry configuration")
     ("write_hits", program_options::value<bool>()->default_value(false), "Write hits to output")
     ("write_clusters", program_options::value<bool>()->default_value(false), "Write clusters to output")
+    ("nev", program_options::value<long>()->default_value(0), "Maximal number of events")
     ("max_chi2ndf", program_options::value<double>()->default_value(0.01), "Maximal tracks Chi2/NDF")
     ("min_cls_dist", program_options::value<double>()->default_value(0), "Minimal cluster distance")
   ;
@@ -127,8 +128,9 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
   s2.SetMaxChi2Ndf( opt_map["max_chi2ndf"].as<double>() );
   s2.CreateOutput(&otree);
 
-  Long64_t nev = tree->GetEntries();
-  //nev = 12;
+  //number of events to analyze, from tree by default
+  Long64_t nev = opt_map["nev"].as<long>();
+  if( nev == 0 ) nev = tree->GetEntries();
 
   cout << "Number of events: " << nev << endl;
 
@@ -163,9 +165,14 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
 
   out->Close();
 
-  //print hit counts
+  //print counts
+  cout << "All done, hit counts:" << endl;
   for_each(hits.begin(), hits.end(), mem_fn(&TrkHitsTransform::PrintCounts));
-
+  cout << "Cluster counts:" << endl;
+  for_each(cls.begin(), cls.end(), mem_fn(&TrkClusterFinder::PrintCounts));
+  cout << "Track counts:" << endl;
+  s1.PrintCounts();
+  s2.PrintCounts();
 
 }//Run
 

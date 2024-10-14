@@ -6,7 +6,7 @@ import sys
 import os
 
 import ROOT as rt
-from ROOT import gSystem, gInterpreter, std
+from ROOT import gROOT, gSystem, gInterpreter, std
 
 #_____________________________________________________________________________
 def main():
@@ -44,6 +44,8 @@ def get_config():
 
 #_____________________________________________________________________________
 if __name__ == "__main__":
+
+    gROOT.SetBatch()
 
     main()
 

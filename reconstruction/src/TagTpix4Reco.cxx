@@ -75,6 +75,7 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
   //true event kinematics
   tree->SetBranchAddress("true_Q2", &fTrueQ2);
   tree->SetBranchAddress("true_x", &fTrueX);
+  tree->SetBranchAddress("num_interactions", &fNumInteractions);
 
   //output file
   unique_ptr<TFile> out = io.MakeFile("output");
@@ -83,6 +84,7 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
   TTree otree("event", "event");
   otree.Branch("true_Q2", &fTrueQ2, "true_Q2/D");
   otree.Branch("true_x", &fTrueX, "true_x/D");
+  otree.Branch("num_interactions", &fNumInteractions, "num_interactions/D");
 
   //geometry
   GeoParser geo;

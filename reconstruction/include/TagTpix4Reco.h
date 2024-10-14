@@ -16,6 +16,7 @@ class TagTpix4Reco {
 
   Double_t fTrueQ2;
   Double_t fTrueX;
+  Double_t fNumInteractions;
 
 };
 

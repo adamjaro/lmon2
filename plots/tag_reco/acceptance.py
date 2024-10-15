@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 2
+    iplot = 1
 
     func = {}
     func[0] = energy_1d

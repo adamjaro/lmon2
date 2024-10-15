@@ -17,9 +17,13 @@ class TagTpix4Reco {
 
     void ElectronRec(std::vector<TagTracks::Track>& trk);
 
-    Double_t fTrueQ2;
-    Double_t fTrueX;
-    Double_t fNumInteractions;
+    //input true kinematics
+    Double_t fTrueEn=0;
+    Double_t fTrueTheta=0;
+    Double_t fTruePhi=0;
+    Double_t fTrueQ2=0;
+    Double_t fTrueX=0;
+    Double_t fNumInteractions=0;
 
     std::shared_ptr<MCParticles::Coll> fMC;
 

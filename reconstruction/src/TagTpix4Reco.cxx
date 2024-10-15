@@ -74,6 +74,9 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
   unique_ptr<TChain> tree = io.MakeChain("input");
 
   //true event kinematics
+  tree->SetBranchAddress("true_el_E", &fTrueEn);
+  tree->SetBranchAddress("true_el_theta", &fTrueTheta);
+  tree->SetBranchAddress("true_el_phi", &fTruePhi);
   tree->SetBranchAddress("true_Q2", &fTrueQ2);
   tree->SetBranchAddress("true_x", &fTrueX);
   tree->SetBranchAddress("num_interactions", &fNumInteractions);
@@ -87,6 +90,9 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
 
   //output tree
   TTree otree("event", "event");
+  otree.Branch("true_el_E", &fTrueEn, "true_el_E/D");
+  otree.Branch("true_el_theta", &fTrueTheta, "true_el_theta/D");
+  otree.Branch("true_el_phi", &fTruePhi, "true_el_phi/D");
   otree.Branch("true_Q2", &fTrueQ2, "true_Q2/D");
   otree.Branch("true_x", &fTrueX, "true_x/D");
   otree.Branch("num_interactions", &fNumInteractions, "num_interactions/D");

@@ -35,13 +35,14 @@ def rate_xy(show_plot=True):
     #number of simulated events
     #nev = 1e6
     #nev = 9980000 # 9ax2
-    nev = 12000000
+    nev = 12000000 # 10ax2
 
     #bunch crossing frequency
     freq = 22676 # kHz
 
     infile = TFile.Open(inp)
     #hxy = infile.Get("h_counts")
+    #hxy = infile.Get("lowQ2_s1_4_h_counts")
     hxy = infile.Get("lowQ2_s2_4_h_counts")
 
     scale = freq/nev
@@ -75,7 +76,7 @@ def rate_xy(show_plot=True):
 
     gPad.SetLogz()
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.png")
 
 #rate_xy

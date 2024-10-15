@@ -4,6 +4,7 @@
 
 import ROOT as rt
 from ROOT import gPad, gROOT, gStyle, TFile, gSystem, TMath
+from ROOT import RDataFrame
 
 import sys
 sys.path.append("../")
@@ -12,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 3
+    iplot = 9
 
     func = {}
     func[0] = theta_x
@@ -24,6 +25,7 @@ def main():
     func[6] = theta_x_true_en
     func[7] = track_en_cal_en
     func[8] = ntrk
+    func[9] = ntrk_num_interactions
 
     func[iplot]()
 
@@ -398,21 +400,23 @@ def ntrk():
     xmin = 0
     xmax = 20
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax5/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax5/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax2/tracks.root"
 
-    det = "s1_tracks"
-    #det = "s2_tracks"
+    det = "s1_ntrk"
+    #det = "s2_ntrk"
 
-    infile = TFile.Open(inp)
-    tree = infile.Get("event")
+    df = RDataFrame("event", inp)
+    df = df.Define("s1_ntrk", "s1_tracks_x.size()")
+    df = df.Define("s2_ntrk", "s2_tracks_x.size()")
 
     can = ut.box_canvas()
-
-    hx = ut.prepare_TH1D("hx", xbin, xmin, xmax)
-
-    tree.Draw("s1_ntrk >> hx") #, "s1_ntrk==14"
+    hx = rt.RDF.TH1DModel( ut.prepare_TH1D("hx", xbin, xmin, xmax) )
+    hx = df.Histo1D(hx, det).GetValue()
 
     ut.line_h1(hx)
+
+    hx.Draw()
 
     ut.put_yx_tit(hx, "Counts", "Number of tracks per event", 1.9, 1.3)
 
@@ -422,10 +426,52 @@ def ntrk():
 
     gPad.SetLogy()
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #ntrk
+
+#_____________________________________________________________________________
+def ntrk_num_interactions():
+
+    #mrad
+    xbin = 1
+    xmin = 0
+    xmax = 50
+
+    ymin = 0
+    ymax = 20
+
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax2/tracks.root"
+
+    #det = "s1_ntrk"
+    det = "s2_ntrk"
+
+    df = RDataFrame("event", inp)
+    df = df.Define("s1_ntrk", "s1_tracks_x.size()")
+    df = df.Define("s2_ntrk", "s2_tracks_x.size()")
+
+    can = ut.box_canvas()
+    hx = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, xbin, ymin, ymax) )
+    hx = df.Histo2D(hx, "num_interactions", det).GetValue()
+
+    hx.SetMinimum(0.98)
+    hx.SetContour(300)
+
+    hx.Draw("colz")
+
+    #ut.put_yx_tit(hx, "Counts", "Number of tracks per event", 1.9, 1.3)
+
+    #ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.03)
+
+    gPad.SetGrid()
+
+    gPad.SetLogz()
+
+    ut.invert_col(rt.gPad)
+    can.SaveAs("01fig.pdf")
+
+#ntrk_num_interactions
 
 #_____________________________________________________________________________
 if __name__ == "__main__":

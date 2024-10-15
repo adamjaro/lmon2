@@ -74,17 +74,11 @@ def energy_pitheta():
 
     #reconstruction efficiency in energy (GeV) and pi - theta (mrad)
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax3/trk_v4.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
     inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax4/trk_v0.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v2_tracks_only.root"
 
     #tagger 1 or 2
-    tag = 2
+    tag = 1
 
     #bins in energy, GeV
     xbin = 0.3
@@ -113,6 +107,8 @@ def energy_pitheta():
     df = df.Define("pitheta", "(TMath::Pi()-true_el_theta)*1e3")
     df = df.Define("s1_nrec", "int n=0; for(auto& i:s1_tracks_is_rec) { if(i) n++; } return n;")
     df = df.Define("s2_nrec", "int n=0; for(auto& i:s2_tracks_is_rec) { if(i) n++; } return n;")
+    df = df.Define("s1_ntrk", "s1_tracks_x.size()")
+    df = df.Define("s2_ntrk", "s2_tracks_x.size()")
 
     can = ut.box_canvas()
     hx = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, ybin, ymin, ymax) )
@@ -171,22 +167,23 @@ def logx_logQ2():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax1/acc.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax1/acc.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v2_tracks_only.root"
 
-    infile = TFile.Open(inp)
-    tree = infile.Get("event")
+    df = RDataFrame("event", inp)
+    df = df.Define("s1_ntrk", "s1_tracks_x.size()")
+    df = df.Define("s2_ntrk", "s2_tracks_x.size()")
+    df = df.Define("logQ2", "TMath::Log10(true_Q2)")
+    df = df.Define("logx", "TMath::Log10(true_x)")
 
     can = ut.box_canvas()
+    hx = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, ybin, ymin, ymax) )
 
-    hxy_all = ut.prepare_TH2D("hxy_all", xbin, xmin, xmax, ybin, ymin, ymax)
-    hxy_sel = ut.prepare_TH2D("hxy_sel", xbin, xmin, xmax, ybin, ymin, ymax)
+    hxy_all = df.Histo2D(hx, "logx", "logQ2").GetValue()
+    #hxy_sel = df.Filter("s1_ntrk>0").Histo2D(hx, "logx", "logQ2").GetValue()
+    hxy_sel = df.Filter("s2_ntrk>0").Histo2D(hx, "logx", "logQ2").GetValue()
 
-    val = "(TMath::Log10(true_Q2)):(TMath::Log10(true_x))"
-
-    #tree.Draw(val+" >> hxy_sel", "s1_ntrk>0")
-    #tree.Draw(val+" >> hxy_sel", "s1_allhit==1")
-    tree.Draw(val+" >> hxy_sel", "s2_allhit==1")
-    tree.Draw(val+" >> hxy_all")
+    print("Selected: ", hxy_sel.GetEntries())
 
     hxy_sel.Divide(hxy_all)
 
@@ -210,8 +207,8 @@ def logx_logQ2():
 
     leg = ut.prepare_leg(0.12, 0.85, 0.2, 0.1, 0.035) # 0.035
     #leg.AddEntry("", "Tagger 1, V6.3", "")
-    leg.AddEntry("", "Tagger 2, V6.3", "")
-    leg.Draw("same")
+    #leg.AddEntry("", "Tagger 2, V6.3", "")
+    #leg.Draw("same")
 
     ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")

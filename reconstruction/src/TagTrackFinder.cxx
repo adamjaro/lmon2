@@ -125,8 +125,6 @@ void TagTrackFinder::ProcessEvent() {
     }//plane 2
   }//plane 1
 
-  fTracks.FinishEvent();
-
 }//ProcessEvent
 
 //_____________________________________________________________________________

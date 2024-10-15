@@ -2,9 +2,10 @@
 #ifndef TagTpix4Reco_h
 #define TagTpix4Reco_h
 
-namespace TrkPlaneBasicHits {
-  class Coll;
-}
+// Reconstruction for tagger detectors with Timepix4
+
+namespace MCParticles { class Coll;}
+namespace TagTracks { class Track;}
 
 class TagTpix4Reco {
 
@@ -14,9 +15,13 @@ class TagTpix4Reco {
 
   private:
 
-  Double_t fTrueQ2;
-  Double_t fTrueX;
-  Double_t fNumInteractions;
+    void ElectronRec(std::vector<TagTracks::Track>& trk);
+
+    Double_t fTrueQ2;
+    Double_t fTrueX;
+    Double_t fNumInteractions;
+
+    std::shared_ptr<MCParticles::Coll> fMC;
 
 };
 

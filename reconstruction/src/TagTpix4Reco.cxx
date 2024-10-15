@@ -21,14 +21,15 @@
 //lmon2 base
 #include "GeoParser.h"
 #include "LoadXML.h"
+#include "MCParticles.h"
 
 //local classes
 #include "TrkPlaneBasicHits.h"
 #include "IOProgramOptions.h"
 #include "TrkHitsTransform.h"
 #include "TrkClusterFinder.h"
-#include "TagTpix4Reco.h"
 #include "TagTrackFinder.h"
+#include "TagTpix4Reco.h"
 
 using namespace std;
 using namespace boost;
@@ -76,6 +77,10 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
   tree->SetBranchAddress("true_Q2", &fTrueQ2);
   tree->SetBranchAddress("true_x", &fTrueX);
   tree->SetBranchAddress("num_interactions", &fNumInteractions);
+
+  //MC particles
+  fMC = make_shared<MCParticles::Coll>();
+  fMC->ConnectInput("mcp", tree.get());
 
   //output file
   unique_ptr<TFile> out = io.MakeFile("output");
@@ -156,8 +161,19 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
     s1.ProcessEvent();
     s2.ProcessEvent();
 
+    //load the MC particles
+    fMC->LoadInput();
+
+    //Q2 reconstruction and MC-track assignment
+    ElectronRec(s1.GetTracks());
+    ElectronRec(s2.GetTracks());
+
     //FinishEvent for clusters after track finder for cluster information about tracks
     for_each(cls.begin(), cls.end(), mem_fn(&TrkClusterFinder::FinishEvent));
+
+    //finish for tracks
+    s1.FinishEvent();
+    s2.FinishEvent();
 
     otree.Fill();
 
@@ -178,6 +194,32 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
 
 }//Run
 
+//_____________________________________________________________________________
+void TagTpix4Reco::ElectronRec(vector<TagTracks::Track>& trk) {
+
+  //track loop
+  for(TagTracks::Track& i: trk) {
+
+    //MC loop
+    for(const MCParticles::Part& mcp: fMC->GetReadData()) {
+
+      if( mcp.itrk != i.prim_id ) continue;
+
+      //track is paired with the MC particle
+      i.has_mcp = kTRUE;
+
+      //track MC particle kinematics
+      i.mcp_en = mcp.en;
+      i.mcp_theta = mcp.theta;
+      i.mcp_phi = mcp.phi;
+
+      break;
+
+    }//MC loop
+
+  }//track loop
+
+}//ElectronRec
 
 
 

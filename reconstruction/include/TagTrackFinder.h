@@ -22,7 +22,10 @@ class TagTrackFinder {
     Double_t GetMaxChi2ndf() { return fChi2ndfMax; }
 
     void ProcessEvent();
+    void FinishEvent() { fTracks.FinishEvent(); }
     void PrintCounts();
+
+    std::vector<TagTracks::Track>& GetTracks() { return fTracks.GetStore(); }
 
   private:
 

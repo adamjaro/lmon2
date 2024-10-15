@@ -60,7 +60,7 @@ namespace TagTracks {
 
         Coll();
 
-        //std::vector<Track>& GetStore() { return fStorage; }
+        std::vector<Track>& GetStore() { return fStorage; }
 
     };//Coll
 

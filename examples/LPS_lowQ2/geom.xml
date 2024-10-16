@@ -1,0 +1,9 @@
+
+<main>
+
+  <include_directory name="../../geometry/tag_layout_rev3"/>
+
+  <include ref="main.xml"/>
+
+</main>
+

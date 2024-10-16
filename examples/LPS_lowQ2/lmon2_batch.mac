@@ -1,0 +1,16 @@
+
+#detector
+/lmon/construct/geometry geom.xml
+
+#input
+/lmon/input/type hepmc_root_tree
+/lmon/input/hepmc_root_tree/name qr_17p8x275.hepmc3.tree.root
+
+#output
+/lmon/output/name lmon2.root
+
+#initialize and run
+/run/initialize
+
+/run/beamOn 1200
+

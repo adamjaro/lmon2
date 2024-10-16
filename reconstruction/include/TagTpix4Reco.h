@@ -6,6 +6,7 @@
 
 namespace MCParticles { class Coll;}
 namespace TagTracks { class Track;}
+class LookupProblemSolver;
 
 class TagTpix4Reco {
 
@@ -15,7 +16,12 @@ class TagTpix4Reco {
 
   private:
 
-    void ElectronRec(std::vector<TagTracks::Track>& trk);
+    void ElectronRec(std::vector<TagTracks::Track>& trk, std::unique_ptr<LookupProblemSolver>& rec);
+
+    void SetMakeLPS(std::unique_ptr<LookupProblemSolver>& rec, boost::program_options::variables_map& opt_map);
+    void AddInput(std::vector<TagTracks::Track>& trk, std::unique_ptr<LookupProblemSolver>& rec);
+
+    void ImportLPS(std::unique_ptr<LookupProblemSolver>& rec, boost::program_options::variables_map& opt_map);
 
     //input true kinematics
     Double_t fTrueEn=0;
@@ -26,6 +32,8 @@ class TagTpix4Reco {
     Double_t fNumInteractions=0;
 
     std::shared_ptr<MCParticles::Coll> fMC;
+
+    double fBeamEn=0; // beam energy, GeV
 
 };
 

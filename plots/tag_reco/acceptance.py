@@ -74,11 +74,11 @@ def energy_pitheta():
 
     #reconstruction efficiency in energy (GeV) and pi - theta (mrad)
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax4/trk_v0.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v2_tracks_only.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax4/trk_v0.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v3_mcp.root"
 
     #tagger 1 or 2
-    tag = 1
+    tag = 2
 
     #bins in energy, GeV
     xbin = 0.3

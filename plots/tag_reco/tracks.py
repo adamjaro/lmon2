@@ -123,25 +123,21 @@ def xy():
     xmin = -80
     xmax = 80
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
+    ymin = -40
+    ymax = 40
 
-    det = "s1_tracks"
-    #det = "s2_tracks"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v3_mcp.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax2/tracks.root"
+
+    #det = "s1_tracks"
+    det = "s2_tracks"
 
     infile = TFile.Open(inp)
     tree = infile.Get("event")
 
     can = ut.box_canvas()
 
-    hxy = ut.prepare_TH2D("hxy", xbin, xmin, xmax, xbin, xmin, xmax)
+    hxy = ut.prepare_TH2D("hxy", xbin, xmin, xmax, xbin, ymin, ymax)
 
     tree.Draw(det+"_y:"+det+"_x >> hxy")
 
@@ -166,14 +162,8 @@ def chi2():
     xmin = 0
     xmax = 0.06
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v3_mcp.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax2/tracks.root"
 
     #det = "s1_tracks"
     det = "s2_tracks"
@@ -187,6 +177,8 @@ def chi2():
 
     tree.Draw(det+"_chi2_xy >> hx")
 
+    ut.set_H1D_col(hx, rt.kRed)
+
     ut.put_yx_tit(hx, "Counts", "Tracks #it{#chi}^{2}", 1.9, 1.3)
 
     ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.11)
@@ -195,7 +187,7 @@ def chi2():
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #chi2
@@ -400,11 +392,10 @@ def ntrk():
     xmin = 0
     xmax = 20
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag6ax5/trk_v1.root"
     inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax2/tracks.root"
 
-    det = "s1_ntrk"
-    #det = "s2_ntrk"
+    #det = "s1_ntrk"
+    det = "s2_ntrk"
 
     df = RDataFrame("event", inp)
     df = df.Define("s1_ntrk", "s1_tracks_x.size()")
@@ -414,7 +405,7 @@ def ntrk():
     hx = rt.RDF.TH1DModel( ut.prepare_TH1D("hx", xbin, xmin, xmax) )
     hx = df.Histo1D(hx, det).GetValue()
 
-    ut.line_h1(hx)
+    ut.line_h1(hx, rt.kRed, 3)
 
     hx.Draw()
 
@@ -426,7 +417,7 @@ def ntrk():
 
     gPad.SetLogy()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #ntrk
@@ -460,15 +451,22 @@ def ntrk_num_interactions():
 
     hx.Draw("colz")
 
-    #ut.put_yx_tit(hx, "Counts", "Number of tracks per event", 1.9, 1.3)
+    ut.put_yx_tit(hx, "Number of reconstructed tracks per event", "Number of simulated interactions per event", 1.5, 1.3)
 
-    #ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.03)
+    ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.12)
 
     gPad.SetGrid()
 
     gPad.SetLogz()
 
-    ut.invert_col(rt.gPad)
+    lin = ut.col_lin(rt.kRed, 3, rt.kDashed)
+    lin.SetX1(0)
+    lin.SetY1(0)
+    lin.SetX2(20)
+    lin.SetY2(20)
+    lin.Draw("same")
+
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #ntrk_num_interactions

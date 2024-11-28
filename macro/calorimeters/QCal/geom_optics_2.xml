@@ -1,0 +1,26 @@
+
+<main>
+
+  <!-- Optics development for QCal1 -->
+
+  <const name="qcal_modz" value="20"/> <!-- mm -->
+  <const name="qcal_xy" value="14"/> <!-- mm -->
+
+  <detector
+    type="QCal1" name="qcal"
+    modx="qcal_xy" mody="qcal_xy" modz="qcal_modz" zpos="-qcal_modz/2"
+    nx="1" ny="1"
+    cell_xy="qcal_xy"
+    cell_mat_name="QCal1_Copper"
+    fiber_clad_D="1.54" fiber_core_D="1.5" fiber_dx="4"
+    core_vis="0:0:1:0.3" opdet_vis="1:1:0:1">
+  </detector>
+
+  <!-- top volume -->
+  <detector
+    name="topv" type="top"
+    xsiz = "500" ysiz="500" zsiz = "10000"> <!-- mm -->
+  </detector>
+
+</main>
+

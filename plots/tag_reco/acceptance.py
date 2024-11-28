@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 1
+    iplot = 2
 
     func = {}
     func[0] = energy_1d
@@ -82,13 +82,13 @@ def energy_pitheta():
 
     #bins in energy, GeV
     xbin = 0.3
-    xmin = 1
+    xmin = 4
     xmax = 20
 
     #bins in theta, mrad
     ybin = 0.2
     ymin = 0
-    ymax = 12
+    ymax = 10
 
     if tag == 1:
         sel = "s1_ntrk>0"
@@ -144,7 +144,7 @@ def energy_pitheta():
     leg.AddEntry("", "#bf{"+lab_sel+"}", "")
     #leg.Draw("same")
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #energy_pitheta
@@ -168,7 +168,8 @@ def logx_logQ2():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax1/acc.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v2_tracks_only.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v2_tracks_only.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v3_mcp.root"
 
     df = RDataFrame("event", inp)
     df = df.Define("s1_ntrk", "s1_tracks_x.size()")
@@ -180,8 +181,8 @@ def logx_logQ2():
     hx = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, ybin, ymin, ymax) )
 
     hxy_all = df.Histo2D(hx, "logx", "logQ2").GetValue()
-    #hxy_sel = df.Filter("s1_ntrk>0").Histo2D(hx, "logx", "logQ2").GetValue()
-    hxy_sel = df.Filter("s2_ntrk>0").Histo2D(hx, "logx", "logQ2").GetValue()
+    hxy_sel = df.Filter("s1_ntrk>0").Histo2D(hx, "logx", "logQ2").GetValue()
+    #hxy_sel = df.Filter("s2_ntrk>0").Histo2D(hx, "logx", "logQ2").GetValue()
 
     print("Selected: ", hxy_sel.GetEntries())
 
@@ -210,7 +211,7 @@ def logx_logQ2():
     #leg.AddEntry("", "Tagger 2, V6.3", "")
     #leg.Draw("same")
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #logx_logQ2
@@ -220,12 +221,8 @@ def energy_mlt():
 
     #reconstruction efficiency in energy (GeV) and mlt defined as -log_10(pi - theta) (rad)
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_v2.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx1/trk_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/trk_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx3/trk_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v3_mcp.root"
 
     #bins in energy, GeV
     xbin = 0.3
@@ -239,13 +236,16 @@ def energy_mlt():
 
     df = RDataFrame("event", inp)
     df = df.Define("mlt", "-TMath::Log10(TMath::Pi()-true_el_theta)")
+    df = df.Define("s1_ntrk", "s1_tracks_x.size()")
+    df = df.Define("s2_ntrk", "s2_tracks_x.size()")
     df = df.Define("s1_nrec", "int n=0; for(auto& i:s1_tracks_is_rec) { if(i) n++; } return n;")
 
     can = ut.box_canvas()
     hx = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, ybin, ymin, ymax) )
 
     hAll = df.Histo2D(hx, "true_el_E", "mlt")
-    hTag = df.Filter("s1_ntrk>0").Histo2D(hx, "true_el_E", "mlt")
+    #hTag = df.Filter("s1_ntrk>0").Histo2D(hx, "true_el_E", "mlt")
+    hTag = df.Filter("s2_ntrk>0").Histo2D(hx, "true_el_E", "mlt")
 
     hTag = hTag.GetValue()
 

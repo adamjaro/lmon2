@@ -52,14 +52,14 @@
 #/vis/viewer/set/viewpointThetaPhi 45 45 deg
 
 #/vis/viewer/set/targetPoint 0 0 -3000 mm
-/vis/viewer/set/targetPoint 0 0 -22250 mm # B2eR end
+#/vis/viewer/set/targetPoint 0 0 -22250 mm # B2eR end
 
 #/vis/viewer/set/targetPoint -307 0 -27248.2 mm  # Tagger 1
 #/vis/viewer/set/targetPoint -295.135 0 -27597.1 mm  # Tagger 1 middle
 #/vis/viewer/set/targetPoint -271.996 0 -26847.8 mm  # Tagger 1, plane 4
 #/vis/viewer/set/targetPoint -281.255 0 -27147.6 mm  # Tagger 1, plane 3
 
-#/vis/viewer/set/targetPoint -307 0 -42249 mm  # Tagger 2
+/vis/viewer/set/targetPoint -307 0 -42249 mm  # Tagger 2
 
 #/vis/viewer/set/targetPoint -460 0 -42460 mm # Q3eR
 

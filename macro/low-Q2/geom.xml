@@ -1,7 +1,7 @@
 
 <main>
 
-  <include_directory name="/home/jaroslav/sim/lmon2/geometry/tag_layout_rev3"/>
+  <include_directory name="/home/jaroslav/sim/lmon2/geometry/tag_layout_rev3b"/>
 
   <include ref="main.xml"/>
 

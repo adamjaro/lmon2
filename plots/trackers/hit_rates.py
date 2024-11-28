@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 2
+    iplot = 0
 
     func = {}
     func[0] = rate_xy
@@ -42,8 +42,8 @@ def rate_xy(show_plot=True):
 
     infile = TFile.Open(inp)
     #hxy = infile.Get("h_counts")
-    #hxy = infile.Get("lowQ2_s1_4_h_counts")
-    hxy = infile.Get("lowQ2_s2_4_h_counts")
+    #hxy = infile.Get("lowQ2_s1_1_h_counts")
+    hxy = infile.Get("lowQ2_s2_1_h_counts")
 
     scale = freq/nev
     print("scale:", scale)
@@ -76,7 +76,7 @@ def rate_xy(show_plot=True):
 
     gPad.SetLogz()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.png")
 
 #rate_xy

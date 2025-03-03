@@ -80,7 +80,9 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
   //optional configuration file
   if( opt_map.count("config") ) {
     cout << "Config: " << opt_map["config"].as<string>() << endl;
-    program_options::store(program_options::parse_config_file(opt_map["config"].as<string>().c_str(), opt), opt_map);
+    program_options::parsed_options popt = program_options::parse_config_file(opt_map["config"].as<string>().c_str(), opt);
+    cout << "Parsed options from config: " << popt.options.size() << endl;
+    program_options::store(popt, opt_map);
   }
 
   //LPS configuration

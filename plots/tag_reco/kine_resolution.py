@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 3
+    iplot = 1
 
     func = {}
     func[0] = energy
@@ -35,41 +35,28 @@ def energy():
     emin = 3
     emax = 19
 
-    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
-    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk_lps.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v9.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag11ax1/tracks_lps_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_lps_v2.root"
 
-    det = "s1_tracks"
-    #det = "s2_tracks"
+    #det = "s1_tracks"
+    det = "s2_tracks"
 
     sel = det+"_is_rec==1"
-    #sel = det+"_is_rec==1 && "+det+"_itrk==1"
-    #sel = det+"_is_rec==1 && "+det+"_prim_id==1"
 
-    infile = TFile.Open(inp)
-    tree = infile.Get("event")
+    df = RDataFrame("event", inp)
+    df = df.Define(det+"_rec_en_sel", det+"_rec_en["+sel+"]")
+    #df = df.Define(det+"_mcp_en_sel", det+"_mcp_en["+sel+"]")
+    df = df.Define(det+"_true_en", "std::vector<Double_t> v("+det+"_rec_en_sel.size(), true_el_E); return v;")
 
     can = ut.box_canvas()
-
-    #counts for all tracks
-    hcnt = ut.prepare_TH1D("hcnt", 1, 0, 1)
-    tree.Draw(det+"_x >> hcnt")
-    print("All tracks:  ", hcnt.GetEntries())
-
-    hxy = ut.prepare_TH2D("hxy", ebin, emin, emax, ebin, emin, emax)
-
-    #tree.Draw(det+"_rec_en:"+det+"_true_en >> hxy", sel)
-    tree.Draw(det+"_rec_en:"+det+"_mcp_en >> hxy", sel)
-
-    print("On the plot:  ", hxy.Integral())
+    hxy = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", ebin, emin, emax, ebin, emin, emax) )
+    #hxy = df.Histo2D(hxy, det+"_mcp_en_sel", det+"_rec_en_sel").GetValue()
+    hxy = df.Histo2D(hxy, det+"_true_en", det+"_rec_en_sel").GetValue()
+    hxy.Draw("colz")
 
     ytit = "Reconstructed energy #it{E_{e}} (GeV)"
-    xtit = "Generated MC particle energy #it{E_{e,mc}} (GeV)"
+    #xtit = "Generated MC particle energy #it{E_{e,mc}} (GeV)"
+    xtit = "Generated true electron energy #it{E_{e,true}} (GeV)"
     ut.put_yx_tit(hxy, ytit, xtit, 1.4, 1.3)
 
     ut.set_margin_lbtr(gPad, 0.11, 0.11, 0.02, 0.11)
@@ -94,38 +81,37 @@ def pitheta():
     xmin = 0
     xmax = 11
 
-    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk.root"
-    inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/trk_lps.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax1/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax2/trk_v9.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7ax3/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx1/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx2/trk_pass1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7bx3/trk_pass1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag11ax1/tracks_lps_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_lps_v1b.root"
 
     det = "s1_tracks"
     #det = "s2_tracks"
 
     sel = det+"_is_rec==1"
-    #sel = det+"_is_rec==1 && "+det+"_itrk==1"
-    #sel = det+"_is_rec==1 && "+det+"_prim_id==1"
 
-    infile = TFile.Open(inp)
-    tree = infile.Get("event")
+    #infile = TFile.Open(inp)
+    #tree = infile.Get("event")
+
+    df = RDataFrame("event", inp)
+    df = df.Define(det+"_rec_pitheta", "(TMath::Pi()-"+det+"_rec_theta["+sel+"])*1e3")
+    df = df.Define(det+"_mcp_pitheta", "(TMath::Pi()-"+det+"_mcp_theta["+sel+"])*1e3")
+    df = df.Define(det+"_true_pitheta", "std::vector<Double_t> v("+det+"_rec_pitheta.size(),\
+        1e3*(TMath::Pi()-true_el_theta)); return v;")
 
     can = ut.box_canvas()
+    hxy = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", xbin, xmin, xmax, xbin, xmin, xmax) )
+    #hxy = df.Histo2D(hxy, det+"_mcp_pitheta", det+"_rec_pitheta").GetValue()
+    hxy = df.Histo2D(hxy, det+"_true_pitheta", det+"_rec_pitheta").GetValue()
+    hxy.Draw("colz")
 
-    #counts for all tracks
-    hcnt = ut.prepare_TH1D("hcnt", 1, 0, 1)
-    tree.Draw(det+"_x >> hcnt")
-    print("All tracks:  ", hcnt.GetEntries())
 
-    hxy = ut.prepare_TH2D("hxy", xbin, xmin, xmax, xbin, xmin, xmax)
+
+    #hxy = ut.prepare_TH2D("hxy", xbin, xmin, xmax, xbin, xmin, xmax)
 
     #tree.Draw("(TMath::Pi()-"+det+"_rec_theta)*1e3:(TMath::Pi()-"+det+"_true_theta)*1e3 >> hxy", sel)
-    tree.Draw("(TMath::Pi()-"+det+"_rec_theta)*1e3:(TMath::Pi()-"+det+"_mcp_theta)*1e3 >> hxy", sel)
+    #tree.Draw("(TMath::Pi()-"+det+"_rec_theta)*1e3:(TMath::Pi()-"+det+"_mcp_theta)*1e3 >> hxy", sel)
 
-    print("On the plot:  ", hxy.Integral())
+    #print("On the plot:  ", hxy.Integral())
 
     ytit = "Reconstructed #it{#pi-#theta_{e}} (mrad)"
     #xtit = "Generated true #it{#pi-#theta_{e,gen}} (mrad)"

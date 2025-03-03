@@ -30,6 +30,7 @@
 #include "VacDrift.h"
 #include "BeamAndrii20240604.h"
 #include "QDMagnet.h"
+#include "ReadGDML.h"
 
 //macros
 #define ADD_COMPONENT(comp) (fComp.insert( make_pair(#comp, &BeamBuilder::MakeDet<comp>) ))
@@ -52,6 +53,7 @@ BeamBuilder::BeamBuilder(G4LogicalVolume *top, GeoParser *geo): BuilderBase(),
   ADD_COMPONENT( VacDrift );
   ADD_COMPONENT( BeamAndrii20240604 );
   ADD_COMPONENT( QDMagnet );
+  ADD_COMPONENT( ReadGDML );
 
   //sensitive detectors
   ADD_DETECTOR( ParticleCounter );

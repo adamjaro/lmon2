@@ -13,10 +13,13 @@
     zpos="-(600/2)+1/2" remove_tracks="1"
     place_into="Q3ER_log">
   </detector>
--->
 
   <include ref="/home/jaroslav/sim/lmon2/geometry/dev/lattice_v6p3_20240724/lattice_v6p3.xml"/>
+-->
 
+  <detector type="ReadGDML" name="gdml"
+    gdml="/home/jaroslav/sim/geant/geant4-v11.1.2/examples/extended/persistency/gdml/G01/scale.gdml">
+  </detector>
 
   <!-- top volume, mm  G4_AIR  G4_Galactic -->
   <detector

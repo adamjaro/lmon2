@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 9
+    iplot = 3
 
     func = {}
     func[0] = theta_x
@@ -162,8 +162,8 @@ def chi2():
     xmin = 0
     xmax = 0.06
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v3_mcp.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax2/tracks.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag11ax1/tracks_lps_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_lps_v1b.root"
 
     #det = "s1_tracks"
     det = "s2_tracks"

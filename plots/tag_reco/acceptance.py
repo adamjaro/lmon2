@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 2
+    iplot = 1
 
     func = {}
     func[0] = energy_1d
@@ -74,21 +74,21 @@ def energy_pitheta():
 
     #reconstruction efficiency in energy (GeV) and pi - theta (mrad)
 
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag9ax4/trk_v0.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v3_mcp.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag11ax1/tracks_lps_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_lps_v1b.root"
 
     #tagger 1 or 2
     tag = 2
 
     #bins in energy, GeV
     xbin = 0.3
-    xmin = 4
+    xmin = 3.5
     xmax = 20
 
     #bins in theta, mrad
     ybin = 0.2
     ymin = 0
-    ymax = 10
+    ymax = 11
 
     if tag == 1:
         sel = "s1_ntrk>0"

@@ -55,7 +55,7 @@ void track_training() {
     //get the track (it is known there is one)
     const TaggerTracks::Track& trk = tracks.GetUnit(0);
 
-    //set independent quantitis for LPS from track geometry
+    //set independent quantities for LPS from track geometry
     vector<double> quant = {trk.x, trk.y, trk.theta_x, trk.theta_y};
 
     //set the known solution from true kinematics, length is 3

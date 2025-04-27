@@ -55,7 +55,7 @@ void track_reco() {
     //tracks loop
     for(const TaggerTracks::Track& trk: tracks.GetReadData()) {
 
-      //independent quantitis for LPS from track geometry
+      //independent quantities for LPS from track geometry
       vector<double> quant = {trk.x, trk.y, trk.theta_x, trk.theta_y};
 
       //prepare the vector container for the solutions

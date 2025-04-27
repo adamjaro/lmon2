@@ -17,7 +17,8 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    pitheta()
+    #pitheta()
+    pitheta_eAu()
 
 #main
 
@@ -40,8 +41,8 @@ def pitheta():
 
     sigma_zeus = 276.3467 # mb
 
-    #nmax = 100000
-    nmax = 0
+    nmax = 100000
+    #nmax = 0
 
     #hmod = rt.RDF.TH1DModel( ut.prepare_TH1D("hx", xbin, 0, xmax) )
     hmod = rt.RDF.TH1DModel( ut.prepare_TH1D_3pt("hx", xbin1, xbin2, xbin3, 0, xmax, xmid1, xmid2) )
@@ -96,6 +97,88 @@ def pitheta():
     plt.savefig("01fig.pdf", bbox_inches = "tight")
 
 #pitheta
+
+#_____________________________________________________________________________
+def pitheta_eAu():
+
+    # pi-theta (pitheta) after beam effects for variuos eAu energies
+
+    #mrad
+    xbin1 = 0.01
+    xbin2 = 0.07
+    xbin3 = 0.3
+    #xmax = 4.2
+    xmax = 5.4
+    xmid1 = 0.2
+    xmid2 = 1.1
+
+    inp_18x110 = "/media/jaroslav/SanDisk2T/datafiles/GETaLM_data/BH/CDR_eAu_Tab_3.5/brems_eAu_18x110_single/brems_eAu_18x110_single_10Mevt.hepmc3.tree.root"
+
+    sigma_18x110 = 1.634617 # kbarn
+
+    inp_10x110 = "/media/jaroslav/SanDisk2T/datafiles/GETaLM_data/BH/CDR_eAu_Tab_3.5/brems_eAu_10x110_single/brems_eAu_10x110_single_10Mevt.hepmc3.tree.root"
+
+    sigma_10x110 = 1.348530 # kbarn
+
+    inp_5x110 = "/media/jaroslav/SanDisk2T/datafiles/GETaLM_data/BH/CDR_eAu_Tab_3.5/brems_eAu_5x110_single/brems_eAu_5x110_single_10Mevt.hepmc3.tree.root"
+
+    sigma_5x110 = 1.036136 # kbarn
+
+    #nmax = 100000
+    nmax = 0
+
+    #hmod = rt.RDF.TH1DModel( ut.prepare_TH1D("hx", xbin, 0, xmax) )
+    hmod = rt.RDF.TH1DModel( ut.prepare_TH1D_3pt("hx", xbin1, xbin2, xbin3, 0, xmax, xmid1, xmid2) )
+
+    #18x110
+    df = load_hepmc3_attrib(inp_18x110, ["beff_phot_theta"], 0, nmax)
+    df = df.Define("beff_phot_pitheta", "(TMath::Pi()-beff_phot_theta)*1e3")
+
+    g18x110 = ut.h1_to_arrays_norm( df.Histo1D(hmod, "beff_phot_pitheta"), sigma_18x110 )
+
+    #10x110
+    df = load_hepmc3_attrib(inp_10x110, ["beff_phot_theta"], 1, nmax)
+    df = df.Define("beff_phot_pitheta", "(TMath::Pi()-beff_phot_theta)*1e3")
+
+    g10x110 = ut.h1_to_arrays_norm( df.Histo1D(hmod, "beff_phot_pitheta"), sigma_18x110 )
+
+    #5x110
+    df = load_hepmc3_attrib(inp_5x110, ["beff_phot_theta"], 2, nmax)
+    df = df.Define("beff_phot_pitheta", "(TMath::Pi()-beff_phot_theta)*1e3")
+
+    g5x110 = ut.h1_to_arrays_norm( df.Histo1D(hmod, "beff_phot_pitheta"), sigma_18x110 )
+
+    os.system("rm tmp*")
+
+
+    #plt.style.use("dark_background")
+    #col = "lime"
+    col = "black"
+
+    fig = plt.figure()
+    fig.set_size_inches(5, 5)
+    ax = fig.add_subplot(1, 1, 1)
+
+    ax.set_xlabel(r"Photon polar angle $\pi-\theta_\gamma$ (mrad)")
+    ax.set_ylabel(r"Cross section $\frac{\mathrm{d}\sigma}{\mathrm{d}\theta_\gamma}$ (kbarn/mrad)")
+
+    set_axes_color(ax, col)
+    plt.grid(True, color = col, linewidth = 0.5, linestyle = "--")
+
+    plt.semilogy(g18x110[0], g18x110[1], "-", label="18x110", color="blue")
+    plt.semilogy(g10x110[0], g10x110[1], "--", label="10x110", color="red")
+    plt.semilogy(g5x110[0], g5x110[1], "-.", label="5x110", color="goldenrod")
+
+    leg = legend()
+    leg.add_entry(leg_txt(), "eAu, CDR Tab. 3.5")
+    leg.add_entry(leg_lin("blue", "-"), "18x110 GeV")
+    leg.add_entry(leg_lin("red", "--"), "10x110 GeV")
+    leg.add_entry(leg_lin("goldenrod", "-."), "5x110 GeV")
+    leg.draw(plt, col)
+
+    plt.savefig("01fig.pdf", bbox_inches = "tight")
+
+#pitheta_eAu
 
 #_____________________________________________________________________________
 def load_hepmc3_attrib(inp, attrib, icall=0, nmax=0):

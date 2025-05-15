@@ -10,14 +10,15 @@ import ROOT as rt
 from ROOT import gSystem, TFile, TIter, TMath
 from ROOT import TGeoManager, TGeoMaterial, TGeoMedium, gGeoManager
 from ROOT import TGeoRotation, TGeoTranslation, TGeoCombiTrans
-from ROOT import TEveManager, TEveGeoTopNode, gEve, TEveArrow, TEveText
+from ROOT import TEveManager, TEveGeoTopNode, gEve, TEveArrow, TEveText, TGLCamera
 
 #_____________________________________________________________________________
 def main():
 
     #response input
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/tag_resp.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/tag_resp_pass5.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag7cx2/tag_resp_pass5.root"
+    inp = "/home/jaroslav/sim/lmon2/examples/LookupProblemSolver/TaggerTracks/lps_tracks.root"
 
     #layer index
     ilay = 2
@@ -34,14 +35,16 @@ def main():
 
     #open the input
     infile = TFile.Open(inp)
-    tree = infile.Get("s1_links_"+str(ilay))
-    quant = infile.Get("s1_quantities_"+str(ilay))
+    #tree = infile.Get("s1_links_"+str(ilay))
+    #quant = infile.Get("s1_quantities_"+str(ilay))
+    tree = infile.Get("Tagger_1_links_"+str(ilay))
+    quant = infile.Get("Tagger_1_quantities_"+str(ilay))
 
     #maximal index number for visualization scale
     nmax_idx = c_uint64(1)
 
     #determine the maximal index from quantity histograms
-    qnext = TIter(quant)
+    qnext = TIter(quant) # .GetListOfPrimitives()
     obj = qnext()
     while obj != None:
         nmax_idx.value *= obj.GetNbinsX()+1
@@ -55,9 +58,12 @@ def main():
     theta = c_double(0)
     phi = c_double(0)
     tree.SetBranchAddress("idx", idx)
-    tree.SetBranchAddress("en", en)
-    tree.SetBranchAddress("theta", theta)
-    tree.SetBranchAddress("phi", phi)
+    #tree.SetBranchAddress("en", en)
+    #tree.SetBranchAddress("theta", theta)
+    #tree.SetBranchAddress("phi", phi)
+    tree.SetBranchAddress("sol_0", en)
+    tree.SetBranchAddress("sol_1", theta)
+    tree.SetBranchAddress("sol_2", phi)
 
     #top geometry
     geom = TGeoManager("geom", "geom")
@@ -227,7 +233,14 @@ def main():
     viewer.SetClearColor(rt.kBlack)
     #viewer.SetClearColor(rt.kWhite)
 
-    code.interact(local=locals())
+    viewer.CurrentCamera().Dolly(180, rt.kFALSE, rt.kFALSE)  # -40
+    viewer.CurrentCamera().RotateRad(-0.2, -0.7)
+    #TGLCamera.Truck(viewer.CurrentCamera(), 80, 20)
+    TGLCamera.Truck(viewer.CurrentCamera(), 10, -20)
+
+    viewer.SavePictureWidth("01fig.png", 2000)
+
+    #code.interact(local=locals())
 
 #main
 

@@ -2,10 +2,11 @@
 from ctypes import c_double
 
 import ROOT as rt
-from ROOT import TMath, TH1D, TCanvas, TLegend, TLine, TIter, TH1, TH2D, TH2, TF2, TGraph
+from ROOT import TMath, TH1D, TCanvas, TLegend, TLine, TIter, TH1, TH2D, TH2, TF2, TGraph, TGraph2D
 from ROOT import RooHist, TLatex, gROOT, TIter, TGraphErrors, TGaxis, TF1, TFrame, TH3D
 from ROOT.Fit import FitResult
 from ROOT import std, vector
+from ROOT import gStyle
 
 #_____________________________________________________________________________
 def prepare_TH1D(name, binsiz, xmin, xmax):
@@ -774,6 +775,29 @@ def invert_col(pad, bgcol=rt.kBlack):
             if obj.GetLineColor() == rt.kBlack:
                 obj.SetLineColor(fgcol)
                 obj.SetMarkerColor(fgcol)
+
+      #TGraph2D
+      if obj.InheritsFrom(TGraph2D.Class()) == True:
+            if obj.GetFillColor() == rt.kWhite:
+                obj.SetFillColor(bgcol)
+            gStyle.SetAxisColor(fgcol, "X")
+            gStyle.SetAxisColor(fgcol, "Y")
+            gStyle.SetAxisColor(fgcol, "Z")
+            gStyle.SetLabelColor(fgcol, "X")
+            gStyle.SetLabelColor(fgcol, "Y")
+            gStyle.SetLabelColor(fgcol, "Z")
+            ax = obj.GetXaxis()
+            ay = obj.GetYaxis()
+            ax.SetAxisColor(fgcol)
+            ay.SetAxisColor(fgcol)
+            ax.SetLabelColor(fgcol)
+            ay.SetLabelColor(fgcol)
+            ax.SetTitleColor(fgcol)
+            ay.SetTitleColor(fgcol)
+            if obj.GetLineColor() == rt.kBlack:
+                obj.SetLineColor(fgcol)
+                obj.SetMarkerColor(fgcol)
+
       #TGaxis
       if obj.InheritsFrom(TGaxis.Class()) == True:
             obj.SetLineColor(fgcol)

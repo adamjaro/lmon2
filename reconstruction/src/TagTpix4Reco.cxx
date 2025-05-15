@@ -273,6 +273,7 @@ void TagTpix4Reco::ElectronRec(vector<TagTracks::Track>& trk, unique_ptr<LookupP
       i.mcp_en = mcp.en;
       i.mcp_theta = mcp.theta;
       i.mcp_phi = mcp.phi;
+      i.mcp_Q2 = 2*fBeamEn*mcp.en*(1-TMath::Cos(TMath::Pi()-mcp.theta));
 
       break;
 

@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 1
+    iplot = 0
 
     func = {}
     func[0] = energy
@@ -36,10 +36,11 @@ def energy():
     emax = 19
 
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag11ax1/tracks_lps_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_lps_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_lps_v2.root"
+    inp = "/home/jaroslav/sim/lmon2/examples/LookupProblemSolver/TaggerTracks/rec_tracks.root"
 
-    #det = "s1_tracks"
-    det = "s2_tracks"
+    det = "s1_tracks"
+    #det = "s2_tracks"
 
     sel = det+"_is_rec==1"
 

@@ -50,6 +50,13 @@ def main():
 
     g2.Draw("surf2")
 
+    #export the solution graph
+    out = TFile("gauss_solve.root", "recreate")
+
+    g2.Write("g2")
+
+    out.Close()
+
     can.SaveAs("gauss2_py.pdf")
 
 #_____________________________________________________________________________

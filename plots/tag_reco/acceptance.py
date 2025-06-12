@@ -75,7 +75,12 @@ def energy_pitheta():
     #reconstruction efficiency in energy (GeV) and pi - theta (mrad)
 
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag11ax1/tracks_lps_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_lps_v1b.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_v3_mcp.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10bx1/tracks_v0.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10cx1/tracks_v0.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10cx2/tracks_v0.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10cx3/tracks_v0.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10cx4/tracks_v0.root"
 
     #tagger 1 or 2
     tag = 2
@@ -117,9 +122,14 @@ def energy_pitheta():
     #hAll = df.Filter("s1_ntrk>0").Histo2D(hx, "true_el_E", "pitheta")
     hTag = df.Filter(sel).Histo2D(hx, "true_el_E", "pitheta")
 
+    hAll = hAll.GetValue()
     hTag = hTag.GetValue()
 
-    hTag.Divide(hAll.GetValue())
+    print("all: ", hAll.GetEntries())
+    print("tag: ", hTag.GetEntries())
+    print("rto: ", hTag.GetEntries()/hAll.GetEntries())
+
+    hTag.Divide(hAll)
 
     xtit = "Electron energy #it{E} (GeV)"
     ytit = "Electron polar angle #it{#pi}-#it{#theta} (mrad)"
@@ -140,9 +150,11 @@ def energy_pitheta():
 
     hTag.Draw("colz")
 
-    leg = ut.prepare_leg(0.15, 0.9, 0.24, 0.06, 0.035) # x, y, dx, dy, tsiz
+    leg = ut.prepare_leg(0.1, 0.85, 0.24, 0.1, 0.035) # x, y, dx, dy, tsiz
     leg.AddEntry("", "#bf{"+lab_sel+"}", "")
-    #leg.Draw("same")
+    leg.AddEntry("", "Dist. from beam axis: 5 cm", "")
+    #leg.AddEntry("", "Dist. from beam axis: 4 cm", "")
+    leg.Draw("same")
 
     #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")

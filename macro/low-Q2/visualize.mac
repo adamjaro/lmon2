@@ -15,8 +15,8 @@
 #input
 /lmon/input/type gun
 #/gun/energy 17.846263 GeV
-/gun/energy 18 GeV
-#/gun/energy 12 GeV
+#/gun/energy 18 GeV
+/gun/energy 12 GeV
 #/gun/energy 10 MeV
 /gun/particle e-
 #/gun/particle gamma

@@ -1,0 +1,197 @@
+
+<main>
+
+  <!-- vacuum drift section from B2eR to Q3eR -->
+
+  <!-- coupling to beam magnets, end point of B2eR -->
+
+  <!-- center end point for B2eR, angle and inner and outer radii of B2eR -->
+  <const name="vac_zBC" value="B2eR_End_Z"/>
+  <const name="vac_xBC" value="B2eR_End_X"/>
+  <const name="vac_TB" value="B2eR_Theta"/>
+  <const name="vac_rBI" value="B2eR_InnerRadius"/>
+  <const name="vac_rBO" value="B2eR_OuterRadius"/>
+
+  <!-- coupling to Q3eR, center of start point in z-x and angle -->
+  <const name="vac_zQ" value="Q3eR_StartZ"/>
+  <const name="vac_xQ" value="Q3eR_StartX"/>
+  <const name="vac_TQ3" value="Q3eR_Theta"/>
+
+  <!-- lower point at B2eR outer radius -->
+  <const name="vac_zBO" value="vac_zBC+vac_rBO*sin(vac_TB)"/>
+  <const name="vac_xBO" value="vac_xBC-vac_rBO*cos(vac_TB)"/>
+
+  <!-- upper point at B2eR inner radius at larger z (closer to B2eR) -->
+  <const name="vac_zB1T" value="vac_zBC-vac_rBI*sin(vac_TB)"/>
+  <const name="vac_xB1T" value="vac_xBC+vac_rBI*cos(vac_TB)"/>
+
+  <!-- upper point at B2eR at lower z (further from B2eR) -->
+  <const name="vac_zB0T" value="vac_zBO-(vac_rBO+vac_rBI)*sin(vac_TQ3)"/>
+  <const name="vac_xB0T" value="vac_xBO+(vac_rBO+vac_rBI)*cos(vac_TQ3)"/>
+
+  <!-- vertical size for beamline elements (mm) -->
+  <const name="vac_DY" value="220"/>
+
+  <!-- drift element immediately after B2eR to adapt for Q3eR angle -->
+  <detector type="BeamDrift" name="vac_B2"
+    ysiz="vac_DY" delta="0"
+    z0TO="vac_zB0T" x0TO="vac_xB0T" z0BO="vac_zBO" x0BO="vac_xBO"
+    z0TI="vac_zB0T" x0TI="vac_xB0T" z0BI="vac_zBO" x0BI="vac_xBO"
+    z1TO="vac_zB1T" x1TO="vac_xB1T" z1BO="vac_zBO" x1BO="vac_xBO"
+    x1TI="vac_xB1T" z1BI="vac_zBO" x1BI="vac_xBO"
+    vis="0:0:0:3" vis_inout="0:0:1:2">
+  </detector>
+
+  <!-- size of ante chamber given from Q3eR axis, mm -->
+  <const name="vac_delt_Q3A" value="250"/>
+
+  <!-- length of Q3eR axis (from Q3 front to the element after B2 (vac_B2)) -->
+  <const name="vac_Q3AL" value="(vac_zBO-vac_zQ)*cos(vac_TQ3) -(vac_xQ-vac_xBO)*sin(vac_TQ3)"/>
+
+  <!-- bottom of drift section at Q3 -->
+  <const name="vac_zQB" value="vac_delt_Q3A*sin(vac_TQ3) + vac_zQ"/>
+  <const name="vac_xQB" value="vac_xQ - vac_delt_Q3A*cos(vac_TQ3)"/>
+
+  <!-- perpendicular size for drift section -->
+  <const name="vac_Q3PL"
+    value="TMath::Sqrt((vac_zB0T-vac_zQB)*(vac_zB0T-vac_zQB) + (vac_xB0T-vac_xQB)*(vac_xB0T-vac_xQB) - vac_Q3AL*vac_Q3AL)"/>
+
+  <!-- center of drift section -->
+  <const name="vac_zQ3D" value="0.5*(vac_zB0T+vac_zQB)"/>
+  <const name="vac_xQ3D" value="0.5*(vac_xB0T+vac_xQB)"/>
+
+  <!-- drift section from B2eR to Q3eR -->
+  <detector type="BoxSegment" name="vac_B2Q3"
+    dx="vac_Q3PL" dy="vac_DY" dz="vac_Q3AL"
+    zpos="vac_zQ3D" xpos="vac_xQ3D" theta="vac_TQ3"
+    vis="0:0:1:2">
+  </detector>
+
+  <!-- beam pipe from B2eR to Q3eR with ante-chamber opening -->
+
+  <!-- radius for beam pipe, mm -->
+  <const name="vac_beam_DR" value="40"/>
+  <const name="vac_beam_wall_DR" value="2"/>
+
+  <!-- ante-chamber full height in y, mm -->
+  <const name="vac_ante_DY" value="60"/>
+
+  <!-- opening in phi in beampipe for ante-chamber -->
+  <const name="vac_ante_Dphi" value="TMath::ASin(0.5*vac_ante_DY/vac_beam_DR)"/>
+
+  <!-- end point of B2eR inside vac_B2Q3 drift section -->
+  <const name="vac_zEB2" value="0.5*vac_Q3AL"/>
+  <const name="vac_xEB2" value="-0.5*vac_Q3PL+vac_delt_Q3A"/>
+
+  <!-- put the beam pipe from B2eR to Q3eR with ante-chamber opening -->
+  <detector type="CylSegment" name="vac_beam_B2Q3"
+    rmax="vac_beam_DR" rmin="vac_beam_DR-vac_beam_wall_DR"
+    dz="vac_Q3AL" xpos="vac_xEB2"
+    sphi="TMath::Pi()+vac_ante_Dphi" dphi="2*TMath::Pi()-2*vac_ante_Dphi"
+    place_into="vac_B2Q3" vis="0:0:1:1">
+  </detector>
+
+  <!-- section for tagger 1 -->
+
+  <!-- required start position in z for tagger 1, mm -->
+  <const name="vac_zS1pos" value="-20000"/>
+
+  <!-- longitudinal (along z) and perpendicular size for tagger 1 section, mm -->
+  <const name="vac_S1AL" value="1500"/>
+  <const name="vac_S1PL" value="150"/>
+
+  <!-- distance in z from end of B2eR for tagger 1 -->
+  <const name="vac_DZB2" value="0.5*vac_Q3AL - (vac_zS1pos-vac_zQ3D)/TMath::Cos(vac_TQ3)"/>
+
+  <!-- top start point for tagger 1 -->
+  <const name="vac_zS1ST" value="vac_zEB2-vac_DZB2"/>
+  <const name="vac_xS1ST" value="vac_xEB2-vac_beam_DR"/>
+
+  <!-- top end point for tagger 1 section -->
+  <const name="vac_zS1ET" value="vac_zS1ST-vac_S1AL"/>
+  <const name="vac_xS1ET" value="vac_xS1ST"/>
+
+  <!-- bottom start point for tagger 1 section -->
+  <const name="vac_zS1SB" value="vac_zS1ST"/>
+  <const name="vac_xS1SB" value="vac_xS1ST-vac_S1PL"/>
+
+  <!-- center point for tagger 1 section -->
+  <const name="vac_zS1C" value="0.5*(vac_zS1SB+vac_zS1ET)"/>
+  <const name="vac_xS1C" value="0.5*(vac_xS1SB+vac_xS1ET)"/>
+
+  <!-- put the section for tagger 1 -->
+  <detector type="BoxSegment" name="vac_S1"
+    dx="vac_S1PL" dy="vac_ante_DY" dz="vac_S1AL"
+    zpos="vac_zS1C" xpos="vac_xS1C" theta="0"
+    place_into="vac_B2Q3" vis="1:0:0:2">
+  </detector>
+
+  <!-- section for tagger 2 -->
+
+  <!-- required start position in z for tagger 2, mm -->
+  <const name="vac_zS2pos" value="-35500"/>
+
+  <!-- longitudinal (along z) and perpendicular size for tagger 2 section, mm -->
+  <const name="vac_S2AL" value="1500"/>
+  <const name="vac_S2PL" value="150"/>
+
+  <!-- distance in z from end of B2eR for tagger 2 -->
+  <const name="vac_DZB2_S2" value="0.5*vac_Q3AL + (vac_zQ3D-vac_zS2pos)/TMath::Cos(vac_TQ3)"/>
+
+  <!-- top start point for tagger 2 -->
+  <const name="vac_zS2ST" value="vac_zEB2-vac_DZB2_S2"/>
+  <const name="vac_xS2ST" value="vac_xEB2-vac_beam_DR"/>
+
+  <!-- top end point for tagger 2 section -->
+  <const name="vac_zS2ET" value="vac_zS2ST-vac_S2AL"/>
+  <const name="vac_xS2ET" value="vac_xS2ST"/>
+
+  <!-- bottom start point for tagger 2 section -->
+  <const name="vac_zS2SB" value="vac_zS2ST"/>
+  <const name="vac_xS2SB" value="vac_xS2ST-vac_S2PL"/>
+
+  <!-- center point for tagger 2 section -->
+  <const name="vac_zS2C" value="0.5*(vac_zS2SB+vac_zS2ET)"/>
+  <const name="vac_xS2C" value="0.5*(vac_xS2SB+vac_xS2ET)"/>
+
+  <!-- put the section for tagger 2 -->
+  <detector type="BoxSegment" name="vac_S2"
+    dx="vac_S2PL" dy="vac_ante_DY" dz="vac_S2AL"
+    zpos="vac_zS2C" xpos="vac_xS2C" theta="0"
+    place_into="vac_B2Q3" vis="1:0:0:2">
+  </detector>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</main>
+

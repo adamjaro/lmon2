@@ -1,0 +1,26 @@
+
+<main>
+
+  <!-- top volume, mm  G4_AIR  G4_Galactic -->
+  <detector
+    name="topv" type="top"
+    xsiz = "10000" ysiz="10000" zsiz="100000"
+    material="G4_Galactic">
+  </detector>
+
+  <!-- <include ref="fields_18GeV.xml"/> -->
+
+  <include ref="beam_magnets.xml"/>
+
+  <include ref="central_section.xml"/>
+
+  <include ref="vacuum_B2Q3.xml"/>
+
+  <include ref="tagger_det.xml"/>
+
+  <include ref="tagger_QCal1.xml"/>
+
+</main>
+
+
+

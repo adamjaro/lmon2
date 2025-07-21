@@ -1,0 +1,99 @@
+
+<main>
+
+  <const name="beam_gamma" value="34924.26476"/>
+
+  <!-- Q1eR quadrupole -->
+  <!-- mm -->
+  <const name="Q1eR_Start_Z" value="-5300."/>
+  <const name="Q1eR_End_Z" value="-7100."/>
+  <const name="Q1eR_InnerRadius" value="55.5"/>
+
+  <detector type="QDMagnet" name="Q1eR"
+    length="Q1eR_Start_Z-Q1eR_End_Z" dr="Q1eR_InnerRadius"
+    dx="200" dy="200" zpos="(Q1eR_Start_Z+Q1eR_End_Z)/2."
+    K1L="0.0004112751881953266" gamma="beam_gamma"
+    vessel_vis="0:0:1:2" inner_vis="1:1:0:2">
+  </detector>
+
+  <!-- Q2eR quadrupole -->
+  <!-- mm -->
+  <const name="Q2eR_Start_Z" value="-7600."/>
+  <const name="Q2eR_End_Z" value="-9000."/>
+  <const name="Q2eR_InnerRadius" value="64.5"/>
+
+  <detector type="QDMagnet" name="Q2eR"
+    length="Q2eR_Start_Z-Q2eR_End_Z" dr="Q2eR_InnerRadius"
+    dx="200" dy="200" zpos="(Q2eR_Start_Z+Q2eR_End_Z)/2."
+    K1L="-0.0003103311612003656" gamma="beam_gamma"
+    vessel_vis="0:0:1:2" inner_vis="1:1:0:2">
+  </detector>
+
+  <!-- B2eR dipole -->
+  <!-- mm, rad -->
+  <const name="B2eR_Start_Z" value="-9500."/>
+  <const name="B2eR_End_Z" value="-14999.773830630378"/>
+
+  <const name="B2eR_Start_X" value="0"/>
+  <const name="B2eR_End_X" value="-49.87797021981341"/>
+
+  <const name="B2eR_Theta" value="atan((B2eR_Start_X-B2eR_End_X)/(B2eR_Start_Z-B2eR_End_Z))"/>
+  <const name="B2eR_Length"
+    value="sqrt((B2eR_Start_X-B2eR_End_X)*(B2eR_Start_X-B2eR_End_X)+(B2eR_Start_Z-B2eR_End_Z)*(B2eR_Start_Z-B2eR_End_Z))"/>
+
+  <const name="B2eR_InnerRadius" value="98"/>
+  <const name="B2eR_OuterRadius" value="2.*B2eR_InnerRadius"/>
+
+  <detector type="QDMagnet" name="B2eR"
+    length="B2eR_Length" theta="B2eR_Theta" dr="B2eR_InnerRadius"
+    dx="B2eR_OuterRadius*2" dy="300"
+    xpos="(B2eR_Start_X+B2eR_End_X)/2." zpos="(B2eR_Start_Z+B2eR_End_Z)/2."
+    magnet_angle="0.018137692334592823" gamma="beam_gamma">
+  </detector>
+
+  <!-- Q3eR quadrupole -->
+  <!-- mm, rad -->
+  <const name="Q3eR_StartZ" value="-37696.0400567176"/>
+  <const name="Q3eR_EndZ" value="-38295.941366658234"/>
+
+  <const name="Q3eR_StartX" value="-461.58101195330387"/>
+  <const name="Q3eR_EndX" value="-472.46303067756573"/>
+
+  <const name="Q3eR_Theta" value="atan((Q3eR_StartX-Q3eR_EndX)/(Q3eR_StartZ-Q3eR_EndZ))"/>
+  <const name="Q3eR_Length"
+    value="sqrt((Q3eR_StartX-Q3eR_EndX)*(Q3eR_StartX-Q3eR_EndX)+(Q3eR_StartZ-Q3eR_EndZ)*(Q3eR_StartZ-Q3eR_EndZ))"/>
+
+  <const name="Q3eR_InnerRadius" value="50"/>
+
+  <detector type="QDMagnet" name="Q3eR"
+    length="Q3eR_Length" dr="Q3eR_InnerRadius"
+    dx="150" dy="150" theta="Q3eR_Theta"
+    zpos="(Q3eR_StartZ+Q3eR_EndZ)/2." xpos="(Q3eR_StartX+Q3eR_EndX)/2."
+    gamma="beam_gamma"
+    vessel_vis="0:0:1:2" inner_vis="1:1:0:2">
+  </detector>
+    <!-- K1L="-0.00006366222664238623" -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</main>
+
+

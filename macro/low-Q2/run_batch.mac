@@ -3,9 +3,9 @@
 #/lmon/construct/geometry geom.xml
 #/lmon/construct/geometry geom_beam.xml
 #/lmon/construct/geometry geom_tpix.xml
-#/lmon/construct/geometry geom_rev2.xml
+#/lmon/construct/geometry geom_rev2c.xml
 #/lmon/construct/geometry geom_rev3c.xml
-/lmon/construct/geometry geom_rev2c.xml
+/lmon/construct/geometry geom_rev2cx1.xml
 
 #input
 /lmon/input/type gun

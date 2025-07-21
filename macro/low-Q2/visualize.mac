@@ -8,15 +8,15 @@
 #/lmon/construct/geometry geom_beam.xml
 #/lmon/construct/geometry geom_tpix.xml
 #/lmon/construct/geometry geom_rev1b.xml
-#/lmon/construct/geometry geom_rev2.xml
+#/lmon/construct/geometry geom_rev2c.xml
 #/lmon/construct/geometry geom_rev3c.xml
-/lmon/construct/geometry geom_rev2c.xml
+/lmon/construct/geometry geom_rev2cx1.xml
 
 #input
 /lmon/input/type gun
-#/gun/energy 17.846263 GeV
+/gun/energy 17.846263 GeV
 #/gun/energy 18 GeV
-/gun/energy 12 GeV
+#/gun/energy 12 GeV
 #/gun/energy 10 MeV
 /gun/particle e-
 #/gun/particle gamma
@@ -57,10 +57,10 @@
 #/vis/viewer/set/viewpointThetaPhi 45 45 deg
 
 #/vis/viewer/set/targetPoint 0 0 -3000 mm
-#/vis/viewer/set/targetPoint 0 0 -15000 mm
+/vis/viewer/set/targetPoint 0 0 -15000 mm
 #/vis/viewer/set/targetPoint 0 0 -22250 mm # B2eR end
 
-/vis/viewer/set/targetPoint -180 0 -20000 mm  # Tagger 1
+#/vis/viewer/set/targetPoint -180 0 -20000 mm  # Tagger 1
 #/vis/viewer/set/targetPoint -307 0 -27248.2 mm  # Tagger 1
 #/vis/viewer/set/targetPoint -295.135 0 -27597.1 mm  # Tagger 1 middle
 #/vis/viewer/set/targetPoint -271.996 0 -26847.8 mm  # Tagger 1, plane 4

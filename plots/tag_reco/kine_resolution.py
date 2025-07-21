@@ -35,27 +35,29 @@ def energy():
     emin = 3
     emax = 19
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag8ax3/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag8ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag11ax1/tracks_lps_v1.root"
-    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_lps_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/tracks.root"
     #inp = "/home/jaroslav/sim/lmon2/examples/LookupProblemSolver/TaggerTracks/rec_tracks.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10dx1/tracks_lps_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/myskamir/FarBackward_ana1/tag10/tracks-bx1-quazireal-n3_500_100-NNcutNone.root"
 
-    det = "s1_tracks"
-    #det = "s2_tracks"
+    #det = "s1_tracks"
+    det = "s2_tracks"
 
     sel = det+"_is_rec==1"
 
     df = RDataFrame("event", inp)
     df = df.Define(det+"_rec_en_sel", det+"_rec_en["+sel+"]")
     #df = df.Define(det+"_mcp_en_sel", det+"_mcp_en["+sel+"]")
-    df = df.Define(det+"_true_en_sel", det+"_true_en["+sel+"]") # -> to be used with older productions with true_en already there
-    #df = df.Define(det+"_true_en", "std::vector<Double_t> v("+det+"_rec_en_sel.size(), true_el_E); return v;")
+    #df = df.Define(det+"_true_en_sel", det+"_true_en["+sel+"]") # -> to be used with older productions with true_en already there
+    df = df.Define(det+"_true_en", "std::vector<Double_t> v("+det+"_rec_en_sel.size(), true_el_E); return v;")
 
     can = ut.box_canvas()
     hxy = rt.RDF.TH2DModel( ut.prepare_TH2D("hx", ebin, emin, emax, ebin, emin, emax) )
     #hxy = df.Histo2D(hxy, det+"_mcp_en_sel", det+"_rec_en_sel").GetValue()
-    #hxy = df.Histo2D(hxy, det+"_true_en", det+"_rec_en_sel").GetValue()
-    hxy = df.Histo2D(hxy, det+"_true_en_sel", det+"_rec_en_sel").GetValue()
+    hxy = df.Histo2D(hxy, det+"_true_en", det+"_rec_en_sel").GetValue()
+    #hxy = df.Histo2D(hxy, det+"_true_en_sel", det+"_rec_en_sel").GetValue() # -> older productions
     hxy.Draw("colz")
 
     ytit = "Reconstructed energy #it{E_{e}} (GeV)"
@@ -72,7 +74,7 @@ def energy():
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #energy
@@ -85,12 +87,15 @@ def pitheta():
     xmin = 0
     xmax = 11
 
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag8ax3/trk_v2.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag8ax3/trk_v2.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag11ax1/tracks_lps_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_lps_v1b.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10dx1/tracks_lps_v1.root"
+    inp = "/home/jaroslav/sim/lmon2-data/myskamir/FarBackward_ana1/tag10/tracks-bx1-quazireal-n3_500_100-NNcutNone.root"
+    #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/tracks.root"
 
-    det = "s1_tracks"
-    #det = "s2_tracks"
+    #det = "s1_tracks"
+    det = "s2_tracks"
 
     sel = det+"_is_rec==1"
 
@@ -132,7 +137,7 @@ def pitheta():
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #pitheta

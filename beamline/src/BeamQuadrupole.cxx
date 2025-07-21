@@ -88,6 +88,7 @@ BeamQuadrupole::BeamQuadrupole(G4String nam, GeoParser *geo, G4LogicalVolume *to
 
   //quadrupole field inside the core
   G4double grad = geo->GetD(fNam, "grad") * tesla/meter; // field gradient, T/m
+  G4cout << "BeamQuadrupole, field for " << fNam << " " << grad << G4endl;
   G4QuadrupoleMagField *field = 0x0;
   G4double angle = 0; // field angle, rad
   if( geo->GetOptD(fNam, "angle", angle, GeoParser::Unit(rad)) ) {

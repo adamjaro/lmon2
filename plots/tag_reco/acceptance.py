@@ -79,7 +79,9 @@ def energy_pitheta():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10bx1/tracks_v0.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10dx1/tracks_v0.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10cx1/tracks_v0.root"
-    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10cx2/tracks_v0.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10cx2/tracks_v0.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex1/tracks_v0.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex3/tracks_v0.root"
 
     #tagger 1 or 2
     tag = 2
@@ -155,7 +157,7 @@ def energy_pitheta():
     #leg.AddEntry("", "Dist. from beam axis: 4 cm", "")
     #leg.Draw("same")
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #energy_pitheta

@@ -28,7 +28,7 @@
 #include "IOProgramOptions.h"
 #include "TrkHitsTransform.h"
 #include "TrkClusterFinder.h"
-#include "TagTrackFinder.h"
+#include "TagTrackFinderLoopGen.h"
 #include "LookupProblemSolver.h"
 #include "TagTpix4Reco.h"
 
@@ -168,11 +168,11 @@ void TagTpix4Reco::Run(const std::vector<std::string>& argvv) {
 
   //track finder
   cout << "max_chi2ndf: " << opt_map["max_chi2ndf"].as<double>() << endl;
-  TagTrackFinder s1("s1_tracks", cls);
+  TagTrackFinderLoopGen s1("s1_tracks", cls);
   s1.LoadV6p3_rev3(geo, "lowQ2_s1_1", "lowQ2_s1_2", "zpos");
   s1.SetMaxChi2Ndf( opt_map["max_chi2ndf"].as<double>() );
   s1.CreateOutput(&otree);
-  TagTrackFinder s2("s2_tracks", cls, 4); // starting offset for planes in tagger 2
+  TagTrackFinderLoopGen s2("s2_tracks", cls, 4); // starting offset for planes in tagger 2
   s2.LoadV6p3_rev3(geo, "lowQ2_s2_1", "lowQ2_s2_2", "zpos");
   s2.SetMaxChi2Ndf( opt_map["max_chi2ndf"].as<double>() );
   s2.CreateOutput(&otree);

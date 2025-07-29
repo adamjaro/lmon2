@@ -40,7 +40,10 @@ def energy():
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/tracks.root"
     #inp = "/home/jaroslav/sim/lmon2/examples/LookupProblemSolver/TaggerTracks/rec_tracks.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10dx1/tracks_lps_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/myskamir/FarBackward_ana1/tag10/tracks-bx1-quazireal-n3_500_100-NNcutNone.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/myskamir/FarBackward_ana1/tag10/tracks-bx1-quazireal-n3_500_100-NNcutNone.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex1/tracks_lps_10dx2_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex1/tracks_lps_v2.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex3/tracks_lps_v1.root"
 
     #det = "s1_tracks"
     det = "s2_tracks"
@@ -74,7 +77,7 @@ def energy():
 
     gPad.SetGrid()
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #energy
@@ -91,8 +94,11 @@ def pitheta():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag11ax1/tracks_lps_v1.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ax3/tracks_lps_v1b.root"
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10dx1/tracks_lps_v1.root"
-    inp = "/home/jaroslav/sim/lmon2-data/myskamir/FarBackward_ana1/tag10/tracks-bx1-quazireal-n3_500_100-NNcutNone.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/myskamir/FarBackward_ana1/tag10/tracks-bx1-quazireal-n3_500_100-NNcutNone.root"
     #inp = "/home/jaroslav/sim/lmon2/macro/low-Q2/tracks.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex1/tracks_lps_10dx2_v1.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex1/tracks_lps_v2.root"
+    inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex3/tracks_lps_v1.root"
 
     #det = "s1_tracks"
     det = "s2_tracks"
@@ -137,7 +143,7 @@ def pitheta():
 
     gPad.SetGrid()
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #pitheta

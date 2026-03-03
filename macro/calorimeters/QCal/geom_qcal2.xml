@@ -1,0 +1,18 @@
+
+<main>
+
+  <!-- top volume -->
+  <detector
+    name="topv" type="top"
+    xsiz = "500" ysiz="500" zsiz = "10000"> <!-- mm -->
+  </detector>
+
+  <!-- QCal2 example -->
+
+  <detector
+    type="QCal2" name="qcal"
+  >
+  </detector>
+
+</main>
+

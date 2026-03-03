@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # energy resolution and photon yields
 
@@ -18,7 +18,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 1
+    iplot = 0
 
     func = {}
     func[0] = yields
@@ -110,9 +110,9 @@ def resolution():
 
     print(res)
 
-    #plt.style.use("dark_background")
-    #col = "lime"
-    col = "black"
+    plt.style.use("dark_background")
+    col = "lime"
+    #col = "black"
 
     #fit the resolution
     pars, cov = curve_fit(resf2, energy, res)

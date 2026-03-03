@@ -2,7 +2,8 @@
 #detector
 #/lmon/construct/geometry geom_A456.xml
 #/lmon/construct/geometry geom_optics.xml
-/lmon/construct/geometry geom_etag.xml
+#/lmon/construct/geometry geom_etag.xml
+/lmon/construct/geometry geom_qcal2.xml
 
 #input
 /lmon/input/type gun

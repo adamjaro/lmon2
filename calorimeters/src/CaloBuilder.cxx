@@ -26,6 +26,7 @@
 #include "CalPWO.h"
 #include "QCal1.h"
 #include "FiberXYCal.h"
+#include "QCal2.h"
 
 //macros
 #define ADD_DETECTOR(det) (fDets.insert( make_pair(#det, &CaloBuilder::MakeDet<det>) ))
@@ -44,6 +45,7 @@ CaloBuilder::CaloBuilder(G4LogicalVolume *top, GeoParser *geo): BuilderBase(),
   ADD_DETECTOR( CalPWO );
   ADD_DETECTOR( QCal1 );
   ADD_DETECTOR( FiberXYCal );
+  ADD_DETECTOR( QCal2 );
 
 }//CaloBuilder
 

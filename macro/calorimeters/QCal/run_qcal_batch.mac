@@ -30,5 +30,5 @@
 #/process/optical/scintillation/verbose 2
 #/process/optical/verbose 2
 
-/run/beamOn 1
+#/run/beamOn 1
 

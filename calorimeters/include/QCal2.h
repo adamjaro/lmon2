@@ -21,6 +21,8 @@ class QCal2 : public Detector, public G4VSensitiveDetector {
 
   private:
 
+    G4LogicalVolume* MakeCell(GeoParser *geo);
+
     G4String fNam; // name of detector sensitive logical volume
 
 };

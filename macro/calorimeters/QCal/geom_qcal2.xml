@@ -1,17 +1,35 @@
 
 <main>
 
+  <!-- QCal2 example -->
+
+  <const name="qcal_mody" value="4"/> <!-- mm -->
+  <const name="qcal_cell_xy" value="2"/> <!-- mm -->
+
+  <const name="qcal_cell_phi" value="30"/> <!-- deg   45 -->
+
+  <const name="qcal_cell_phi_rad" value="qcal_cell_phi*TMath::DegToRad()"/>
+  <const name="qcal_cell_z" value="(qcal_mody-qcal_cell_xy*TMath::Sin(qcal_cell_phi_rad))/TMath::Cos(qcal_cell_phi_rad)"/>
+
+  <!-- <const name="test_cy" value="qcal_cell_xy*TMath::Sin(qcal_cell_phi_rad)+qcal_cell_z*TMath::Cos(qcal_cell_phi_rad)"/> -->
+
+  <const name="qcal_nz" value="3"/> <!-- number of cells along z -->
+
+  <!-- module length along z -->
+  <const name="qcal_modz" value="qcal_cell_xy*(TMath::Cos(qcal_cell_phi_rad)+(qcal_nz-1)/TMath::Cos(qcal_cell_phi_rad))+qcal_cell_z*TMath::Sin(qcal_cell_phi_rad)"/>
+
+  <detector
+    type="QCal2" name="qcal"
+    modx="qcal_cell_xy" mody="qcal_mody" modz="qcal_modz"
+    cell_phi="qcal_cell_phi" nz="qcal_nz"
+    cell_xy="qcal_cell_xy" cell_z="qcal_cell_z"
+  >
+  </detector>
+
   <!-- top volume -->
   <detector
     name="topv" type="top"
     xsiz = "500" ysiz="500" zsiz = "10000"> <!-- mm -->
-  </detector>
-
-  <!-- QCal2 example -->
-
-  <detector
-    type="QCal2" name="qcal"
-  >
   </detector>
 
 </main>

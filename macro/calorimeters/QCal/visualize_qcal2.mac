@@ -57,7 +57,7 @@
 
 # Draw coordinate axes:
 #/vis/scene/add/axes 185 10 12 10. mm
-#/vis/scene/add/axes 0 0 0 12.5 mm
+/vis/scene/add/axes 0 0 0 12.5 mm
 #/vis/scene/add/axes 0 0 0 1.732 mm
 #/vis/scene/add/axes -1 -2 2.26795 1.732 mm
 

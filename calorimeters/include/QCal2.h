@@ -15,6 +15,7 @@ class QCal2 : public Detector, public G4VSensitiveDetector {
 
     //called via Detector
     virtual const G4String& GetName() const {return fNam;}
+    virtual void Add(std::vector<Detector*> *vec);
 
     //called via G4VSensitiveDetector
     virtual G4bool ProcessHits(G4Step *step, G4TouchableHistory*) {return true;}
@@ -24,6 +25,8 @@ class QCal2 : public Detector, public G4VSensitiveDetector {
     G4LogicalVolume* MakeCell(GeoParser *geo);
 
     G4String fNam; // name of detector sensitive logical volume
+
+    Detector *fOpDet; // optical photon detector
 
 };
 

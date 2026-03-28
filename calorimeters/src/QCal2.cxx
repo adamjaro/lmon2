@@ -3,6 +3,22 @@
 //
 // Cherenkov fiber calorimeter with fibers at an angle to its axis
 //
+//
+// Geometry parameters:
+//
+// modx, mody, modz
+// xpos, ypos, zpos
+// cell_xy, cell_z
+// cell_phi
+// nz, nx
+// cell_mat_name
+// fiber_clad_D
+// fiber_core_D
+// fiber_dx
+// opdet_dz
+// place_into, place_into1, place_into2
+//
+// mod_vis, cell_vis, clad_vis, core_vis
 //_____________________________________________________________________________
 
 //C++
@@ -82,11 +98,11 @@ QCal2::QCal2(const G4String& nam, GeoParser *geo, G4LogicalVolume *top): Detecto
 
   }//z-loop
 
-
-
-
   //module center position
   G4double xpos=0, ypos=0, zpos=0;
+  geo->GetOptD(fNam, "xpos", xpos, GeoParser::Unit(mm));
+  geo->GetOptD(fNam, "ypos", ypos, GeoParser::Unit(mm));
+  geo->GetOptD(fNam, "zpos", zpos, GeoParser::Unit(mm));
 
   //module in its mother volume
   G4LogicalVolume *mother_vol = LogicVolFinder::GetMotherVolume("place_into", top, geo, fNam);
@@ -147,7 +163,7 @@ G4LogicalVolume* QCal2::MakeCell(GeoParser *geo) {
 
   //fiber cladding volume
   G4LogicalVolume *clad_vol = new G4LogicalVolume(clad_shape, pmma_mat, clad_shape->GetName());
-  ColorDecoder clad_vis("1:0:0:2");
+  ColorDecoder clad_vis("1:0:0:3");
   clad_vol->SetVisAttributes(clad_vis.MakeVis(geo, fNam, "clad_vis"));
 
   //fiber spacing in module
@@ -184,7 +200,7 @@ G4LogicalVolume* QCal2::MakeCell(GeoParser *geo) {
   geo->GetOptD(fNam, "opdet_dz", opdet_dz, GeoParser::Unit(mm));
 
   //volume for optical detector
-  ColorDecoder opdet_vis("1:1:0:2");
+  ColorDecoder opdet_vis("1:1:0:1");
   G4LogicalVolume *opdet_vol = opdet->CreateGeometry(fiber_core_D/2, opdet_dz, opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
 
   //optical detector in the cladding, at the end of the fiber
@@ -203,12 +219,11 @@ G4LogicalVolume* QCal2::MakeCell(GeoParser *geo) {
 
   //fiber core volume
   G4LogicalVolume *core_vol = new G4LogicalVolume(core_shape, siO2_mat, fNam);
-  ColorDecoder core_vis("0:1:1:1");
+  ColorDecoder core_vis("0:1:1:0.3");
   core_vol->SetVisAttributes(core_vis.MakeVis(geo, fNam, "core_vis"));
 
   //core in the cladding
   G4VPhysicalVolume *core_phys = new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*opdet_dz), core_vol, fNam, clad_vol, false, 0);
-
 
   return cell_vol;
 
@@ -224,8 +239,37 @@ void QCal2::Add(std::vector<Detector*> *vec) {
 
 }//Add
 
+//_____________________________________________________________________________
+G4bool QCal2::ProcessHits(G4Step *step, G4TouchableHistory*) {
 
+  //G4cout << "QCal2::ProcessHits" << G4endl;
 
+  //cell location in the module
+  const G4TouchableHandle& hnd = step->GetPreStepPoint()->GetTouchableHandle();
+
+  //G4cout << hnd->GetVolume()->GetName() << " " << hnd->GetVolume(1)->GetName();// << G4endl;
+  //G4cout << " " << hnd->GetVolume(2)->GetName() << " " << hnd->GetVolume(3)->GetName() << G4endl;
+
+  //core -> clad -> cell
+  hnd->MoveUpHistory(2); // #2 from fiber core (qcal) to the cell
+
+  //global cell position
+  G4ThreeVector origin(0, 0, 0);
+  G4ThreeVector gpos = hnd->GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
+
+  //make the hit for the cell
+  Int_t cell_id = hnd->GetCopyNumber(0); // cell volume after MoveUpHistory(2)
+  CalPWOHits::Hit& hit = fHits.ConstructedAt(cell_id, CalPWOHits::Hit(cell_id, gpos.x()/mm, gpos.y()/mm, gpos.z()/mm));
+
+  //deposited energy in step, GeV
+  G4double edep = step->GetTotalEnergyDeposit()/GeV;
+
+  //increment energy deposit in the hit
+  hit.en += edep;
+
+  return true;
+
+}//ProcessHits
 
 
 

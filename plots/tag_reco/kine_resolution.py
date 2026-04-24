@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # track resolution in kinematic quantities
 
@@ -13,7 +13,7 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    iplot = 1
+    iplot = 0
 
     func = {}
     func[0] = energy
@@ -45,8 +45,8 @@ def energy():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex1/tracks_lps_v2.root"
     inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex3/tracks_lps_v1.root"
 
-    #det = "s1_tracks"
-    det = "s2_tracks"
+    det = "s1_tracks"
+    #det = "s2_tracks"
 
     sel = det+"_is_rec==1"
 
@@ -100,8 +100,8 @@ def pitheta():
     #inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex1/tracks_lps_v2.root"
     inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex3/tracks_lps_v1.root"
 
-    #det = "s1_tracks"
-    det = "s2_tracks"
+    det = "s1_tracks"
+    #det = "s2_tracks"
 
     sel = det+"_is_rec==1"
 
@@ -109,6 +109,11 @@ def pitheta():
     #tree = infile.Get("event")
 
     df = RDataFrame("event", inp)
+
+    #print(df)
+
+    #return
+
     df = df.Define(det+"_rec_pitheta", "(TMath::Pi()-"+det+"_rec_theta["+sel+"])*1e3")
     df = df.Define(det+"_mcp_pitheta", "(TMath::Pi()-"+det+"_mcp_theta["+sel+"])*1e3")
     df = df.Define(det+"_true_pitheta", "std::vector<Double_t> v("+det+"_rec_pitheta.size(),\

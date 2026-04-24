@@ -84,7 +84,7 @@ def energy_pitheta():
     inp = "/home/jaroslav/sim/lmon2-data/taggers/tag10ex3/tracks_v0.root"
 
     #tagger 1 or 2
-    tag = 2
+    tag = 1
 
     #bins in energy, GeV
     xbin = 0.3

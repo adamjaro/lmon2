@@ -10,7 +10,8 @@
 #/lmon/construct/geometry geom_rev1b.xml
 #/lmon/construct/geometry geom_rev2c.xml
 #/lmon/construct/geometry geom_rev3c.xml
-/lmon/construct/geometry geom_rev2cx1.xml
+#/lmon/construct/geometry geom_rev2cx1.xml
+/lmon/construct/geometry /home/jaroslav/Knihy/Archiv/2024/lmon2-prod/taggers/tag10ex3/main_visualize.xml
 
 #input
 /lmon/input/type gun

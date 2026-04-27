@@ -8,7 +8,7 @@ class FiberYZ {
 
   public:
 
-    FiberYZ(Double_t L, Double_t yL, Double_t r);
+    FiberYZ(Double_t L, Double_t yL, Double_t r, Double_t rmin);
 
     Double_t f(Double_t z);
     Double_t fP(Double_t z);
@@ -38,14 +38,33 @@ class FiberYZ {
 
     void MakeNormVect(Double_t z, Double_t& a, Double_t& b);
 
+    void InvertZ();
+
+    void MakeFacets();
+
+    class facet {
+      public:
+
+      //triangular facet
+
+      std::array<Double_t, 3> p0;
+      std::array<Double_t, 3> p1;
+      std::array<Double_t, 3> p2;
+    };//facet
+
+    size_t GetNFacets() { return fFacets.size(); }
+    const facet& GetFacet(size_t i) { return fFacets[i]; }
+
   private:
 
     Double_t fL; // length along z, mm
     Double_t fyL; // elevation at z = L, mm
     Double_t fR; // fiber radius, mm
     Double_t fA, fB; // polynomial coeffitients
+    //Int_t fNphi; // segmentation in y-x plane
 
     std::vector<slice> fSlices;
+    std::vector<facet> fFacets;
 
 };
 

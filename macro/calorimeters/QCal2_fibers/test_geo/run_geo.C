@@ -12,13 +12,14 @@ void run_geo() {
   TGeoVolume *top = geo->MakeBox("top", med, 100, 100, 100);
   geo->SetTopVolume(top);
 
-  TGeoVolume *p = geo->MakeSphere("p", med, 0, 0.18);
+  //point
+  TGeoVolume *p = geo->MakeSphere("p", med, 0, 0.1); // 0.18
   p->SetLineColor(kGreen);
   p->SetTransparency(0);
 
-
-
-  FiberYZ fib(10, 8, 1.1);
+  //fiber
+  FiberYZ fib(10, 8, 1.1, 0.9);
+  //fib.InvertZ();
 
   //slice loop
   for(size_t i=0; i<fib.GetNSlice(); i++) {
@@ -30,10 +31,25 @@ void run_geo() {
 
       //cout <<slc.points.at(ip).at(2) << " " << slc.points.at(ip).at(1) << " " << slc.points.at(ip).at(0) << endl;
 
-      make_point(slc.points.at(ip).at(2), slc.points.at(ip).at(1), slc.points.at(ip).at(0)-1, p, top);
+      make_point(slc.points.at(ip).at(2), slc.points.at(ip).at(1), -1*slc.points.at(ip).at(0), p, top);
     }//point loop
   }//slice loop
 
+  //facet loop
+  vector<TEveArrow*> arrows;
+  for(size_t i=0; i<fib.GetNFacets(); i++) {
+
+    const FiberYZ::facet& fct = fib.GetFacet(i);
+
+    const array<Double_t, 3>& p0 = fct.p0;
+    const array<Double_t, 3>& p1 = fct.p1;
+    const array<Double_t, 3>& p2 = fct.p2;
+
+    arrows.push_back( new TEveArrow(p1[2]-p0[2], p1[1]-p0[1], -1*(p1[0]-p0[0]), p0[2], p0[1], -1*p0[0]) );
+    arrows.push_back( new TEveArrow(p2[2]-p1[2], p2[1]-p1[1], -1*(p2[0]-p1[0]), p1[2], p1[1], -1*p1[0]) );
+    arrows.push_back( new TEveArrow(p0[2]-p2[2], p0[1]-p2[1], -1*(p0[0]-p2[0]), p2[2], p2[1], -1*p2[0]) );
+
+  }//facet loop
 
   //end of geometry definition
   geo->CloseGeometry();
@@ -45,6 +61,17 @@ void run_geo() {
   node->SetVisLevel(4);
   node->GetNode()->GetVolume()->SetVisibility(kFALSE);
   gEve->AddGlobalElement(node);
+
+  //facets
+  for( TEveArrow *i: arrows ) {
+
+        i->SetMainColor(kRed);
+        i->SetTubeR(0.05);
+        i->SetConeR(0.05);
+        i->SetConeL(0);
+        gEve->AddGlobalElement(i);
+
+  }
 
   //z-axis
   make_axis(12, 0, 0, -1, 0, 0);

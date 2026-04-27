@@ -15,7 +15,10 @@ def main():
     gROOT.ProcessLine(".include ../../../../calorimeters/include")
     gROOT.ProcessLine(".L ../../../../calorimeters/src/FiberYZ.cxx")
 
-    fib = rt.FiberYZ(10, 8, 1.1)
+    fib = rt.FiberYZ(10, 8, 1.1, 0.9)
+
+    #print_facets(fib)
+    return
 
     can = ut.box_canvas()
 
@@ -61,8 +64,8 @@ def make_axis(fib):
 #_____________________________________________________________________________
 def make_slice_points(fib):
 
-    g = TGraph(fib.GetNSlice()*2)
-    #g = TGraph(fib.GetNSlice())
+    #g = TGraph(fib.GetNSlice()*2)
+    g = TGraph(fib.GetNSlice())
     ip = 0;
 
     for i in range(fib.GetNSlice()):
@@ -70,8 +73,8 @@ def make_slice_points(fib):
 
         g.SetPoint(ip, slc.points.at(0).at(2), slc.points.at(0).at(1))
         ip += 1
-        g.SetPoint(ip, slc.points.at(1).at(2), slc.points.at(1).at(1))
-        ip += 1
+        #g.SetPoint(ip, slc.points.at(1).at(2), slc.points.at(1).at(1))
+        #ip += 1
 
     g.SetLineColor(rt.kViolet)
     g.SetMarkerColor(rt.kViolet)
@@ -132,6 +135,19 @@ def make_tangent_all(fib):
 #make_tangent_all
 
 #_____________________________________________________________________________
+def print_facets(fib):
+
+    for i in range(fib.GetNFacets()):
+
+        fct = fib.GetFacet(i);
+        print("Facet", i)
+        print("p0:", fct.p0.at(0), fct.p0.at(1), fct.p0.at(2))
+        print("p1:", fct.p1.at(0), fct.p1.at(1), fct.p1.at(2))
+        print("p2:", fct.p2.at(0), fct.p2.at(1), fct.p2.at(2))
+
+#print_facets
+
+#_____________________________________________________________________________
 if __name__ == "__main__":
 
     gROOT.SetBatch()
@@ -139,6 +155,17 @@ if __name__ == "__main__":
     gStyle.SetFrameLineWidth(2)
 
     main()
+
+
+
+
+
+
+
+
+
+
+
 
 
 

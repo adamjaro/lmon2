@@ -207,7 +207,7 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   ColorDecoder fibYZ_vis("0:1:1:0.3");
   fiberYZ_vol->SetVisAttributes(fibYZ_vis.MakeVis(geo, fNam, "fibYZ_vis"));
 
-  //new G4PVPlacement(0, G4ThreeVector(0,0,0), fiberYZ_vol, fiberYZ_vol->GetName(), cell_vol, false, 0);
+  new G4PVPlacement(0, G4ThreeVector(0,0,0), fiberYZ_vol, fiberYZ_vol->GetName(), cell_vol, false, 0);
 
 
   //fiber core, FIXME to be sensitive volume
@@ -215,9 +215,9 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   G4LogicalVolume *core_vol = new G4LogicalVolume(core_shape, siO2_mat, core_shape->GetName());
   ColorDecoder core_vis("0:1:1:0.3");
   core_vol->SetVisAttributes(core_vis.MakeVis(geo, fNam, "core_vis"));
-  //new G4PVPlacement(0, G4ThreeVector(0,8,12), core_vol, core_vol->GetName(), cell_vol, false, 0);
   new G4PVPlacement(0, G4ThreeVector(0,8,12), core_vol, core_vol->GetName(), cell_vol, false, 0);
   //new G4PVPlacement(0, G4ThreeVector(0,8,8), core_vol, core_vol->GetName(), cell_vol, false, 1);
+  new G4PVPlacement(0, G4ThreeVector(0,0,-2), core_vol, core_vol->GetName(), cell_vol, false, 0);
 
   //optical detector to be attached to fiber cores
   OpSiDet *opdet = new OpSiDet(fNam+"_opdet");
@@ -225,8 +225,9 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
 
   ColorDecoder opdet_vis("1:1:0:1");
   G4LogicalVolume *opdet_vol = opdet->CreateGeometry(1.1, 4, opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
-  new G4PVPlacement(0, G4ThreeVector(0,8,7.8), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
-
+  //new G4PVPlacement(0, G4ThreeVector(0,8,7.8), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
+  //new G4PVPlacement(0, G4ThreeVector(0,0,-2), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
+  new G4PVPlacement(0, G4ThreeVector(0,0,-6), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
 
   return cell_vol;
 

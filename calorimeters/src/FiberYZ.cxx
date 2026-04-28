@@ -261,8 +261,8 @@ void FiberYZ::MakeFacets() {
     fFacets.push_back( facet() );
     facet& fct = fFacets.back();
     fct.p0 = {0,s1.y,s1.z};
-    fct.p1 = p1;
-    fct.p2 = p0;
+    fct.p1 = p0;
+    fct.p2 = p1;
   }//points loop
 
   //final facet, last slice
@@ -271,9 +271,8 @@ void FiberYZ::MakeFacets() {
   fFacets.push_back( facet() );
   facet& fct = fFacets.back();
   fct.p0 = {0,s1.y,s1.z};
-  fct.p1 = p1;
-  fct.p2 = p0;
-
+  fct.p1 = p0;
+  fct.p2 = p1;
 
 }//MakeFacets
 

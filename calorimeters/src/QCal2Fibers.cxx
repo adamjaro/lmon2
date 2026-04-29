@@ -170,13 +170,76 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   siO2_mat->SetMaterialPropertiesTable(siO2_tab);
 
 
-  //bent fiber
-  FiberYZ fib(10, 8, 1.1, 0.9);
+  G4double ypos = 4;
+
+
+  //bent fiber, cladding
+  G4LogicalVolume *fiberYZ_clad_vol = MakeFiberYZ(10, ypos, 1.4, "fiberYZ_clad", pmma_mat);
+  ColorDecoder fibYZ_clad_vis("0:1:1:2");
+  fiberYZ_clad_vol->SetVisAttributes(fibYZ_clad_vis.MakeVis(geo, fNam, "fibYZ_clad_vis"));
+
+  new G4PVPlacement(0, G4ThreeVector(0,0,0), fiberYZ_clad_vol, fiberYZ_clad_vol->GetName(), cell_vol, false, 0);
+
+  //bent fiber, core
+  G4LogicalVolume *fiberYZ_vol = MakeFiberYZ(10, ypos, 1.1, "fiberYZ", siO2_mat);
+  ColorDecoder fibYZ_vis("0:1:1:0.3");
+  fiberYZ_vol->SetVisAttributes(fibYZ_vis.MakeVis(geo, fNam, "fibYZ_vis"));
+  new G4PVPlacement(0, G4ThreeVector(0,0,0), fiberYZ_vol, fiberYZ_vol->GetName(), fiberYZ_clad_vol, false, 0);
+
+
+  //fiber cladding
+  G4Tubs *clad_shape = new G4Tubs(fNam+"_clad", 0, 1.4, 4/2, 0, 360*deg);
+
+  //fiber cladding volume
+  G4LogicalVolume *clad_vol = new G4LogicalVolume(clad_shape, pmma_mat, clad_shape->GetName());
+  ColorDecoder clad_vis("1:0:0:2");
+  clad_vol->SetVisAttributes(clad_vis.MakeVis(geo, fNam, "clad_vis"));
+
+  //upper fiber by cladding
+  new G4PVPlacement(0, G4ThreeVector(0,ypos,12), clad_vol, clad_vol->GetName(), cell_vol, false, 0);
+
+
+  //fiber core, FIXME to be sensitive volume
+  G4Tubs *core_shape = new G4Tubs(fNam+"_core", 0, 1.1, 4/2, 0, 360*deg);
+  G4LogicalVolume *core_vol = new G4LogicalVolume(core_shape, siO2_mat, core_shape->GetName());
+  ColorDecoder core_vis("0:1:1:0.3");
+  core_vol->SetVisAttributes(core_vis.MakeVis(geo, fNam, "core_vis"));
+
+  //fiber in cladding
+  new G4PVPlacement(0, G4ThreeVector(0,0.0), core_vol, core_vol->GetName(), clad_vol, false, 0);
+
+  //new G4PVPlacement(0, G4ThreeVector(0,8,12), core_vol, core_vol->GetName(), cell_vol, false, 0);
+  //new G4PVPlacement(0, G4ThreeVector(0,8,8), core_vol, core_vol->GetName(), cell_vol, false, 1);
+
+  //lower fiber
+  //new G4PVPlacement(0, G4ThreeVector(0,0,-2), core_vol, core_vol->GetName(), cell_vol, false, 0);
+
+  //optical detector to be attached to fiber cores
+  OpSiDet *opdet = new OpSiDet(fNam+"_opdet");
+  fOpDet = dynamic_cast<Detector*>( opdet );
+
+  ColorDecoder opdet_vis("1:1:0:1");
+  //G4LogicalVolume *opdet_vol = opdet->CreateGeometry(1.1, 4, opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
+  //new G4PVPlacement(0, G4ThreeVector(0,8,7.8), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
+  //new G4PVPlacement(0, G4ThreeVector(0,0,-2), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
+  //new G4PVPlacement(0, G4ThreeVector(0,0,-6), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
+
+  G4LogicalVolume *opdet_vol = opdet->CreateGeometry(4, 4, 1, opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
+  new G4PVPlacement(0, G4ThreeVector(0,0,-0.5), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
+
+  return cell_vol;
+
+}//MakeCell
+
+//_____________________________________________________________________________
+G4LogicalVolume* QCal2Fibers::MakeFiberYZ(Double_t L, Double_t yL, Double_t r, const G4String& nam, G4Material *mat) {
+
+  FiberYZ fib(L, yL, r, 0.1); // 0.9  0.1  0.05
   //fib.InvertZ();
 
-  G4cout << "fib: " << fib.GetNFacets() << G4endl;
+  //G4cout << "fib: " << fib.GetNFacets() << G4endl;
 
-  G4TessellatedSolid *fiberYZ_shape = new G4TessellatedSolid("fiberYZ");
+  G4TessellatedSolid *fiberYZ_shape = new G4TessellatedSolid(nam);
 
   //facet loop
   for(size_t i=0; i<fib.GetNFacets(); i++) {
@@ -189,10 +252,6 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
     const std::array<Double_t, 3>& p1 = fct.p1;
     const std::array<Double_t, 3>& p2 = fct.p2;
 
-    //const std::array<Double_t, 3>& p0 = fct.p1;
-    //const std::array<Double_t, 3>& p1 = fct.p2;
-    //const std::array<Double_t, 3>& p2 = fct.p0;
-
     G4TriangularFacet *gf = new
     G4TriangularFacet(G4ThreeVector(p0[0],p0[1],p0[2]), G4ThreeVector(p1[0],p1[1],p1[2]), G4ThreeVector(p2[0],p2[1],p2[2]), ABSOLUTE);
 
@@ -202,36 +261,11 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
 
   fiberYZ_shape->SetSolidClosed(true);
 
-  G4LogicalVolume *fiberYZ_vol = new G4LogicalVolume(fiberYZ_shape, siO2_mat, fiberYZ_shape->GetName());
+  G4LogicalVolume *fiberYZ_vol = new G4LogicalVolume(fiberYZ_shape, mat, fiberYZ_shape->GetName());
 
-  ColorDecoder fibYZ_vis("0:1:1:0.3");
-  fiberYZ_vol->SetVisAttributes(fibYZ_vis.MakeVis(geo, fNam, "fibYZ_vis"));
+  return fiberYZ_vol;
 
-  new G4PVPlacement(0, G4ThreeVector(0,0,0), fiberYZ_vol, fiberYZ_vol->GetName(), cell_vol, false, 0);
-
-
-  //fiber core, FIXME to be sensitive volume
-  G4Tubs *core_shape = new G4Tubs(fNam+"_core", 0, 1.1, 4/2, 0, 360*deg);
-  G4LogicalVolume *core_vol = new G4LogicalVolume(core_shape, siO2_mat, core_shape->GetName());
-  ColorDecoder core_vis("0:1:1:0.3");
-  core_vol->SetVisAttributes(core_vis.MakeVis(geo, fNam, "core_vis"));
-  new G4PVPlacement(0, G4ThreeVector(0,8,12), core_vol, core_vol->GetName(), cell_vol, false, 0);
-  //new G4PVPlacement(0, G4ThreeVector(0,8,8), core_vol, core_vol->GetName(), cell_vol, false, 1);
-  new G4PVPlacement(0, G4ThreeVector(0,0,-2), core_vol, core_vol->GetName(), cell_vol, false, 0);
-
-  //optical detector to be attached to fiber cores
-  OpSiDet *opdet = new OpSiDet(fNam+"_opdet");
-  fOpDet = dynamic_cast<Detector*>( opdet );
-
-  ColorDecoder opdet_vis("1:1:0:1");
-  G4LogicalVolume *opdet_vol = opdet->CreateGeometry(1.1, 4, opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
-  //new G4PVPlacement(0, G4ThreeVector(0,8,7.8), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
-  //new G4PVPlacement(0, G4ThreeVector(0,0,-2), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
-  new G4PVPlacement(0, G4ThreeVector(0,0,-6), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
-
-  return cell_vol;
-
-}//MakeCell
+}//MakeFiberYZ
 
 //_____________________________________________________________________________
 void QCal2Fibers::Add(std::vector<Detector*> *vec) {
@@ -249,6 +283,11 @@ G4bool QCal2Fibers::ProcessHits(G4Step *step, G4TouchableHistory*) {
   return true;
 
 }//ProcessHits
+
+
+
+
+
 
 
 

@@ -26,6 +26,7 @@ class QCal2Fibers : public Detector, public G4VSensitiveDetector {
   private:
 
     G4LogicalVolume* MakeCell(GeoParser *geo);
+    G4LogicalVolume* MakeFiberYZ(Double_t L, Double_t yL, Double_t r, const G4String& nam, G4Material *mat);
 
     G4String fNam; // name of detector sensitive logical volume
 

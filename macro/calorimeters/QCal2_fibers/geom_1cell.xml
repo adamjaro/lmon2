@@ -4,7 +4,7 @@
   <!-- QCal2Fibers example -->
 
   <const name="qcal_mody" value="30"/> <!-- mm -->
-  <const name="qcal_cell_xy" value="22"/> <!-- mm -->
+  <const name="qcal_cell_xy" value="15"/> <!-- mm -->
 
   <const name="qcal_cell_phi" value="0"/> <!-- deg   45 -->
 
@@ -30,6 +30,7 @@
     cell_xy="qcal_cell_xy" cell_z="qcal_cell_z"
     cell_mat_name="QCal2_Copper"
     fiber_clad_D="1.54" fiber_core_D="1.5" fiber_dx="4"
+    lguide_z="16"
     fibYZ_vis="0:1:1:0.3"
   >
   </detector>

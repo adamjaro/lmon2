@@ -160,6 +160,39 @@ void FiberYZ::InvertZ() {
 }//InvertZ
 
 //_____________________________________________________________________________
+void FiberYZ::RotateXY(Double_t theta) {
+
+  //rotate the shape in xy plane
+
+  Double_t cosT = TMath::Cos(theta);
+  Double_t sinT = TMath::Sin(theta);
+
+  //slice loop
+  for(slice& slc: fSlices) {
+
+    //center in z
+    Double_t x0 = slc.x;
+    Double_t y0 = slc.y;
+    slc.x = x0*cosT - y0*sinT;
+    slc.y = x0*sinT + y0*cosT;
+
+    //point loop
+    for(array<Double_t, 3>& p: slc.points) {
+
+      Double_t x0 = p[0];
+      Double_t y0 = p[1];
+
+      p[0] = x0*cosT - y0*sinT;
+      p[1] = x0*sinT + y0*cosT;
+    }//point loop
+  }//slice loop
+
+  //recalculate the facets
+  MakeFacets();
+
+}//RotateXY
+
+//_____________________________________________________________________________
 void FiberYZ::MakeFacets() {
 
   //construct triangular facets representing the shape
@@ -236,7 +269,7 @@ void FiberYZ::MakeFacets() {
 
     fFacets.push_back( facet() );
     facet& fct = fFacets.back();
-    fct.p0 = {0,s0.y,s0.z};
+    fct.p0 = {s0.x, s0.y, s0.z};
     fct.p1 = p1;
     fct.p2 = p0;
   }//points loop
@@ -246,7 +279,7 @@ void FiberYZ::MakeFacets() {
   const array<Double_t, 3>& p01 = s0.points[0];
   fFacets.push_back( facet() );
   facet& fct0 = fFacets.back();
-  fct0.p0 = {0,s0.y,s0.z};
+  fct0.p0 = {s0.x, s0.y, s0.z};
   fct0.p1 = p01;
   fct0.p2 = p00;
 
@@ -260,7 +293,7 @@ void FiberYZ::MakeFacets() {
 
     fFacets.push_back( facet() );
     facet& fct = fFacets.back();
-    fct.p0 = {0,s1.y,s1.z};
+    fct.p0 = {s1.x, s1.y, s1.z};
     fct.p1 = p0;
     fct.p2 = p1;
   }//points loop
@@ -270,7 +303,7 @@ void FiberYZ::MakeFacets() {
   const array<Double_t, 3>& p1 = s1.points[0];
   fFacets.push_back( facet() );
   facet& fct = fFacets.back();
-  fct.p0 = {0,s1.y,s1.z};
+  fct.p0 = {s1.x, s1.y, s1.z};
   fct.p1 = p0;
   fct.p2 = p1;
 
@@ -280,6 +313,7 @@ void FiberYZ::MakeFacets() {
 FiberYZ::slice::slice(Double_t zz, Int_t nphi, Double_t dphi, FiberYZ *fi): z(zz), fib(fi) {
 
   //slice center
+  x = 0;
   y = fib->f(z);
   r = fib->fR;
 

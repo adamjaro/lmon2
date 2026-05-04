@@ -20,6 +20,7 @@ class FiberYZ {
 
       Double_t z; // slice center in y-z
       Double_t y;
+      Double_t x;
       Double_t r; // radius
       Double_t a; // tangent unit vector
       Double_t b;
@@ -39,6 +40,7 @@ class FiberYZ {
     void MakeNormVect(Double_t z, Double_t& a, Double_t& b);
 
     void InvertZ();
+    void RotateXY(Double_t theta);
 
     void MakeFacets();
 

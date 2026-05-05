@@ -60,7 +60,7 @@ QCal2Fibers::QCal2Fibers(const G4String& nam, GeoParser *geo, G4LogicalVolume *t
   //G4double modz = geo->GetD(fNam, "modz")*mm; // full size in z, mm
   G4double modx = 35*mm; // full size in x, mm
   G4double mody = 35*mm; // full size in y, mm
-  G4double modz = 35*mm; // full size in z, mm
+  G4double modz = 40*mm; // full size in z, mm
 
   //calorimeter module
   G4Box *mod_shape = new G4Box(fNam+"_mod", modx/2., mody/2., modz/2.);
@@ -140,7 +140,7 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   G4double cell_xy = geo->GetD(fNam, "cell_xy")*mm;
   //G4double cell_z = geo->GetD(fNam, "cell_z")*mm;
   //G4double cell_xy = 32*mm;
-  G4double cell_z = 32*mm;
+  G4double cell_z = 37*mm;
 
   //cell main  volume
   //G4Box *cell_shape = new G4Box(fNam+"_cell", cell_xy/2., cell_xy/2., cell_z/2.); // FIXME fibers to be sensitive
@@ -204,16 +204,31 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   G4LogicalVolume *opdet_vol = opdet->CreateGeometry(6*mm, 6*mm, opdet_dz, opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
   new G4PVPlacement(0, G4ThreeVector(0,0,0.5*cell_z-0.5*opdet_dz), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
 
+  //straight section at the end of bent fibers
+  G4double fib_lguide_end_dz = 5*mm;
+  geo->GetOptD(fNam, "fib_lguide_end_dz", fib_lguide_end_dz, GeoParser::Unit(mm));
+
+  G4LogicalVolume *lguide_end_vol = MakeStraightFib(fiber_clad_D, fiber_core_D, fib_lguide_end_dz, pmma_mat, siO2_mat,
+    fNam+"_lguide_end_clad", fNam+"_lguide_end_core", geo);
+  new G4PVPlacement(0, G4ThreeVector(-2,0,0.5*cell_z-opdet_dz-0.5*fib_lguide_end_dz), lguide_end_vol,
+    lguide_end_vol->GetName(), cell_vol, false, 0); // negative x
+  new G4PVPlacement(0, G4ThreeVector(2,0,0.5*cell_z-opdet_dz-0.5*fib_lguide_end_dz), lguide_end_vol,
+    lguide_end_vol->GetName(), cell_vol, false, 1); // positive x
+
   //bent fiber at negative x
-  G4LogicalVolume *fibYZ_neg_x_clad = MakeFiberYZ(lguide_z, 4, fiber_clad_D/2, "fibYZ_neg_x_clad", pmma_mat, TMath::Pi()/2);
-  G4LogicalVolume *fibYZ_neg_x_core = MakeFiberYZ(lguide_z, 4, fiber_core_D/2, "fibYZ_neg_x_core", siO2_mat, TMath::Pi()/2);
+  G4LogicalVolume *fibYZ_neg_x_clad = MakeFiberYZ(lguide_z-fib_lguide_end_dz, 4, fiber_clad_D/2,
+    "fibYZ_neg_x_clad", pmma_mat, TMath::Pi()/2);
+  G4LogicalVolume *fibYZ_neg_x_core = MakeFiberYZ(lguide_z-fib_lguide_end_dz, 4, fiber_core_D/2,
+    "fibYZ_neg_x_core", siO2_mat, TMath::Pi()/2);
   new G4PVPlacement(0, G4ThreeVector(0,0,0), fibYZ_neg_x_core, fibYZ_neg_x_core->GetName(), fibYZ_neg_x_clad, false, 0);
 
   new G4PVPlacement(0, G4ThreeVector(-2,0,-0.5*cell_z+abso_z), fibYZ_neg_x_clad, fibYZ_neg_x_clad->GetName(), cell_vol, false, 0);
 
   //bent fiber at positive x
-  G4LogicalVolume *fibYZ_pos_x_clad = MakeFiberYZ(lguide_z, 4, fiber_clad_D/2, "fibYZ_pos_x_clad", pmma_mat, -TMath::Pi()/2);
-  G4LogicalVolume *fibYZ_pos_x_core = MakeFiberYZ(lguide_z, 4, fiber_core_D/2, "fibYZ_pos_x_core", siO2_mat, -TMath::Pi()/2);
+  G4LogicalVolume *fibYZ_pos_x_clad = MakeFiberYZ(lguide_z-fib_lguide_end_dz, 4, fiber_clad_D/2,
+    "fibYZ_pos_x_clad", pmma_mat, -TMath::Pi()/2);
+  G4LogicalVolume *fibYZ_pos_x_core = MakeFiberYZ(lguide_z-fib_lguide_end_dz, 4, fiber_core_D/2,
+    "fibYZ_pos_x_core", siO2_mat, -TMath::Pi()/2);
   new G4PVPlacement(0, G4ThreeVector(0,0,0), fibYZ_pos_x_core, fibYZ_pos_x_core->GetName(), fibYZ_pos_x_clad, false, 0);
 
   new G4PVPlacement(0, G4ThreeVector(2,0,-0.5*cell_z+abso_z), fibYZ_pos_x_clad, fibYZ_pos_x_clad->GetName(), cell_vol, false, 0);

@@ -1,6 +1,6 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-from ctypes import c_double
+from array import array
 
 import ROOT as rt
 from ROOT import gSystem, gInterpreter, gROOT, std
@@ -16,9 +16,9 @@ def main():
     event_tree = inp.Get("event")
 
     #attach the true kinematics (electron energy and theta and phi angles)
-    true_en = c_double(0)
-    true_theta = c_double(0)
-    true_phi = c_double(0)
+    true_en = array('d', [0.])
+    true_theta = array('d', [0.])
+    true_phi = array('d', [0.])
     event_tree.SetBranchAddress("true_el_E", true_en)
     event_tree.SetBranchAddress("true_el_theta", true_theta)
     event_tree.SetBranchAddress("true_el_phi", true_phi)
@@ -66,7 +66,7 @@ def main():
         quant = std.vector("double")([trk.x, trk.y, trk.theta_x, trk.theta_y])
 
         #set the known solution from true kinematics, length is 3
-        sol = std.vector("double")([true_en.value, true_theta.value, true_phi.value])
+        sol = std.vector("double")([true_en[0], true_theta[0], true_phi[0]])
 
         #add training input to LPS
         solver.AddInput(quant, sol)

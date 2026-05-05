@@ -1,5 +1,6 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
+from array import array
 from ctypes import c_double
 
 import ROOT as rt
@@ -16,9 +17,9 @@ def main():
     event_tree = inp.Get("event")
 
     #attach true kinematics to compare with solutions by LPS
-    true_en = c_double(0)
-    true_theta = c_double(0)
-    true_phi = c_double(0)
+    true_en = array('d', [0.])
+    true_theta = array('d', [0.])
+    true_phi = array('d', [0.])
     event_tree.SetBranchAddress("true_el_E", true_en)
     event_tree.SetBranchAddress("true_el_theta", true_theta)
     event_tree.SetBranchAddress("true_el_phi", true_phi)

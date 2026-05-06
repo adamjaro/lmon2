@@ -32,7 +32,7 @@
 
 //_____________________________________________________________________________
 OpSiDet::OpSiDet(const G4String& nam, GeoParser *geo, G4LogicalVolume *top): Detector(),
-   G4VSensitiveDetector(nam), fNam(nam) {
+   G4VSensitiveDetector(nam), fNam(nam), fUpHistory(-1) {
 
   G4cout << "OpSiDet: " << fNam << G4endl;
 
@@ -117,7 +117,13 @@ G4bool OpSiDet::ProcessHits(G4Step *step, G4TouchableHistory*) {
   //only absorbed photons
   if( track->GetTrackStatus() <= 0 ) return false;
 
-  //G4cout << "OpSiDet::ProcessHits" << G4endl;
+  G4cout << "OpSiDet::ProcessHits" << G4endl;
+
+  const G4TouchableHandle& hnd = step->GetPreStepPoint()->GetTouchableHandle();
+  if( fUpHistory >= 0 ) {
+    hnd->MoveUpHistory(fUpHistory);
+  }
+  G4cout << hnd->GetVolume()->GetName() << " " << hnd->GetVolume(1)->GetName() << G4endl;
 
   //point in current step
   G4StepPoint *point = step->GetPostStepPoint();
@@ -128,11 +134,24 @@ G4bool OpSiDet::ProcessHits(G4Step *step, G4TouchableHistory*) {
   //hit time, ns
   hit.time = point->GetGlobalTime()/ns;
 
+  //optical photon energy, eV
+  hit.phot_en = track->GetKineticEnergy()/eV;
+
   //hit position
   G4ThreeVector hpos = point->GetPosition();
   hit.pos_x = hpos.x()/mm;
   hit.pos_y = hpos.y()/mm;
   hit.pos_z = hpos.z()/mm;
+
+  //cell position
+  G4ThreeVector origin(0, 0, 0);
+  G4ThreeVector gpos = hnd->GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
+  hit.pmt_x = gpos.x()/mm;
+  hit.pmt_y = gpos.y()/mm;
+  hit.pmt_z = gpos.z()/mm;
+
+  //cell ID for the hit
+  hit.cell_id = hnd->GetCopyNumber(0);
 
   return true;
 

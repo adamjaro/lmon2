@@ -19,9 +19,10 @@ void run_geo() {
 
   //fiber
   FiberYZ fib(10, 8, 1.1, 0.9);
+  //FiberYZ fib(10, 0, 1.1, 0.3);
   fib.InvertZ();
-  fib.RotateXY(TMath::Pi()/4);
-  fib.RotateXY(TMath::Pi()/4);
+  //fib.RotateXY(TMath::Pi()/4);
+  //fib.RotateXY(TMath::Pi()/4);
   //fib.RotateXY(0);
 
   //slice loop
@@ -83,8 +84,8 @@ void run_geo() {
   make_axis(0, 12, 0, 0, -1, 0);
 
   //x-axis
-  //make_axis(0, 0, -4, 0, 0, 2);
-  make_axis(0, 0, -20, 0, 0, 10);
+  make_axis(0, 0, -4, 0, 0, 2);
+  //make_axis(0, 0, -20, 0, 0, 10);
 
   //finish and draw
   gEve->FullRedraw3D(kTRUE);

@@ -29,6 +29,7 @@ PhotoHitsV2::Coll::Coll() {
   DATA_ADD_UNIT_ATTR( pos_y )
   DATA_ADD_UNIT_ATTR( pos_z )
   DATA_ADD_UNIT_ATTR( time )
+  DATA_ADD_UNIT_ATTR( phot_en )
   DATA_ADD_UNIT_ATTR( pmt_x )
   DATA_ADD_UNIT_ATTR( pmt_y )
   DATA_ADD_UNIT_ATTR( pmt_z )

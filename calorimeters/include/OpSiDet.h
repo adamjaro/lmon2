@@ -27,6 +27,10 @@ class OpSiDet : public Detector, public G4VSensitiveDetector {
     virtual void ClearEvent();
     virtual void FinishEvent();
 
+    //G4TouchableHandle history
+    void SetUpHistory(G4int h) { fUpHistory = h; }
+    G4int GetUpHistory() { return fUpHistory; }
+
   private:
 
     G4LogicalVolume *MakeLogical(G4VSolid *shape, G4VisAttributes *vis);
@@ -36,6 +40,8 @@ class OpSiDet : public Detector, public G4VSensitiveDetector {
     G4String fNam; // name of sensitive logical volume
 
     PhotoHitsV2::Coll fHits; // hit collection
+
+    G4int fUpHistory; // for G4TouchableHandle history
 
 };
 

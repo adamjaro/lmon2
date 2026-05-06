@@ -18,13 +18,13 @@
 /gun/particle opticalphoton
 /gun/polarization 0 1 0
 /gun/energy 7.07 eV
-#/gun/position 0 7.8 9.5 mm
-#/gun/position 0 8.9 13.9 mm
+#/gun/position 0 0 -17.5 mm
+/gun/position -4 0 -17.5 mm
 #/gun/position 0 4.9 -3.9 mm
 #/gun/position -6 0 -15 mm # negative x for 32mm
 #/gun/position -6 0 -17.5 mm # for 37mm
 #/gun/position 6 0 -15 mm
-/gun/position 6 0 -17.5 mm
+#/gun/position 6 0 -17.5 mm
 #/gun/direction 0.000913 0.2 -0.99863
 #/gun/direction 0.000913 0.15 0.99863  #works for negative x
 /gun/direction -0.000913 -0.15 0.99863   # works for positive x

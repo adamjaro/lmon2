@@ -18,11 +18,12 @@
 // opdet_dz
 // place_into, place_into1, place_into2
 //
-// mod_vis, cell_vis, clad_vis, core_vis
+// mod_vis, cell_vis, clad_vis, core_vis, fibYZ_vis
 //_____________________________________________________________________________
 
 //C++
 #include <array>
+#include <vector>
 
 //ROOT
 #include "TTree.h"
@@ -143,8 +144,7 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   G4double cell_z = 37*mm;
 
   //cell main  volume
-  //G4Box *cell_shape = new G4Box(fNam+"_cell", cell_xy/2., cell_xy/2., cell_z/2.); // FIXME fibers to be sensitive
-  G4Box *cell_shape = new G4Box(fNam, cell_xy/2., cell_xy/2., cell_z/2.);
+  G4Box *cell_shape = new G4Box(fNam+"_cell", cell_xy/2., cell_xy/2., cell_z/2.);
   G4Material *cell_mat = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR");
   G4LogicalVolume *cell_vol = new G4LogicalVolume(cell_shape, cell_mat, cell_shape->GetName());
   //G4LogicalVolume *cell_vol = new G4LogicalVolume(cell_shape, pmma_mat, cell_shape->GetName());
@@ -153,14 +153,23 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   ColorDecoder cell_vis("1:0:0:2");
   cell_vol->SetVisAttributes(cell_vis.MakeVis(geo, fNam, "cell_vis"));
 
-  //length in z for individual sections
-  G4double opdet_dz = 1*mm; // thickness in z for optical detector
+  //optical detector at positive z end
+  OpSiDet *opdet = new OpSiDet(fNam+"_opdet");
+  opdet->SetUpHistory(1); // from opdet to cell in its hits
+  fOpDet = dynamic_cast<Detector*>( opdet );
+
+  //placement for the optical detector
+  G4double opdet_dz=1*mm, opdet_dxy=6*mm; // thickness in z and size in xy for optical detector
   geo->GetOptD(fNam, "opdet_dz", opdet_dz, GeoParser::Unit(mm));
+  geo->GetOptD(fNam, "opdet_dxy", opdet_dxy, GeoParser::Unit(mm));
+  ColorDecoder opdet_vis("1:1:0:1");
+  G4LogicalVolume *opdet_vol = opdet->CreateGeometry(opdet_dxy, opdet_dxy, opdet_dz, opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
+  new G4PVPlacement(0, G4ThreeVector(0,0,0.5*cell_z-0.5*opdet_dz), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
 
   //length for lightguide section
   G4double lguide_z = geo->GetD(fNam, "lguide_z")*mm;
 
-  //length for in z for absorber and Cherenkov fibers
+  //length in z for absorber and Cherenkov fibers
   G4double abso_z = cell_z - lguide_z - opdet_dz;
 
   //diameter for Cherenkov fiber cladding and core
@@ -183,20 +192,128 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   siO2_tab->AddProperty("RINDEX", "Fused Silica");
   siO2_mat->SetMaterialPropertiesTable(siO2_tab);
 
-  //Cherenkov radiator fiber in cladding, FIXME fiber core to be sensitive volume
+  //Cherenkov radiator fiber in cladding, same lenght as absorber, fiber core as sensitive volume
   G4LogicalVolume *clad_vol = MakeStraightFib(fiber_clad_D, fiber_core_D, abso_z, pmma_mat, siO2_mat,
-    fNam+"_clad", fNam+"_core", geo);
+    fNam+"_clad", fNam, geo);
+
+  //fiber spacing in cell
+  G4double fiber_dx = geo->GetD(fNam, "fiber_dx")*mm;
+
+  //number of fibers along x and y in the cell
+  G4int nfib = std::floor((cell_xy-fiber_dx)/fiber_dx)+1;
+
+  //offset for the first fiber (number of intervals between fibers is nfib-1)
+  G4double ofs = 0.5*(cell_xy - (nfib-1)*fiber_dx);
+
+  //spacing for bent lightguide fibers at optical detector
+  G4double odet_fib_dxy = opdet_dxy/nfib;
+
+  //fiber positions for lightguide
+  std::vector<std::array<G4double, 4>> fib_lguide_pos;
+
+  //fibers (by the cladding) in the cell
+  G4int fiber_cnt = 0; // fiber count in cell
+  for(G4int ix=0; ix<nfib; ix++) {
+    for(G4int iy=0; iy<nfib; iy++) {
+
+      //fiber position in x and y
+      G4double fib_x = -0.5*cell_xy + ofs + ix*fiber_dx;
+      G4double fib_y = -0.5*cell_xy + ofs + iy*fiber_dx;
+
+      //fiber (by the cladding) in the cell, starting from negative end in z
+      new G4PVPlacement(0, G4ThreeVector(fib_x, fib_y, -0.5*cell_z+0.5*abso_z), clad_vol, clad_vol->GetName(),
+        cell_vol, false, fiber_cnt++);
+
+      //corresponding lightguide fiber at SiPM
+      G4double odet_fib_x = -0.5*opdet_dxy + 0.5*odet_fib_dxy + ix*odet_fib_dxy;
+      G4double odet_fib_y = -0.5*opdet_dxy + 0.5*odet_fib_dxy + iy*odet_fib_dxy;
+
+      fib_lguide_pos.push_back({fib_x, fib_y, odet_fib_x, odet_fib_y}); // indices: 0, 1, 2, 3
+
+      //G4cout << fib_x << " " << fib_y << " " << odet_fib_x << " " << odet_fib_y << G4endl; 
+
+    }//iy
+  }//ix
+
+  //lightguide straight section at the end of bent fibers
+  G4double fib_lguide_end_dz = 5*mm;
+  geo->GetOptD(fNam, "fib_lguide_end_dz", fib_lguide_end_dz, GeoParser::Unit(mm));
+
+  //volume for straight end fibers
+  G4LogicalVolume *lguide_end_vol = MakeStraightFib(fiber_clad_D, fiber_core_D, fib_lguide_end_dz, pmma_mat, siO2_mat,
+    fNam+"_lguide_end_clad", fNam+"_lguide_end_core", geo);
+
+  //placement for straight end fibers
+  G4int fib_end_cnt=0;
+  for(std::array<G4double, 4>& pos: fib_lguide_pos) {
+
+    //x and y at the sensor at indices 2 and 3
+    new G4PVPlacement(0, G4ThreeVector(pos[2],pos[3],0.5*cell_z-opdet_dz-0.5*fib_lguide_end_dz), lguide_end_vol,
+      lguide_end_vol->GetName(), cell_vol, false, fib_end_cnt++);
+
+  }//lguide pos loop
+
+  //lightguide by bent fibers
+  fib_end_cnt = 0;
+  for(std::array<G4double, 4>& pos: fib_lguide_pos) {
+
+    //distance in x and y to connect by the fiber
+    G4double dx = pos[0]-pos[2]; // fib_x - odet_fib_x
+    G4double dy = pos[1]-pos[3]; // fib_y - odet_fib_y
+    G4double Lz = TMath::Sqrt(dx*dx+dy*dy);
+
+    //angle for the fiber
+    G4double theta = -0.5*TMath::Pi(); // bent fiber natively along y axis
+
+    //positive y
+    if(pos[1] > 0 and Lz > 1e-9) {
+
+      theta += TMath::ACos(dx/Lz);
+
+      //G4cout << dx << " " << dy << " " << Lz << " " << TMath::ACos(dx/Lz) << G4endl;
+    } else if(Lz > 1e-9) {
+
+      //negative y
+      theta += TMath::Pi()+TMath::ACos(-dx/Lz);
+
+      //if(pos[1] < 0 and Lz > 1e-9) {
+      //G4cout << dx << " " << dy << " " << Lz << " " << TMath::Pi()+TMath::ACos(-dx/Lz) << G4endl;
+    }
+
+    //construct the fiber
+    G4LogicalVolume *fibYZ_clad = MakeFiberYZ(lguide_z-fib_lguide_end_dz, Lz, fiber_clad_D/2,
+      "fibYZ_clad_"+std::to_string(fib_end_cnt), pmma_mat, theta);
+    G4LogicalVolume *fibYZ_core = MakeFiberYZ(lguide_z-fib_lguide_end_dz, Lz, fiber_core_D/2,
+      "fibYZ_core_"+std::to_string(fib_end_cnt), siO2_mat, theta);
+
+    //fiber visibility
+    ColorDecoder fibYZ_clad_vis("0:1:1:3");
+    fibYZ_clad->SetVisAttributes(fibYZ_clad_vis.MakeVis(geo, fNam, "fibYZ_clad_vis"));
+    ColorDecoder fibYZ_vis("0:1:1:0.3");
+    fibYZ_core->SetVisAttributes(fibYZ_vis.MakeVis(geo, fNam, "fibYZ_vis"));
+
+    //core in the cladding
+    new G4PVPlacement(0, G4ThreeVector(0,0,0), fibYZ_core, fibYZ_core->GetName(), fibYZ_clad, false, 0);
+
+    //bent fiber in the cell
+    new G4PVPlacement(0, G4ThreeVector(pos[2],pos[3],-0.5*cell_z+abso_z), fibYZ_clad, fibYZ_clad->GetName(), cell_vol, false, 0);
+
+    fib_end_cnt++;
+
+  }//lguide pos loop
+
+  //absorber block
 
 
+
+/*
   //fiber (by cladding) in the cell
   new G4PVPlacement(0, G4ThreeVector(-6,0,0.5*abso_z-0.5*cell_z), clad_vol, clad_vol->GetName(), cell_vol, false, 0);
   new G4PVPlacement(0, G4ThreeVector(6,0,0.5*abso_z-0.5*cell_z), clad_vol, clad_vol->GetName(), cell_vol, false, 1);
 
-
-
-
   //optical detector at positive z end
   OpSiDet *opdet = new OpSiDet(fNam+"_opdet");
+  opdet->SetUpHistory(1); // from opdet to cell
   fOpDet = dynamic_cast<Detector*>( opdet );
 
   //placement for the optical detector
@@ -240,71 +357,7 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   ColorDecoder fibYZ_vis("0:1:1:0.3");
   fibYZ_neg_x_core->SetVisAttributes(fibYZ_vis.MakeVis(geo, fNam, "fibYZ_vis"));
   fibYZ_pos_x_core->SetVisAttributes(fibYZ_vis.MakeVis(geo, fNam, "fibYZ_vis"));
-
-
-
-/*
-  G4double ypos = 4;
-
-
-  //bent fiber, cladding
-  G4LogicalVolume *fiberYZ_clad_vol = MakeFiberYZ(10, ypos, 1.4, "fiberYZ_clad", pmma_mat);
-  ColorDecoder fibYZ_clad_vis("0:1:1:2");
-  fiberYZ_clad_vol->SetVisAttributes(fibYZ_clad_vis.MakeVis(geo, fNam, "fibYZ_clad_vis"));
-
-  new G4PVPlacement(0, G4ThreeVector(0,0,0), fiberYZ_clad_vol, fiberYZ_clad_vol->GetName(), cell_vol, false, 0);
-
-  //bent fiber, core
-  G4LogicalVolume *fiberYZ_vol = MakeFiberYZ(10, ypos, 1.1, "fiberYZ", siO2_mat);
-  ColorDecoder fibYZ_vis("0:1:1:0.3");
-  fiberYZ_vol->SetVisAttributes(fibYZ_vis.MakeVis(geo, fNam, "fibYZ_vis"));
-  new G4PVPlacement(0, G4ThreeVector(0,0,0), fiberYZ_vol, fiberYZ_vol->GetName(), fiberYZ_clad_vol, false, 0);
-
-
-  //fiber cladding
-  G4Tubs *clad_shape = new G4Tubs(fNam+"_clad", 0, 1.4, 4/2, 0, 360*deg);
-
-  //fiber cladding volume
-  G4LogicalVolume *clad_vol = new G4LogicalVolume(clad_shape, pmma_mat, clad_shape->GetName());
-  ColorDecoder clad_vis("1:0:0:2");
-  clad_vol->SetVisAttributes(clad_vis.MakeVis(geo, fNam, "clad_vis"));
-
-  //upper fiber by cladding
-  //new G4PVPlacement(0, G4ThreeVector(0,ypos,-2), clad_vol, clad_vol->GetName(), cell_vol, false, 0);
-  new G4PVPlacement(0, G4ThreeVector(ypos,0,-2), clad_vol, clad_vol->GetName(), cell_vol, false, 0);
-
-
-  //fiber core, FIXME to be sensitive volume
-  G4Tubs *core_shape = new G4Tubs(fNam+"_core", 0, 1.1, 4/2, 0, 360*deg);
-  G4LogicalVolume *core_vol = new G4LogicalVolume(core_shape, siO2_mat, core_shape->GetName());
-  ColorDecoder core_vis("0:1:1:0.3");
-  core_vol->SetVisAttributes(core_vis.MakeVis(geo, fNam, "core_vis"));
-
-  //fiber in cladding
-  new G4PVPlacement(0, G4ThreeVector(0,0.0), core_vol, core_vol->GetName(), clad_vol, false, 0);
-
-
-
-  //new G4PVPlacement(0, G4ThreeVector(0,8,12), core_vol, core_vol->GetName(), cell_vol, false, 0);
-  //new G4PVPlacement(0, G4ThreeVector(0,8,8), core_vol, core_vol->GetName(), cell_vol, false, 1);
-
-  //lower fiber
-  //new G4PVPlacement(0, G4ThreeVector(0,0,-2), core_vol, core_vol->GetName(), cell_vol, false, 0);
-
-  //optical detector to be attached to fiber cores
-  OpSiDet *opdet = new OpSiDet(fNam+"_opdet");
-  fOpDet = dynamic_cast<Detector*>( opdet );
-
-  ColorDecoder opdet_vis("1:1:0:1");
-  //G4LogicalVolume *opdet_vol = opdet->CreateGeometry(1.1, 4, opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
-  //new G4PVPlacement(0, G4ThreeVector(0,8,7.8), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
-  //new G4PVPlacement(0, G4ThreeVector(0,0,-2), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
-  //new G4PVPlacement(0, G4ThreeVector(0,0,-6), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
-
-  G4LogicalVolume *opdet_vol = opdet->CreateGeometry(4, 4, 1, opdet_vis.MakeVis(geo, fNam, "opdet_vis"));
-  new G4PVPlacement(0, G4ThreeVector(0,0,10.5), opdet_vol, opdet_vol->GetName(), cell_vol, false, 0);
 */
-
 
   return cell_vol;
 
@@ -362,7 +415,7 @@ G4LogicalVolume* QCal2Fibers::MakeStraightFib(G4double cladD, G4double coreD, G4
   G4Tubs *clad_shape = new G4Tubs(clad_nam, 0, cladD/2., Lz/2., 0, 360*deg);
 
   G4LogicalVolume *clad_vol = new G4LogicalVolume(clad_shape, clad_mat, clad_shape->GetName());
-  ColorDecoder clad_vis("1:0:0:2");
+  ColorDecoder clad_vis("1:0:0:3");
   clad_vol->SetVisAttributes(clad_vis.MakeVis(geo, fNam, "clad_vis"));
 
   G4Tubs *core_shape = new G4Tubs(core_nam, 0, coreD/2., Lz/2., 0, 360*deg);

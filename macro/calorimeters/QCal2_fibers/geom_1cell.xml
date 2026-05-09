@@ -28,10 +28,12 @@
     zpos="0" cell_phi="qcal_cell_phi"
     nz="qcal_nz" nx="qcal_nx"
     cell_xy="qcal_cell_xy" cell_z="qcal_cell_z"
-    cell_mat_name="QCal2_Copper"
+    abso_mat_name="QCal2Fibers_Copper"
     fiber_clad_D="1.54" fiber_core_D="1.5"
     fiber_dx="4" lguide_z="21"
-    fibYZ_vis="0:1:1:0.4" core_vis="0:1:1:0.4"
+    fibYZ_vis="0:1:1:1" core_vis="0:1:1:1"
+    cell_vis="0:0:1:2" abso_vis="1:0:0:1"
+    fiber_abso_delt="0.3"
   >
   </detector>
 

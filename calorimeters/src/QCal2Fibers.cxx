@@ -33,6 +33,7 @@
 #include "G4NistManager.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
+#include "G4MultiUnion.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
@@ -197,13 +198,13 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
     fNam+"_clad", fNam, geo);
 
   //fiber spacing in cell
-  G4double fiber_dx = geo->GetD(fNam, "fiber_dx")*mm;
+  const G4double fiber_dx = geo->GetD(fNam, "fiber_dx")*mm;
 
   //number of fibers along x and y in the cell
-  G4int nfib = std::floor((cell_xy-fiber_dx)/fiber_dx)+1;
+  const G4int nfib = std::floor((cell_xy-fiber_dx)/fiber_dx)+1;
 
   //offset for the first fiber (number of intervals between fibers is nfib-1)
-  G4double ofs = 0.5*(cell_xy - (nfib-1)*fiber_dx);
+  const G4double ofs = 0.5*(cell_xy - (nfib-1)*fiber_dx);
 
   //spacing for bent lightguide fibers at optical detector
   G4double odet_fib_dxy = opdet_dxy/nfib;
@@ -302,7 +303,91 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
 
   }//lguide pos loop
 
+  //name for absorber material
+  G4String abso_mat_name = "G4_W";
+  geo->GetOptS(fNam, "abso_mat_name", abso_mat_name);
+
+  //local materials for the absorber
+  if( !G4Material::GetMaterial("QCal2Fibers_Copper", false) ) {
+    new G4Material("QCal2Fibers_Copper", 29., 63.55*g/mole, 8.960*g/cm3); //z, a, density
+  }
+
+  //select the absorber material, local or NIST
+  G4Material *abso_mat=0x0;
+  if( abso_mat_name.find("QCal2Fibers_") != std::string::npos ) {
+    abso_mat = G4Material::GetMaterial(abso_mat_name); // local material
+  } else {
+    abso_mat = G4NistManager::Instance()->FindOrBuildMaterial(abso_mat_name); // nist material
+  }
+
+  G4cout << "  " << fNam << ", absorber material: " << abso_mat->GetName() << G4endl;
+
+  //absorber opening for fibers
+  G4double fiber_abso_delt = 0.02*mm; // add space between fibers and absorber
+  geo->GetOptD(fNam, "fiber_abso_delt", fiber_abso_delt, GeoParser::Unit(mm));
+  G4double fiber_abso_xy = fiber_clad_D+fiber_abso_delt;
+
   //absorber block
+  G4MultiUnion *abso_shape = new G4MultiUnion(fNam+"_abso_shape");
+
+  //upper and lower (in y) absorber base plates
+  G4Box *abso_base_shape = new G4Box(fNam+"_abso_base_shape", cell_xy/2., (ofs-0.5*fiber_abso_xy)/2., abso_z/2.);
+  abso_shape->AddNode(abso_base_shape, G4Transform3D(G4RotationMatrix(),
+    G4ThreeVector(0, -0.5*cell_xy+abso_base_shape->GetYHalfLength(), 0))); // lower
+  abso_shape->AddNode(abso_base_shape, G4Transform3D(G4RotationMatrix(),
+    G4ThreeVector(0, 0.5*cell_xy-abso_base_shape->GetYHalfLength(), 0))); // upper
+
+  //plates between layers of fibers (in y)
+  G4Box *abso_layer_shape = new G4Box(fNam+"_abso_layer_shape", cell_xy/2., (fiber_dx-fiber_abso_xy)/2., abso_z/2.);
+  for(G4int iy=0; iy<nfib-1; iy++) {
+    G4double posY = -0.5*cell_xy + ofs + 0.5*fiber_dx + iy*fiber_dx; // position in y between the fibers
+    abso_shape->AddNode(abso_layer_shape, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, posY, 0)));
+  }//iy
+
+  //edge part in layer of fibers
+  G4Box *abso_edge_shape = new G4Box(fNam+"_abso_edge_shape", (ofs-0.5*fiber_abso_xy)/2., fiber_abso_xy/2., abso_z/2.);
+  for(G4int iy=0; iy<nfib; iy++) {
+    G4double posY = -0.5*cell_xy + ofs + iy*fiber_dx; // fiber position in y
+    G4double posX1 = 0.5*cell_xy - abso_edge_shape->GetXHalfLength(); // positive x
+    G4double posX2 = -0.5*cell_xy + abso_edge_shape->GetXHalfLength(); // negative x
+
+    abso_shape->AddNode(abso_edge_shape, G4Transform3D(G4RotationMatrix(), G4ThreeVector(posX1, posY, 0)));
+    abso_shape->AddNode(abso_edge_shape, G4Transform3D(G4RotationMatrix(), G4ThreeVector(posX2, posY, 0)));
+  }//iy
+
+  //close the absorber block
+  abso_shape->Voxelize();
+
+  //absorber volume
+  G4LogicalVolume *abso_vol = new G4LogicalVolume(abso_shape, abso_mat, abso_shape->GetName());
+  ColorDecoder abso_vis("1:0:0:2");
+  abso_vol->SetVisAttributes(abso_vis.MakeVis(geo, fNam, "abso_vis"));
+
+  //absorber in the cell
+  new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*cell_z+0.5*abso_z), abso_vol, abso_vol->GetName(), cell_vol, false, 0);
+
+  //absorber middle parts in layer of fibers (outside of G4MultiUnion because visualization would not work)
+  G4Box *abso_mid_shape = new G4Box(fNam+"_abso_mid_shape", (fiber_dx-fiber_abso_xy)/2., fiber_abso_xy/2., abso_z/2.);
+  G4LogicalVolume *abso_mid_vol = new G4LogicalVolume(abso_mid_shape, abso_mat, abso_mid_shape->GetName());
+  abso_mid_vol->SetVisAttributes(abso_vis.MakeVis(geo, fNam, "abso_vis"));
+
+  G4int abso_mid_shape_cnt = 0;
+  for(G4int iy=0; iy<nfib; iy++) {
+    G4double posY = -0.5*cell_xy + ofs + iy*fiber_dx; // fiber position in y
+
+    for(G4int ix=0; ix<nfib-1; ix++) {
+      G4double posX = -0.5*cell_xy + ofs + 0.5*fiber_dx + ix*fiber_dx; // position in x between the fibers
+
+      new G4PVPlacement(0, G4ThreeVector(posX,posY,-0.5*cell_z+0.5*abso_z),
+        abso_mid_vol, abso_mid_vol->GetName(), cell_vol, false, abso_mid_shape_cnt++);
+    }//ix
+  }//iy
+
+
+
+
+
+
 
 
 

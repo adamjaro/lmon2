@@ -25,7 +25,9 @@ def main():
     gROOT.ProcessLine("boost::program_options::store(parse_config_file(\"conf.ini\", opt), opt_map);")
 
     #optional non-uniform segmentation in quantities
-    solver.SetUseMedCellFinder()
+    #solver.SetUseFoamCellFinder()
+    #solver.SetUseMedCellFinder()
+    #solver.SetUseSumCellFinder()
 
     #initialize the LPS for training
     solver.Initialize(rt.opt_map)

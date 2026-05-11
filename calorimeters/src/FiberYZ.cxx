@@ -88,7 +88,7 @@ FiberYZ::FiberYZ(Double_t L, Double_t yL, Double_t r, Double_t rmin): fL(L), fyL
   Int_t nphi = TMath::Pi()/TMath::ASin( rmin/(2*r) );
   Double_t dphi = 2*TMath::Pi()/nphi;
 
-  cout << "nz: " << nz << " dz: " << dz << " nphi: " << nphi << endl;
+  //cout << "nz: " << nz << " dz: " << dz << " nphi: " << nphi << endl;
 
   //slice loop
   for(Int_t i=0; i<nz; i++) {

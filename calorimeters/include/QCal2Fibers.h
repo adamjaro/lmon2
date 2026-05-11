@@ -26,7 +26,7 @@ class QCal2Fibers : public Detector, public G4VSensitiveDetector {
   private:
 
     G4LogicalVolume* MakeCell(GeoParser *geo);
-    G4LogicalVolume* MakeFiberYZ(Double_t L, Double_t yL, Double_t r, const G4String& nam, G4Material *mat, Double_t theta);
+    G4LogicalVolume* MakeFiberYZ(Double_t L, Double_t yL, Double_t r, Double_t ds, const G4String& nam, G4Material *mat, Double_t theta);
     G4LogicalVolume* MakeStraightFib(G4double cladD, G4double coreD, G4double Lz,
       G4Material *clad_mat, G4Material *core_mat, const G4String& clad_nam, const G4String& core_nam, GeoParser *geo);
     //void MakeFiberLguide(std::vector<std::array<G4double, 4>>& pos);

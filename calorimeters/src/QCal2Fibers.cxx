@@ -11,14 +11,16 @@
 // cell_xy, cell_z
 // cell_phi
 // nz, nx
-// cell_mat_name
+// abso_mat_name
+// fiber_abso_delt
 // fiber_clad_D
 // fiber_core_D
 // fiber_dx
-// opdet_dz
+// opdet_dz, opdet_dxy
+// lguide_z, fib_lguide_end_dz, fib_lguide_dsmin
 // place_into, place_into1, place_into2
 //
-// mod_vis, cell_vis, clad_vis, core_vis, fibYZ_vis
+// mod_vis, cell_vis, abso_vis, clad_vis, core_vis, fibYZ_vis
 //_____________________________________________________________________________
 
 //C++
@@ -57,12 +59,12 @@ QCal2Fibers::QCal2Fibers(const G4String& nam, GeoParser *geo, G4LogicalVolume *t
   G4cout << "QCal2Fibers: " << fNam << G4endl;
 
   //module size
-  //G4double modx = geo->GetD(fNam, "modx")*mm; // full size in x, mm
-  //G4double mody = geo->GetD(fNam, "mody")*mm; // full size in y, mm
-  //G4double modz = geo->GetD(fNam, "modz")*mm; // full size in z, mm
-  G4double modx = 35*mm; // full size in x, mm
-  G4double mody = 35*mm; // full size in y, mm
-  G4double modz = 40*mm; // full size in z, mm
+  G4double modx = geo->GetD(fNam, "modx")*mm; // full size in x, mm
+  G4double mody = geo->GetD(fNam, "mody")*mm; // full size in y, mm
+  G4double modz = geo->GetD(fNam, "modz")*mm; // full size in z, mm
+  //G4double modx = 35*mm; // full size in x, mm
+  //G4double mody = 35*mm; // full size in y, mm
+  //G4double modz = 40*mm; // full size in z, mm
 
   //calorimeter module
   G4Box *mod_shape = new G4Box(fNam+"_mod", modx/2., mody/2., modz/2.);
@@ -76,14 +78,11 @@ QCal2Fibers::QCal2Fibers(const G4String& nam, GeoParser *geo, G4LogicalVolume *t
   //cell volume
   G4LogicalVolume *cell_vol = MakeCell(geo);
 
-  //FIXME single cell
   //G4RotationMatrix *cell_rot = new G4RotationMatrix(); // is HepRotation
   //cell_rot->rotateX((90+geo->GetD(fNam, "cell_phi"))*deg);
   //cell_rot->rotateX(10*deg);
   //new G4PVPlacement(cell_rot, G4ThreeVector(0, 0, 0), cell_vol, cell_vol->GetName(), mod_vol, false, 0);
-  new G4PVPlacement(0, G4ThreeVector(0, 0, 0), cell_vol, cell_vol->GetName(), mod_vol, false, 0);
-
-/*
+  //new G4PVPlacement(0, G4ThreeVector(0, 0, 0), cell_vol, cell_vol->GetName(), mod_vol, false, 0); // single cell
 
   //cells in module
   G4RotationMatrix *cell_rot = new G4RotationMatrix(); // is HepRotation
@@ -116,8 +115,6 @@ QCal2Fibers::QCal2Fibers(const G4String& nam, GeoParser *geo, G4LogicalVolume *t
 
   }//z-loop
 
-  */
-
   //module center position
   G4double xpos=0, ypos=0, zpos=0;
   geo->GetOptD(fNam, "xpos", xpos, GeoParser::Unit(mm));
@@ -140,9 +137,9 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
 
   //cell main volume size
   G4double cell_xy = geo->GetD(fNam, "cell_xy")*mm;
-  //G4double cell_z = geo->GetD(fNam, "cell_z")*mm;
+  G4double cell_z = geo->GetD(fNam, "cell_z")*mm;
   //G4double cell_xy = 32*mm;
-  G4double cell_z = 37*mm;
+  //G4double cell_z = 37*mm;
 
   //cell main  volume
   G4Box *cell_shape = new G4Box(fNam+"_cell", cell_xy/2., cell_xy/2., cell_z/2.);
@@ -239,6 +236,7 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   //lightguide straight section at the end of bent fibers
   G4double fib_lguide_end_dz = 5*mm;
   geo->GetOptD(fNam, "fib_lguide_end_dz", fib_lguide_end_dz, GeoParser::Unit(mm));
+  G4cout << "  " << fNam << ", fib_lguide_end_dz: " << fib_lguide_end_dz << G4endl;
 
   //volume for straight end fibers
   G4LogicalVolume *lguide_end_vol = MakeStraightFib(fiber_clad_D, fiber_core_D, fib_lguide_end_dz, pmma_mat, siO2_mat,
@@ -253,6 +251,11 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
       lguide_end_vol->GetName(), cell_vol, false, fib_end_cnt++);
 
   }//lguide pos loop
+
+  //minimal facet spacing for bent fibers
+  G4double fib_lguide_dsmin = 0.1*mm;
+  geo->GetOptD(fNam, "fib_lguide_dsmin", fib_lguide_dsmin, GeoParser::Unit(mm));
+  G4cout << "  " << fNam << ", fib_lguide_dsmin: " << fib_lguide_dsmin << G4endl;
 
   //lightguide by bent fibers
   fib_end_cnt = 0;
@@ -282,9 +285,9 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
     }
 
     //construct the fiber
-    G4LogicalVolume *fibYZ_clad = MakeFiberYZ(lguide_z-fib_lguide_end_dz, Lz, fiber_clad_D/2,
+    G4LogicalVolume *fibYZ_clad = MakeFiberYZ(lguide_z-fib_lguide_end_dz, Lz, fiber_clad_D/2, fib_lguide_dsmin,
       "fibYZ_clad_"+std::to_string(fib_end_cnt), pmma_mat, theta);
-    G4LogicalVolume *fibYZ_core = MakeFiberYZ(lguide_z-fib_lguide_end_dz, Lz, fiber_core_D/2,
+    G4LogicalVolume *fibYZ_core = MakeFiberYZ(lguide_z-fib_lguide_end_dz, Lz, fiber_core_D/2, fib_lguide_dsmin,
       "fibYZ_core_"+std::to_string(fib_end_cnt), siO2_mat, theta);
 
     //fiber visibility
@@ -325,6 +328,7 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   //absorber opening for fibers
   G4double fiber_abso_delt = 0.02*mm; // add space between fibers and absorber
   geo->GetOptD(fNam, "fiber_abso_delt", fiber_abso_delt, GeoParser::Unit(mm));
+  G4cout << "  " << fNam << ", fiber_abso_delt: " << fiber_abso_delt << G4endl;
   G4double fiber_abso_xy = fiber_clad_D+fiber_abso_delt;
 
   //absorber block
@@ -449,9 +453,10 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
 }//MakeCell
 
 //_____________________________________________________________________________
-G4LogicalVolume* QCal2Fibers::MakeFiberYZ(Double_t L, Double_t yL, Double_t r, const G4String& nam, G4Material *mat, Double_t theta) {
+G4LogicalVolume* QCal2Fibers::MakeFiberYZ(Double_t L, Double_t yL, Double_t r, Double_t ds,
+  const G4String& nam, G4Material *mat, Double_t theta) {
 
-  FiberYZ fib(L, yL, r, 0.1); // 0.9  0.1  0.05
+  FiberYZ fib(L, yL, r, ds); // 0.9  0.1  0.05
   fib.InvertZ();
   fib.RotateXY(theta);
 

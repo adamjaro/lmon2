@@ -3,18 +3,17 @@
 
   <!-- QCal2Fibers example -->
 
-  <const name="qcal_mody" value="60"/> <!-- mm 30 -->
-  <const name="qcal_cell_xy" value="15"/> <!-- mm  15  17 -->
+  <const name="qcal_mody" value="40"/> <!-- mm -->
+  <const name="qcal_cell_xy" value="14"/> <!-- mm  15  17 -->
 
   <const name="qcal_cell_phi" value="45"/> <!-- deg   45 -->
 
   <const name="qcal_cell_phi_rad" value="qcal_cell_phi*TMath::DegToRad()"/>
   <const name="qcal_cell_z" value="(qcal_mody-qcal_cell_xy*TMath::Sin(qcal_cell_phi_rad))/TMath::Cos(qcal_cell_phi_rad)"/>
 
-  <!-- <const name="test_cy" value="qcal_cell_xy*TMath::Sin(qcal_cell_phi_rad)+qcal_cell_z*TMath::Cos(qcal_cell_phi_rad)"/> -->
 
-  <const name="qcal_nz" value="1"/> <!-- number of cells along z -->
-  <const name="qcal_nx" value="1"/> <!-- number of cells along x -->
+  <const name="qcal_nz" value="3"/> <!-- number of cells along z -->
+  <const name="qcal_nx" value="2"/> <!-- number of cells along x -->
 
   <!-- module length along z -->
   <const name="qcal_modz" value="qcal_cell_xy*(TMath::Cos(qcal_cell_phi_rad)+(qcal_nz-1)/TMath::Cos(qcal_cell_phi_rad))+qcal_cell_z*TMath::Sin(qcal_cell_phi_rad)"/>
@@ -30,14 +29,14 @@
     cell_xy="qcal_cell_xy" cell_z="qcal_cell_z"
     abso_mat_name="QCal2Fibers_Copper"
     fiber_clad_D="1.54" fiber_core_D="1.5"
-    fiber_dx="4" lguide_z="21"
+    fiber_dx="4" lguide_z="14" fib_lguide_end_dz="2"
     fibYZ_vis="0:1:1:1" core_vis="0:1:1:1"
-    cell_vis="1:0:0:2" abso_vis="1:0:0:1"
+    cell_vis="1:0:0:2" abso_vis="1:0:0:0.4"
     fiber_abso_delt="0.3"
   >
   </detector>
 
-  <!--     fiber_clad_D="1.54" fiber_core_D="1.5" -->
+  <!--     fib_lguide_dsmin="0.9"   -->
   <!-- fiber_clad_D="1.5" fiber_core_D="1.46" -->
 
   <!-- zpos="-0.5*qcal_modz" -->

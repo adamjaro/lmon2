@@ -117,13 +117,13 @@ G4bool OpSiDet::ProcessHits(G4Step *step, G4TouchableHistory*) {
   //only absorbed photons
   if( track->GetTrackStatus() <= 0 ) return false;
 
-  G4cout << "OpSiDet::ProcessHits" << G4endl;
+  //G4cout << "OpSiDet::ProcessHits" << G4endl;
 
   const G4TouchableHandle& hnd = step->GetPreStepPoint()->GetTouchableHandle();
   if( fUpHistory >= 0 ) {
     hnd->MoveUpHistory(fUpHistory);
   }
-  G4cout << hnd->GetVolume()->GetName() << " " << hnd->GetVolume(1)->GetName() << G4endl;
+  //G4cout << hnd->GetVolume()->GetName() << " " << hnd->GetVolume(1)->GetName() << G4endl;
 
   //point in current step
   G4StepPoint *point = step->GetPostStepPoint();

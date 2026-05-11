@@ -1,20 +1,21 @@
 
 <main>
 
-  <!-- QCal2Fibers example -->
+  <!-- QCal2Fibers full production geometry -->
 
-  <const name="qcal_mody" value="60"/> <!-- mm 30 -->
+  <const name="qcal_mody" value="195"/> <!-- mm, 25 mm added for lguide -->
   <const name="qcal_cell_xy" value="15"/> <!-- mm  15  17 -->
 
   <const name="qcal_cell_phi" value="45"/> <!-- deg   45 -->
 
+  <const name="qcal_ypos" value="12"/> <!-- mm, correction for lightguide -->
+
   <const name="qcal_cell_phi_rad" value="qcal_cell_phi*TMath::DegToRad()"/>
   <const name="qcal_cell_z" value="(qcal_mody-qcal_cell_xy*TMath::Sin(qcal_cell_phi_rad))/TMath::Cos(qcal_cell_phi_rad)"/>
 
-  <!-- <const name="test_cy" value="qcal_cell_xy*TMath::Sin(qcal_cell_phi_rad)+qcal_cell_z*TMath::Cos(qcal_cell_phi_rad)"/> -->
 
-  <const name="qcal_nz" value="1"/> <!-- number of cells along z -->
-  <const name="qcal_nx" value="1"/> <!-- number of cells along x -->
+  <const name="qcal_nz" value="16"/> <!-- number of cells along z -->
+  <const name="qcal_nx" value="11"/> <!-- number of cells along x -->
 
   <!-- module length along z -->
   <const name="qcal_modz" value="qcal_cell_xy*(TMath::Cos(qcal_cell_phi_rad)+(qcal_nz-1)/TMath::Cos(qcal_cell_phi_rad))+qcal_cell_z*TMath::Sin(qcal_cell_phi_rad)"/>
@@ -25,22 +26,19 @@
   <detector
     type="QCal2Fibers" name="qcal"
     modx="qcal_modx" mody="qcal_mody" modz="qcal_modz" mod_vis="0:0:1:2"
-    zpos="0" cell_phi="qcal_cell_phi"
+    zpos="-0.5*qcal_modz" ypos="qcal_ypos" cell_phi="qcal_cell_phi"
     nz="qcal_nz" nx="qcal_nx"
     cell_xy="qcal_cell_xy" cell_z="qcal_cell_z"
     abso_mat_name="QCal2Fibers_Copper"
     fiber_clad_D="1.54" fiber_core_D="1.5"
-    fiber_dx="4" lguide_z="21"
+    fiber_dx="4" lguide_z="35"
     fibYZ_vis="0:1:1:1" core_vis="0:1:1:1"
     cell_vis="1:0:0:2" abso_vis="1:0:0:1"
-    fiber_abso_delt="0.3"
+    fib_lguide_dsmin="0.1"
   >
   </detector>
 
-  <!--     fiber_clad_D="1.54" fiber_core_D="1.5" -->
   <!-- fiber_clad_D="1.5" fiber_core_D="1.46" -->
-
-  <!-- zpos="-0.5*qcal_modz" -->
 
   <!-- top volume -->
   <detector

@@ -31,15 +31,15 @@
     fiber_clad_D="1.54" fiber_core_D="1.5"
     fiber_dx="4" lguide_z="14" fib_lguide_end_dz="2"
     fibYZ_vis="0:1:1:1" core_vis="0:1:1:1"
-    cell_vis="1:0:0:2" abso_vis="1:0:0:0.4"
-    fiber_abso_delt="0.3"
+    cell_vis="1:0:0:2" abso_vis="1:0:0:1"
+    fiber_abso_delt="0.1" fib_lguide_dsmin="0.1"
   >
   </detector>
 
   <!--     fib_lguide_dsmin="0.9"   -->
   <!-- fiber_clad_D="1.5" fiber_core_D="1.46" -->
 
-  <!-- zpos="-0.5*qcal_modz" -->
+  <!-- zpos="-0.5*qcal_modz"  abso_vis="1:0:0:0.5 -->
 
   <!-- top volume -->
   <detector

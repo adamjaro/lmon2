@@ -1,8 +1,7 @@
 
 #detector
-#/lmon/construct/geometry geom_1cell.xml
-#/lmon/construct/geometry geom_4cells.xml
-/lmon/construct/geometry geom_full.xml
+/lmon/construct/geometry geom_4cells.xml
+#/lmon/construct/geometry geom_fib_1mm_sens_6mm.xml
 
 #input
 /lmon/input/type gun
@@ -33,5 +32,5 @@
 #/process/optical/scintillation/verbose 2
 #/process/optical/verbose 2
 
-/run/beamOn 1
+#/run/beamOn 1
 

@@ -4,7 +4,8 @@
 /run/verbose 2
 
 #detectors and components
-/lmon/construct/geometry geom_4cells.xml
+#/lmon/construct/geometry geom_4cells.xml
+/lmon/construct/geometry geom_fib_1mm_sens_6mm.xml
 
 #input
 /lmon/input/type gun
@@ -47,20 +48,19 @@
 /vis/viewer/set/autoRefresh false
 /vis/verbose errors
 #/vis/viewer/set/background 1 1 1 0.
-#/vis/viewer/set/lightsThetaPhi -120 -45 deg
+#/vis/viewer/set/lightsThetaPhi 120. 135. deg
 /vis/viewer/set/lightsThetaPhi -45 -45 deg
 #
 # Draw geometry:
 /vis/drawVolume
 #
-# View angle, theta rotates about y
-#/vis/viewer/set/viewpointThetaPhi 90 180 deg
-#/vis/viewer/set/viewpointThetaPhi -120 -45 deg
-/vis/viewer/set/viewpointThetaPhi -45 -45 deg
+# Specify view angle:
+#/vis/viewer/set/viewpointThetaPhi 90. 180.
+/vis/viewer/set/viewpointThetaPhi -45 -45
 #/vis/viewer/set/viewpointThetaPhi 45 45 deg
 
 #/vis/viewer/set/targetPoint 0 8 10 mm
-#/vis/viewer/set/targetPoint 0 4 10 mm
+/vis/viewer/set/targetPoint 0 0 0 mm
 
 # Specify zoom value:
 #/vis/viewer/zoom 2.
@@ -68,7 +68,7 @@
 # Draw coordinate axes:
 #/vis/scene/add/axes 185 10 12 10. mm
 #/vis/scene/add/axes 0 8 10 10 mm
-#/vis/scene/add/axes 0 0 0 20 mm
+/vis/scene/add/axes 0 0 0 100 mm
 #/vis/scene/add/axes -1 -2 2.26795 1.732 mm
 
 # Draw smooth trajectories at end of event, showing trajectory points

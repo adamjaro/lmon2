@@ -43,7 +43,8 @@ def yields(draw=True):
     #photon counts
     xmin = 0
     #xmax = 240
-    xmax = 700
+    #xmax = 700
+    xmax = 450
     #xbin = 2
     xbin = 5
 
@@ -91,7 +92,7 @@ def yields(draw=True):
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #yields
@@ -136,7 +137,7 @@ def resolution():
 
     plt.rc("text", usetex = True)
     plt.rc('text.latex', preamble=r'\usepackage{amsmath}')
-    ax.set_xlabel("Incident energy $E$ (GeV)")
+    ax.set_xlabel("Generated gamma energy $E_\gamma$ (GeV)")
     ax.set_ylabel(r"Resolution $\sigma_N/\langle N\rangle$")
 
     #fit parameters for legend

@@ -145,7 +145,16 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   G4Box *cell_shape = new G4Box(fNam+"_cell", cell_xy/2., cell_xy/2., cell_z/2.);
   G4Material *cell_mat = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR");
   G4LogicalVolume *cell_vol = new G4LogicalVolume(cell_shape, cell_mat, cell_shape->GetName());
-  //G4LogicalVolume *cell_vol = new G4LogicalVolume(cell_shape, pmma_mat, cell_shape->GetName());
+
+  G4bool set_air_rindex_table = false;
+  geo->GetOptB(fNam, "set_air_rindex_table", set_air_rindex_table);
+  if(set_air_rindex_table) {
+    G4cout << "  " << fNam << ", setting RINDEX for G4_AIR" << G4endl;
+
+    G4MaterialPropertiesTable *air_tab = new G4MaterialPropertiesTable();
+    air_tab->AddProperty("RINDEX", "Air");
+    cell_mat->SetMaterialPropertiesTable(air_tab);    
+  }
 
   //cell visibility
   ColorDecoder cell_vis("1:0:0:2");
@@ -174,13 +183,27 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   G4double fiber_clad_D = geo->GetD(fNam, "fiber_clad_D")*mm; // cladding diameter
   G4double fiber_core_D = geo->GetD(fNam, "fiber_core_D")*mm; // core diameter
 
-  //PMMA material for fiber cladding
-  G4Material *pmma_mat = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS");
+  //material for fiber cladding
+  G4String clad_mat_name = "PMMA";
+  geo->GetOptS(fNam, "clad_mat_name", clad_mat_name);
+  G4cout << "  " << fNam << ", cladding material: " << clad_mat_name << G4endl;
 
-  //optics for PMMA
-  G4MaterialPropertiesTable *pmma_tab = new G4MaterialPropertiesTable();
-  pmma_tab->AddProperty("RINDEX", "PMMA");
-  pmma_mat->SetMaterialPropertiesTable(pmma_tab);
+  G4Material *clad_mat = NULL;
+  if( clad_mat_name.find("PMMA") != std::string::npos ) {
+
+    //PMMA material for fiber cladding
+    clad_mat = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS");
+
+    //optics for PMMA
+    G4MaterialPropertiesTable *pmma_tab = new G4MaterialPropertiesTable();
+    pmma_tab->AddProperty("RINDEX", "PMMA");
+    clad_mat->SetMaterialPropertiesTable(pmma_tab);
+  }
+  if( clad_mat_name.find("Air") != std::string::npos ) {
+
+    //cladding as air in the cell
+    clad_mat = cell_mat;
+  }
 
   //SiO2 material for fiber core
   G4Material *siO2_mat = G4NistManager::Instance()->FindOrBuildMaterial("G4_SILICON_DIOXIDE");
@@ -191,7 +214,7 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   siO2_mat->SetMaterialPropertiesTable(siO2_tab);
 
   //Cherenkov radiator fiber in cladding, same lenght as absorber, fiber core as sensitive volume
-  G4LogicalVolume *clad_vol = MakeStraightFib(fiber_clad_D, fiber_core_D, abso_z, pmma_mat, siO2_mat,
+  G4LogicalVolume *clad_vol = MakeStraightFib(fiber_clad_D, fiber_core_D, abso_z, clad_mat, siO2_mat,
     fNam+"_clad", fNam, geo);
 
   //fiber spacing in cell
@@ -199,6 +222,7 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
 
   //number of fibers along x and y in the cell
   const G4int nfib = std::floor((cell_xy-fiber_dx)/fiber_dx)+1;
+  G4cout << "  " << fNam << ", nfib: " << nfib << G4endl;
 
   //offset for the first fiber (number of intervals between fibers is nfib-1)
   const G4double ofs = 0.5*(cell_xy - (nfib-1)*fiber_dx);
@@ -239,7 +263,7 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   G4cout << "  " << fNam << ", fib_lguide_end_dz: " << fib_lguide_end_dz << G4endl;
 
   //volume for straight end fibers
-  G4LogicalVolume *lguide_end_vol = MakeStraightFib(fiber_clad_D, fiber_core_D, fib_lguide_end_dz, pmma_mat, siO2_mat,
+  G4LogicalVolume *lguide_end_vol = MakeStraightFib(fiber_clad_D, fiber_core_D, fib_lguide_end_dz, clad_mat, siO2_mat,
     fNam+"_lguide_end_clad", fNam+"_lguide_end_core", geo);
 
   //placement for straight end fibers
@@ -286,7 +310,7 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
 
     //construct the fiber
     G4LogicalVolume *fibYZ_clad = MakeFiberYZ(lguide_z-fib_lguide_end_dz, Lz, fiber_clad_D/2, fib_lguide_dsmin,
-      "fibYZ_clad_"+std::to_string(fib_end_cnt), pmma_mat, theta);
+      "fibYZ_clad_"+std::to_string(fib_end_cnt), clad_mat, theta);
     G4LogicalVolume *fibYZ_core = MakeFiberYZ(lguide_z-fib_lguide_end_dz, Lz, fiber_core_D/2, fib_lguide_dsmin,
       "fibYZ_core_"+std::to_string(fib_end_cnt), siO2_mat, theta);
 

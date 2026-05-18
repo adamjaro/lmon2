@@ -57,7 +57,7 @@ def run_all():
     ut.set_margin_lbtr(gPad, 0.12, 0.1, 0.02, 0.02)
 
     leg = ut.prepare_leg(0.67, 0.72, 0.25, 0.2, 0.04)
-    leg.SetHeader("Generated #it{E}_{#gamma} =")
+    leg.SetHeader("Generated #it{E}_{#gamma}:")
     for i in energy:
         leg.AddEntry(hx[i], str(i)+" GeV", "l")
 
@@ -67,7 +67,7 @@ def run_all():
 
     #gPad.SetLogy()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #run_all

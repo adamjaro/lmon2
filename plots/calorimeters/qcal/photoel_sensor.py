@@ -16,9 +16,9 @@ def main():
     #inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal2bx1/en_1/lmon.root"
     inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal2cx1/en_1/lmon.root"
 
-    xbin = 8
+    xbin = 10
     xmin = 0
-    xmax = 700
+    xmax = 1800
 
     df = RDataFrame("DetectorTree", inp)
     #df = df.Range(12)

@@ -37,10 +37,12 @@
     fib_lguide_dsmin="0.1"
     set_air_rindex_table="1"
     clad_mat_name="Air"
+    set_max_optical_en="4"
   >
   </detector>
 
   <!-- fib_lguide_dsmin="0.1"  0.4 -->
+  <!-- set_max_optical_en="4" -->
 
   <!-- top volume -->
   <detector

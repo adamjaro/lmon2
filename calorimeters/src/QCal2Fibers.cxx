@@ -21,6 +21,8 @@
 // place_into, place_into1, place_into2
 //
 // mod_vis, cell_vis, abso_vis, clad_vis, core_vis, fibYZ_vis
+//
+// set_max_optical_en
 //_____________________________________________________________________________
 
 //C++
@@ -43,6 +45,7 @@
 #include "G4VisAttributes.hh"
 #include "G4TessellatedSolid.hh"
 #include "G4TriangularFacet.hh"
+#include "G4OpticalPhoton.hh"
 
 //local classes
 #include "GeoParser.h"
@@ -54,7 +57,7 @@
 
 //_____________________________________________________________________________
 QCal2Fibers::QCal2Fibers(const G4String& nam, GeoParser *geo, G4LogicalVolume *top): Detector(),
-   G4VSensitiveDetector(nam), fNam(nam), fOpDet(NULL) {
+   G4VSensitiveDetector(nam), fNam(nam), fOpDet(NULL), fMaxOptEn(-1) {
 
   G4cout << "QCal2Fibers: " << fNam << G4endl;
 
@@ -129,6 +132,12 @@ QCal2Fibers::QCal2Fibers(const G4String& nam, GeoParser *geo, G4LogicalVolume *t
   }
 
   new G4PVPlacement(0, G4ThreeVector(xpos, ypos, zpos), mod_vol, mod_vol->GetName(), mother_vol, false, 0);
+
+  //minimal wavelength for optical photon by its maximal energy
+  if( geo->GetOptD(fNam, "set_max_optical_en", fMaxOptEn, GeoParser::Unit(eV)) ) {
+    G4cout << "  " << fNam << ", set_max_optical_en: " << fMaxOptEn << G4endl;
+  }
+
 
 }//QCal2Fibers
 
@@ -557,6 +566,16 @@ void QCal2Fibers::Add(std::vector<Detector*> *vec) {
 
 //_____________________________________________________________________________
 G4bool QCal2Fibers::ProcessHits(G4Step *step, G4TouchableHistory*) {
+
+  //minimal wavelength for optical photon by its maximal energy
+  if( fMaxOptEn < 0 ) return true;
+
+  //track for optical photon
+  G4Track *track = step->GetTrack();
+  if( track->GetDefinition() != G4OpticalPhoton::OpticalPhotonDefinition() ) return true;
+
+  //apply the cut for maximal optical photon energy
+  if( track->GetKineticEnergy() > fMaxOptEn ) track->SetTrackStatus( G4TrackStatus::fStopAndKill );
 
   return true;
 

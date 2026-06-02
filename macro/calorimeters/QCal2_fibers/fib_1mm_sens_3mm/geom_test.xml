@@ -1,0 +1,42 @@
+
+<main>
+
+  <!-- QCal2Fibers, fiber diameter 1 mm, SiPM 3 mm, test mode -->
+
+  <const name="qcal_mody" value="40"/> <!-- mm -->
+  <const name="qcal_cell_xy" value="12.2"/> <!-- mm -->
+
+  <const name="qcal_cell_z" value="30"/> <!-- mm -->
+
+  <detector
+    type="QCal2Fibers" name="qcal"
+    test_mode="1"
+    modx="qcal_cell_xy" mody="qcal_cell_xy" modz="qcal_cell_z" mod_vis="0:0:1:3"
+    zpos="0" cell_phi="0"
+    nz="1" nx="1"
+    cell_xy="qcal_cell_xy" cell_z="qcal_cell_z"
+    abso_mat_name="QCal2Fibers_Copper"
+    fiber_clad_D="-1" fiber_core_D="1"
+    fiber_dx="4" lguide_z="14" fib_lguide_end_dz="0.02"
+    opdet_dxy="3"
+    fibYZ_vis="0:1:1:0.6" core_vis="0:1:1:0.6"
+    clad_vis="0:1:1:2" fibYZ_clad_vis="0:1:1:2"
+    cell_vis="0:0:1:2" abso_vis="1:0:0:2"
+    fiber_abso_delt="0.1" fib_lguide_dsmin="0.1"
+    set_air_rindex_table="1"
+  >
+  </detector>
+
+  <!--     fib_lguide_dsmin="0.9"      clad_mat_name="Air" -->
+  <!-- fiber_clad_D="1.5" fiber_core_D="1.46" -->
+
+  <!-- zpos="-0.5*qcal_modz"  abso_vis="1:0:0:0.5 -->
+
+  <!-- top volume -->
+  <detector
+    name="topv" type="top"
+    xsiz = "500" ysiz="500" zsiz = "10000"> <!-- mm -->
+  </detector>
+
+</main>
+

@@ -6,6 +6,8 @@ import ROOT as rt
 from ROOT import gPad, gROOT, gStyle, gSystem, gInterpreter
 from ROOT import TGraph, RDataFrame, RDF
 
+from photoelectrons import photoelectrons
+
 import sys
 sys.path.append("../..")
 import plot_utils as ut
@@ -28,9 +30,11 @@ def main():
 def run_all():
 
     #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal2cx3/en_","/lmon.root"]
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal2cx4/en_","/lmon.root"]
+    #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal2cx4/en_","/lmon.root"]
+    #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx1/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx2/en_","/lmon.root"]
 
-    energy = [1, 5, 9, 18] # , 14
+    energy = [1, 5, 9, 14, 18] # , 14
 
     hx = {}
     for i in energy:
@@ -39,7 +43,7 @@ def run_all():
     hx[1].SetLineColor(rt.kViolet)
     hx[5].SetLineColor(rt.kCyan+1)
     hx[9].SetLineColor(rt.kRed)
-    #hx[14].SetLineColor(rt.kBlue)
+    hx[14].SetLineColor(rt.kBlue)
     hx[18].SetLineColor(rt.kGreen+1)
 
     can = ut.box_canvas()
@@ -64,6 +68,7 @@ def run_all():
     gPad.SetGrid()
 
     gPad.SetLogy()
+    #gPad.SetLogx()
 
     ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
@@ -77,15 +82,16 @@ def run_single(inp=None):
         inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal2cx3/en_18/lmon.root"
         draw = True
 
-    #xbin = 12
-    xbin = 4
+    xbin = 8
+    #xbin = 2
     xmin = 0
-    #xmax = 3400
-    xmax = 300
+    #xmax = 100
+    xmax = 650
 
     df = RDataFrame("DetectorTree", inp)
     #df = df.Range(12)
 
+    #detected flag
     df = df.Define("qcal_opdet_is_detected", "sens(qcal_opdet_phot_en)")
 
     #number of photons in sensor in event
@@ -94,13 +100,7 @@ def run_single(inp=None):
         vector<Int_t> v; for(pair<Int_t, Int_t> p: sens) {v.push_back(p.second);} return v;")
 
     #number of photoelectrons in sensor in event
-    df = df.Define("qcal_nphotoel_sens", """map<Int_t, Int_t> sens;
-        for(size_t i=0; i<qcal_opdet_cell_id.size(); i++) {
-            Int_t id = qcal_opdet_cell_id[i];
-            if( !qcal_opdet_is_detected[i] ) continue;
-            if(sens.find(id) == sens.end()) {sens.emplace(id, 1);} else {sens[id]++;}
-        }
-        vector<Int_t> v; for(pair<Int_t, Int_t> p: sens) {v.push_back(p.second);} return v;""")
+    df = df.Define("qcal_nphotoel_sens", "nphotoel_sens(qcal_opdet_cell_id, qcal_opdet_is_detected)")
 
     hx = rt.RDF.TH1DModel( ut.prepare_TH1D("hx", xbin, xmin, xmax) )
     hx1 = rt.RDF.TH1DModel( ut.prepare_TH1D("hx1", xbin, xmin, xmax) )
@@ -174,39 +174,27 @@ if __name__ == "__main__":
 
     #rt.EnableImplicitMT()
 
-    #energy to wavelength PDG 2024 Tab 1.1
-    gInterpreter.Declare("""
-        class sens_pde {
-            TGraph gp;
-            public:
-            void set_pde(string inp) {
-                ROOT::RDataFrame df = ROOT::RDF::FromCSV(inp);
-                auto df1 = df.Define("PDE_5V", "0.01*DetectionEfficiency_5V_percent");
-                df1 = df1.Define("PDE_2_5V", "0.01*DetectionEfficiency_2_5V_percent");
-                gp = df1.Graph("Wavelength_nm", "PDE_2_5V").GetValue();
-                //gp = df1.Graph("Wavelength_nm", "PDE_5V").GetValue();
-                gp.SetBit(TGraph::kIsSortedX);
-            }
-            vector<Bool_t> operator()(ROOT::VecOps::RVec<double>& en) {
-                //cout << "sens" << endl;
-                vector<Bool_t> v;
-                v.resize(en.size());
-                for(size_t i=0; i<en.size(); i++) {
-                    v[i] = kFALSE;
-                    Double_t lam = 1239.841/en[i];
-                    if(lam < 300 or lam > 950) continue;
-                    if(gp.Eval(lam) < gRandom->Rndm()) v[i] = kTRUE;
-                    //cout << lam << " " << gp.Eval(lam) << " " << gRandom->Rndm() << endl;
-                }
-                return v;}
-        };
+    #photoelectron functions
+    photoelectrons()
 
-        sens_pde sens;
-    """)
-
-    rt.sens.set_pde("../../../../lmon2-data/pde_wavelength_30035.csv")
-
+    #call to main
     main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -29,10 +29,9 @@ def main():
 #_____________________________________________________________________________
 def run_all():
 
-    #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal2cx3/en_","/lmon.root"]
-    #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal2cx4/en_","/lmon.root"]
     #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx1/en_","/lmon.root"]
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx2/en_","/lmon.root"]
+    #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx2/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_","/lmon.root"]
 
     energy = [1, 5, 9, 14, 18] # , 14
 
@@ -49,16 +48,16 @@ def run_all():
     can = ut.box_canvas()
 
     h1 = hx[energy[len(energy)-1]]
-    ut.put_yx_tit(h1, "Counts", "Number of photoelectrons in sensor in event", 1.4, 1.3)
+    ut.put_yx_tit(h1, "Counts / event", "Fired microcells in sensor in event", 1.6, 1.2)
 
     h1.Draw()
 
     for i in energy[:-1]:
         hx[i].Draw("same")
 
-    ut.set_margin_lbtr(gPad, 0.1, 0.1, 0.02, 0.04)
+    ut.set_margin_lbtr(gPad, 0.11, 0.1, 0.02, 0.02)
 
-    leg = ut.prepare_leg(0.67, 0.66, 0.25, 0.3, 0.04)
+    leg = ut.prepare_leg(0.64, 0.63, 0.25, 0.33, 0.04)
     leg.SetHeader("Generated #it{E}_{#gamma}:")
     for i in energy:
         leg.AddEntry(hx[i], str(i)+" GeV", "l")
@@ -79,17 +78,17 @@ def run_single(inp=None):
     draw = False
     if inp is None:
         #inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal2cx2/en_1/lmon.root"
-        inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal2cx3/en_18/lmon.root"
+        inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3cx2/en_9/lmon.root"
         draw = True
 
     xbin = 8
     #xbin = 2
     xmin = 0
     #xmax = 100
-    xmax = 650
+    xmax = 950
 
     df = RDataFrame("DetectorTree", inp)
-    #df = df.Range(12)
+    rt.RDF.Experimental.AddProgressBar(df)
 
     #detected flag
     df = df.Define("qcal_opdet_is_detected", "sens(qcal_opdet_phot_en)")
@@ -107,12 +106,19 @@ def run_single(inp=None):
     #hx = df.Histo1D(hx, "qcal_nphot_sens").GetValue()
     hx1 = df.Histo1D(hx1, "qcal_nphotoel_sens").GetValue()
 
+    #number of events processed
+    nev = df.Count().GetValue()
+
     #print("nphot:", hx.GetEntries())
-    #print("nphotel:", hx1.GetEntries())
+    #print("nphotel:", hx1.GetEntries(), nev)
 
     #ut.line_h1(hx, rt.kBlue, 2)
     #ut.line_h1(hx1, rt.kRed, 2)
     ut.line_h1(hx1, rt.kBlue, 2)
+
+    #normalize by number of events
+    hx1.Scale(1./nev)
+    print(hx1.Integral())
 
     if not draw: return hx1
 

@@ -216,7 +216,7 @@ def plot_mat(hist):
         xmax = hx.GetXaxis().GetXmax()
         lab.DrawLatex(xmin+0.6*(xmax-xmin), 0.85*ymax, "Sens# "+hx.GetName())
 
-        ut.invert_col(gPad)
+        #ut.invert_col(gPad)
 
     can.SaveAs("01fig.pdf")
 

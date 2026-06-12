@@ -103,6 +103,47 @@ def photoelectrons():
         sensor_time senstime;
     """)
 
+    #cell position in x and z
+    gInterpreter.Declare("""
+        class cell_pos_xz {
+            public:
+            map<Int_t, pair<Double_t, Double_t>> xzpos;
+            cell_pos_xz(Int_t nx, Int_t nz, Double_t cell_xy, Double_t cell_z, Double_t cell_phi, Double_t modx, Double_t modz) {
+                cout << "hi from cell_pos_xz " << nx << " " << nz << " " << cell_phi << " " << modz << endl;
+                Double_t cell_posz_init = 0.5*(cell_xy*TMath::Cos(cell_phi) + cell_z*TMath::Sin(cell_phi));
+                Double_t cell_posz = 0.5*modz - cell_posz_init;
+                Int_t cell_cnt = 0;
+                //z-loop
+                for(Int_t iz=0; iz<nz; iz++) {
+                    //x-loop
+                    for(Int_t ix=0; ix<nx; ix++) {
+
+                        Double_t cell_posx = -0.5*modx + 0.5*cell_xy + ix*cell_xy;
+
+                        xzpos.emplace(cell_cnt++, make_pair(cell_posx, cell_posz));
+                    }//x-loop
+                    cell_posz -= cell_xy/TMath::Cos(cell_phi);
+                }//z-loop
+                //for(size_t i=0; i<xzpos.size(); i++) cout << i << " " << xzpos[i].first << " " << xzpos[i].second << endl;
+            }
+            ROOT::RVecD operator()(const ROOT::RVecI& cell_id, const ROOT::RVecB& is_detected, Int_t xz=0) {
+                //vector to return, 0: x, 1: z
+                ROOT::RVecD vec;
+                for(size_t i=0; i<cell_id.size(); i++) {
+                    if( !is_detected[i] ) continue;
+                    //cout << cell_id[i] << endl;
+                    if( xz == 0) {
+                        vec.push_back( xzpos[cell_id[i]].first );
+                    } else {
+                        vec.push_back( xzpos[cell_id[i]].second );
+                    }
+                }
+                return vec;
+            }
+        };
+    """)
+
+
 #photoelectrons
 
 

@@ -38,6 +38,7 @@ class QCal2Fibers : public Detector, public G4VSensitiveDetector {
     CalPWOHits::Coll fHits; // hits in fibers as in PWO
 
     G4double fMaxOptEn; // maximal energy for optical photon, eV
+    G4double fMinOptEn; // minimal energy for optical photon, eV
 
 };
 

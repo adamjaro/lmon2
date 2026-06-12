@@ -23,6 +23,7 @@
 // mod_vis, cell_vis, abso_vis, clad_vis, core_vis, fibYZ_vis
 //
 // set_max_optical_en
+// set_min_optical_en
 //_____________________________________________________________________________
 
 //C++
@@ -57,7 +58,7 @@
 
 //_____________________________________________________________________________
 QCal2Fibers::QCal2Fibers(const G4String& nam, GeoParser *geo, G4LogicalVolume *top): Detector(),
-   G4VSensitiveDetector(nam), fNam(nam), fOpDet(NULL), fMaxOptEn(-1) {
+   G4VSensitiveDetector(nam), fNam(nam), fOpDet(NULL), fMaxOptEn(-1), fMinOptEn(-1) {
 
   G4cout << "QCal2Fibers: " << fNam << G4endl;
 
@@ -140,7 +141,10 @@ QCal2Fibers::QCal2Fibers(const G4String& nam, GeoParser *geo, G4LogicalVolume *t
   if( geo->GetOptD(fNam, "set_max_optical_en", fMaxOptEn, GeoParser::Unit(eV)) ) {
     G4cout << "  " << fNam << ", set_max_optical_en: " << fMaxOptEn << G4endl;
   }
-
+  //maximal wavelength for optical photon by its minimal energy
+  if( geo->GetOptD(fNam, "set_min_optical_en", fMinOptEn, GeoParser::Unit(eV)) ) {
+    G4cout << "  " << fNam << ", set_min_optical_en: " << fMinOptEn << G4endl;
+  }
 
 }//QCal2Fibers
 
@@ -356,8 +360,21 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   geo->GetOptS(fNam, "abso_mat_name", abso_mat_name);
 
   //local materials for the absorber
+  //copper:
   if( !G4Material::GetMaterial("QCal2Fibers_Copper", false) ) {
     new G4Material("QCal2Fibers_Copper", 29., 63.55*g/mole, 8.960*g/cm3); //z, a, density
+  }
+  //tungsten powder and epoxy
+  if( !G4Material::GetMaterial("QCal2Fibers_WPowderplusEpoxy", false) ) {
+    std::vector<G4String> epoxy_elements = {"H", "C", "O"};
+    std::vector<G4int> epoxy_natoms = {44, 15, 7};
+    G4Material *epoxy = G4NistManager::Instance()->ConstructNewMaterial("QCal2Fibers_Epoxy", epoxy_elements, epoxy_natoms, 1.3*g/cm3);
+
+    G4Material *tungsten = G4NistManager::Instance()->FindOrBuildMaterial("G4_W");
+
+    G4Material *mat = new G4Material("QCal2Fibers_WPowderplusEpoxy", 10.95*g/cm3, 2);
+    mat->AddMaterial(tungsten, 0.97);
+    mat->AddMaterial(epoxy, 0.03);
   }
 
   //select the absorber material, local or NIST
@@ -537,15 +554,16 @@ void QCal2Fibers::Add(std::vector<Detector*> *vec) {
 //_____________________________________________________________________________
 G4bool QCal2Fibers::ProcessHits(G4Step *step, G4TouchableHistory*) {
 
-  //minimal wavelength for optical photon by its maximal energy
-  if( fMaxOptEn < 0 ) return true;
-
-  //track for optical photon
+  //track for optical photon for cuts on minimal and maximal wavelength
   G4Track *track = step->GetTrack();
   if( track->GetDefinition() != G4OpticalPhoton::OpticalPhotonDefinition() ) return true;
 
-  //apply the cut for maximal optical photon energy
-  if( track->GetKineticEnergy() > fMaxOptEn ) track->SetTrackStatus( G4TrackStatus::fStopAndKill );
+  //track energy
+  G4double en = track->GetKineticEnergy();
+
+  //apply cuts for maximal and minimal optical photon energy
+  if( fMaxOptEn > 0 and en > fMaxOptEn ) track->SetTrackStatus( G4TrackStatus::fStopAndKill );
+  if( fMinOptEn > 0 and en < fMinOptEn ) track->SetTrackStatus( G4TrackStatus::fStopAndKill );
 
   return true;
 

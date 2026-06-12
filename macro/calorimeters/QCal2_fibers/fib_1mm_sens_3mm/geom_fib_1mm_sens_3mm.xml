@@ -38,6 +38,7 @@
     fiber_abso_delt="0.1" fib_lguide_dsmin="0.1"
     set_air_rindex_table="1"
     set_max_optical_en="4"
+    set_min_optical_en="1.23"
   >
   </detector>
 

@@ -34,7 +34,7 @@ def main():
 def yields(draw=True):
 
     #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx1/en_","/lmon.root"]
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx2/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_","/lmon.root"]
 
     energy = [1, 5, 9, 14, 18]
 
@@ -42,7 +42,7 @@ def yields(draw=True):
     xmin = 0
     #xmax = 240
     #xmax = 700
-    xmax = 3000
+    xmax = 2800
     #xbin = 2
     xbin = 20
 
@@ -58,6 +58,10 @@ def yields(draw=True):
 
         h_en = rt.RDF.TH1DModel( hx.Clone("hx_"+str(i)) )
         h_en = df.Histo1D(h_en, "qcal_nphotoel").GetValue()
+
+        #normalize to number of events
+        h_en.Scale( 1./(df.Count().GetValue()) )
+        print("Integral:", h_en.Integral())
 
         fg = TF1("fg_"+str(i), "gaus", xmin, xmax)
         fg.SetParameters(1, h_en.GetMean(), h_en.GetStdDev())
@@ -80,15 +84,15 @@ def yields(draw=True):
 
     for i in hist: i.Draw("same")
 
-    ut.put_yx_tit(hx, "Counts", "Number of photoelectrons in event", 1.9, 1.4)
+    ut.put_yx_tit(hx, "Counts / event", "Fired microcells in event", 1.7, 1.2)
 
-    ut.set_margin_lbtr(gPad, 0.14, 0.12, 0.03, 0.09)
+    ut.set_margin_lbtr(gPad, 0.12, 0.1, 0.03, 0.03)
 
     for i in func: i.Draw("same")
 
     gPad.SetGrid()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #yields
@@ -103,9 +107,9 @@ def resolution():
 
     print(res)
 
-    plt.style.use("dark_background")
-    col = "lime"
-    #col = "black"
+    #plt.style.use("dark_background")
+    #col = "lime"
+    col = "black"
 
     #fit the resolution
     pars, cov = curve_fit(resf2, energy, res)

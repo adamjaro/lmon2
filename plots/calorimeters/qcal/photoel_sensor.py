@@ -69,7 +69,7 @@ def run_all():
     gPad.SetLogy()
     #gPad.SetLogx()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #_____________________________________________________________________________

@@ -33,8 +33,8 @@ def main():
 #_____________________________________________________________________________
 def yields(draw=True):
 
-    #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx1/en_","/lmon.root"]
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_","/lmon.root"]
+    #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx4/en_","/lmon.root"]
 
     energy = [1, 5, 9, 14, 18]
 
@@ -48,9 +48,14 @@ def yields(draw=True):
 
     hx = ut.prepare_TH1D("hx", xbin, xmin, xmax)
 
+    print(inp[0])
+
     func = []
     hist = []
     for i in energy:
+
+        print()
+        print("Energy:", i)
 
         df = RDataFrame("DetectorTree", inp[0]+str(i)+inp[1])
         df = df.Define("qcal_opdet_is_detected", "sens(qcal_opdet_phot_en)") # detected flag
@@ -92,7 +97,7 @@ def yields(draw=True):
 
     gPad.SetGrid()
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #yields
@@ -107,9 +112,9 @@ def resolution():
 
     print(res)
 
-    #plt.style.use("dark_background")
-    #col = "lime"
-    col = "black"
+    plt.style.use("dark_background")
+    col = "lime"
+    #col = "black"
 
     #fit the resolution
     pars, cov = curve_fit(resf2, energy, res)

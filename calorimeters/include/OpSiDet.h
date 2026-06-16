@@ -7,6 +7,7 @@
 #include "Detector.h"
 #include "G4VSensitiveDetector.hh"
 #include "PhotoHitsV2.h"
+#include "HitAtID.h"
 
 class OpSiDet : public Detector, public G4VSensitiveDetector {
 
@@ -40,6 +41,7 @@ class OpSiDet : public Detector, public G4VSensitiveDetector {
     G4String fNam; // name of sensitive logical volume
 
     PhotoHitsV2::Coll fHits; // hit collection
+    HitAtID::Coll fHitsEn; // deposited energy
 
     G4int fUpHistory; // for G4TouchableHandle history
 

@@ -5,7 +5,7 @@
 #include "Detector.h"
 #include "G4VSensitiveDetector.hh"
 
-#include "CalPWOHits.h"
+#include "HitAtID.h"
 
 class QCal2Fibers : public Detector, public G4VSensitiveDetector {
 
@@ -35,10 +35,12 @@ class QCal2Fibers : public Detector, public G4VSensitiveDetector {
 
     Detector *fOpDet; // optical photon detector
 
-    CalPWOHits::Coll fHits; // hits in fibers as in PWO
+    HitAtID::Coll fHits; // hits in fibers as in PWO
 
     G4double fMaxOptEn; // maximal energy for optical photon, eV
     G4double fMinOptEn; // minimal energy for optical photon, eV
+
+    G4int fUpHist; // hierarchy for hits in fibers
 
 };
 

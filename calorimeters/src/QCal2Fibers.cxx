@@ -58,7 +58,7 @@
 
 //_____________________________________________________________________________
 QCal2Fibers::QCal2Fibers(const G4String& nam, GeoParser *geo, G4LogicalVolume *top): Detector(),
-   G4VSensitiveDetector(nam), fNam(nam), fOpDet(NULL), fMaxOptEn(-1), fMinOptEn(-1) {
+   G4VSensitiveDetector(nam), fNam(nam), fOpDet(NULL), fMaxOptEn(-1), fMinOptEn(-1), fUpHist(0) {
 
   G4cout << "QCal2Fibers: " << fNam << G4endl;
 
@@ -198,6 +198,13 @@ G4LogicalVolume* QCal2Fibers::MakeCell(GeoParser *geo) {
   //diameter for Cherenkov fiber cladding and core
   G4double fiber_clad_D = geo->GetD(fNam, "fiber_clad_D")*mm; // cladding diameter
   G4double fiber_core_D = geo->GetD(fNam, "fiber_core_D")*mm; // core diameter
+
+  //volume hierarchy for hits in fibers by deposited energy
+  if( fiber_clad_D > 0 ) {
+    fUpHist = 2; // core -> clad -> cell
+  } else {
+    fUpHist = 1; // core -> cell
+  }
 
   //material for fiber cladding
   G4String clad_mat_name = "PMMA";
@@ -553,6 +560,19 @@ void QCal2Fibers::Add(std::vector<Detector*> *vec) {
 
 //_____________________________________________________________________________
 G4bool QCal2Fibers::ProcessHits(G4Step *step, G4TouchableHistory*) {
+
+  //G4cout << "QCal2Fibers::ProcessHits" << G4endl;
+
+  //cell location in the module
+  const G4TouchableHandle& hnd = step->GetPreStepPoint()->GetTouchableHandle();
+  hnd->MoveUpHistory(fUpHist);
+
+  //G4cout << hnd->GetVolume()->GetName() << " " << hnd->GetVolume(1)->GetName() << G4endl;
+
+  //hit by deposited energy in fiber cores for the cell
+  Int_t cell_id = hnd->GetCopyNumber(0);
+  HitAtID::Hit& hit = fHits.ConstructedAt(cell_id, HitAtID::Hit(cell_id));
+  hit.en += step->GetTotalEnergyDeposit()/GeV;
 
   //track for optical photon for cuts on minimal and maximal wavelength
   G4Track *track = step->GetTrack();

@@ -108,6 +108,20 @@ void OpSiDet::MakeBoundary(G4VPhysicalVolume *src_phys, G4VPhysicalVolume *opdet
 //_____________________________________________________________________________
 G4bool OpSiDet::ProcessHits(G4Step *step, G4TouchableHistory*) {
 
+  //G4cout << "OpSiDet::ProcessHits" << G4endl;
+
+  //volume hierarchy
+  const G4TouchableHandle& hnd = step->GetPreStepPoint()->GetTouchableHandle();
+  if( fUpHistory >= 0 ) {
+    hnd->MoveUpHistory(fUpHistory);
+  }
+  //G4cout << hnd->GetVolume()->GetName() << " " << hnd->GetVolume(1)->GetName() << G4endl;
+
+  //hit by deposited energy
+  Int_t cell_id = hnd->GetCopyNumber(0);
+  HitAtID::Hit& hit_en = fHitsEn.ConstructedAt(cell_id, HitAtID::Hit(cell_id));
+  hit_en.en += step->GetTotalEnergyDeposit()/GeV;
+
   //track in step
   G4Track *track = step->GetTrack();
 
@@ -117,19 +131,11 @@ G4bool OpSiDet::ProcessHits(G4Step *step, G4TouchableHistory*) {
   //only absorbed photons
   if( track->GetTrackStatus() <= 0 ) return false;
 
-  //G4cout << "OpSiDet::ProcessHits" << G4endl;
-
-  const G4TouchableHandle& hnd = step->GetPreStepPoint()->GetTouchableHandle();
-  if( fUpHistory >= 0 ) {
-    hnd->MoveUpHistory(fUpHistory);
-  }
-  //G4cout << hnd->GetVolume()->GetName() << " " << hnd->GetVolume(1)->GetName() << G4endl;
-
   //point in current step
   G4StepPoint *point = step->GetPostStepPoint();
 
   //add the hit
-  PhotoHitsV2::Hit& hit = fHits.Add( PhotoHitsV2::Hit() );
+  PhotoHitsV2::Hit& hit = fHits.Add();
 
   //hit time, ns
   hit.time = point->GetGlobalTime()/ns;
@@ -151,7 +157,7 @@ G4bool OpSiDet::ProcessHits(G4Step *step, G4TouchableHistory*) {
   hit.pmt_z = gpos.z()/mm;
 
   //cell ID for the hit
-  hit.cell_id = hnd->GetCopyNumber(0);
+  hit.cell_id = cell_id;
 
   return true;
 
@@ -196,6 +202,7 @@ std::vector<G4double> OpSiDet::LambdaNMtoEV(const std::vector<G4double>& lambda)
 void OpSiDet::CreateOutput(TTree *tree) {
 
   fHits.CreateOutput(fNam, tree);
+  fHitsEn.CreateOutput(fNam+"_en", tree);
 
 }//CreateOutput
 
@@ -203,6 +210,7 @@ void OpSiDet::CreateOutput(TTree *tree) {
 void OpSiDet::ClearEvent() {
 
   fHits.ClearEvent();
+  fHitsEn.ClearEvent();
 
 }//ClearEvent
 
@@ -210,6 +218,7 @@ void OpSiDet::ClearEvent() {
 void OpSiDet::FinishEvent() {
 
   fHits.FinishEvent();
+  fHitsEn.FinishEvent();
 
 }//FinishEvent
 

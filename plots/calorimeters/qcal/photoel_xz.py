@@ -15,7 +15,8 @@ import plot_utils as ut
 #_____________________________________________________________________________
 def main():
 
-    inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_5/lmon.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_5/lmon.root"
+    inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3dx3/en_18/lmon.root"
 
     #geometry parameters
     nx = 15

@@ -29,8 +29,8 @@ def main():
 #_____________________________________________________________________________
 def run_all():
 
-    #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx2/en_","/lmon.root"]
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_","/lmon.root"]
+    #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3dx3/en_","/lmon.root"]
 
     #energy = [1, 5, 9, 14, 18]
     energy = [1, 9, 18]
@@ -71,7 +71,7 @@ def run_all():
 
     #gPad.SetLogy()
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #_____________________________________________________________________________
@@ -84,7 +84,8 @@ def run_single(inp=None, thres=10):
 
     xbin = 1
     xmin = 0
-    xmax = 24
+    #xmax = 24
+    xmax = 38
 
     df = RDataFrame("DetectorTree", inp)
 

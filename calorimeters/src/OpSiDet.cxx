@@ -135,7 +135,7 @@ G4bool OpSiDet::ProcessHits(G4Step *step, G4TouchableHistory*) {
   G4StepPoint *point = step->GetPostStepPoint();
 
   //add the hit
-  PhotoHitsV2::Hit& hit = fHits.Add();
+  PhotoHitsV3::Hit& hit = fHits.Add();
 
   //hit time, ns
   hit.time = point->GetGlobalTime()/ns;
@@ -144,17 +144,17 @@ G4bool OpSiDet::ProcessHits(G4Step *step, G4TouchableHistory*) {
   hit.phot_en = track->GetKineticEnergy()/eV;
 
   //hit position
-  G4ThreeVector hpos = point->GetPosition();
-  hit.pos_x = hpos.x()/mm;
-  hit.pos_y = hpos.y()/mm;
-  hit.pos_z = hpos.z()/mm;
+  //G4ThreeVector hpos = point->GetPosition();
+  //hit.pos_x = hpos.x()/mm;
+  //hit.pos_y = hpos.y()/mm;
+  //hit.pos_z = hpos.z()/mm;
 
   //cell position
-  G4ThreeVector origin(0, 0, 0);
-  G4ThreeVector gpos = hnd->GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
-  hit.pmt_x = gpos.x()/mm;
-  hit.pmt_y = gpos.y()/mm;
-  hit.pmt_z = gpos.z()/mm;
+  //G4ThreeVector origin(0, 0, 0);
+  //G4ThreeVector gpos = hnd->GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
+  //hit.pmt_x = gpos.x()/mm;
+  //hit.pmt_y = gpos.y()/mm;
+  //hit.pmt_z = gpos.z()/mm;
 
   //cell ID for the hit
   hit.cell_id = cell_id;

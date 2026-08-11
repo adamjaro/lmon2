@@ -13,20 +13,24 @@ sys.path.append("../..")
 import plot_utils as ut
 
 #_____________________________________________________________________________
-@rt.Numba.Declare(['const RVec<bool>'], "bool")
-def my_func(i):
-    print("hi from my_func")
-    return 1
+#@rt.Numba.Declare(['const RVec<bool>'], "bool")
+#def my_func(i):
+#    print("hi from my_func")
+#    return 1
 
 #_____________________________________________________________________________
 def main():
 
-    inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3cx2/en_9/lmon.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3cx2/en_9/lmon.root"
+    inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3hx3/en_9/lmon.root"
 
-    iev = 57; # 57  9  5  4
+    iev = 9; # 57  9  5  4
     xbin = 0.06
-    xmin = 0.5
-    xmax = 2
+    #xmin = 0.5
+    #xmax = 2
+    xmin = 1.2
+    #xmin = 1.7
+    xmax = 4
 
     #col = rt.kCyan
     col = rt.kBlue
@@ -87,7 +91,7 @@ def main():
 
     gPad.SetGrid()
 
-    #ut.invert_col(rt.gPad)
+    ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
     #awkward array holding photoelectron times for sensor IDs
@@ -154,6 +158,8 @@ def plot_mat(hist):
     for i in range(1,nx*ny+1):
 
         pads[i-1].cd()
+  
+        if(len(hist) < i): continue
 
         hx = hist[i-1]
 
@@ -216,7 +222,7 @@ def plot_mat(hist):
         xmax = hx.GetXaxis().GetXmax()
         lab.DrawLatex(xmin+0.6*(xmax-xmin), 0.85*ymax, "Sens# "+hx.GetName())
 
-        #ut.invert_col(gPad)
+        ut.invert_col(gPad)
 
     can.SaveAs("01fig.pdf")
 

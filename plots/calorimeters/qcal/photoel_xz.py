@@ -16,16 +16,32 @@ import plot_utils as ut
 def main():
 
     #inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_5/lmon.root"
-    inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3dx3/en_18/lmon.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3ex3/en_1/lmon.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3fx1/en_9/lmon.root"
+    #inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3gx3/en_18/lmon.root" # geom_fib_1mm_dx7mm.xml
+    inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3hx3/en_9/lmon.root" # geom_fib_1mm_dx6mm.xml
 
     #geometry parameters
-    nx = 15
-    nz = 20
-    cell_xy = 12.2
-    cell_z = 263.571645
+    #nx = 15
+    #nz = 20
+    #cell_xy = 12.2
+    #cell_z = 263.571645
+    #modz = 522.814704
+
+    # geom_fib_1mm_dx10mm.xml:
+    #nx = 15; nz = 20; cell_xy = 31; cell_z = 718.533188; modz = 1362.971788
+
+    # geom_fib_1mm_dx8mm.xml:
+    #nx = 21; nz = 22; cell_xy = 25; cell_z = 795.243866; modz = 1322.462120
+
+    # geom_fib_1mm_dx7mm.xml
+    #nx = 25; nz = 25; cell_xy = 21; cell_z = 799.043866; modz = 1299.551861
+
+    # geom_fib_1mm_dx6mm.xml
+    nx = 17; nz = 26; cell_xy = 18.1; cell_z = 498.087950; modz = 1004.931637
+
     cell_phi = 45*TMath.Pi()/180
     modx = cell_xy*nx
-    modz = 522.814704
 
     #object of cell_pos_xz defined in photoelectrons.py
     par = str(nx)+", "+str(nz)+", "+str(cell_xy)+", "+str(cell_z)+", "+str(cell_phi)+", "+str(modx)+", "+str(modz)

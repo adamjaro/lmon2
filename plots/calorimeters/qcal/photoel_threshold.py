@@ -30,13 +30,14 @@ def main():
 def run_all():
 
     #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_","/lmon.root"]
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3dx3/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3hx3/en_","/lmon.root"]
 
     #energy = [1, 5, 9, 14, 18]
     energy = [1, 9, 18]
 
     #threshold in fired microcells
     thres = 10
+    #thres = 15
 
     hx = {}
     for i in energy:
@@ -85,7 +86,9 @@ def run_single(inp=None, thres=10):
     xbin = 1
     xmin = 0
     #xmax = 24
-    xmax = 38
+    #xmax = 38
+    #xmax = 8
+    xmax = 18
 
     df = RDataFrame("DetectorTree", inp)
 

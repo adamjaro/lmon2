@@ -34,15 +34,15 @@ def main():
 def yields(draw=True):
 
     #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_","/lmon.root"]
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx4/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3hx3/en_","/lmon.root"]
 
     energy = [1, 5, 9, 14, 18]
 
     #photoelectron counts
     xmin = 0
     #xmax = 240
-    #xmax = 700
-    xmax = 2800
+    xmax = 1600
+    #xmax = 2800
     #xbin = 2
     xbin = 20
 

@@ -30,7 +30,7 @@ def main():
 def run_all():
 
     #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_","/lmon.root"]
-    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3dx3/en_","/lmon.root"]
+    inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3hx3/en_","/lmon.root"]
 
     #energy = [1, 5, 9, 14, 18] # , 14
     energy = [1, 9, 18]
@@ -85,7 +85,9 @@ def run_single(inp=None):
     #xbin = 2
     xmin = 0
     #xmax = 100
-    xmax = 950
+    #xmax = 950
+    #xmax = 690
+    xmax = 820
 
     df = RDataFrame("DetectorTree", inp)
     rt.RDF.Experimental.AddProgressBar(df)

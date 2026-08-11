@@ -2,7 +2,7 @@
 #detector
 #/lmon/construct/geometry geom_test.xml
 #/lmon/construct/geometry geom_4cells.xml
-/lmon/construct/geometry geom_fib_1mm_dx10mm.xml
+/lmon/construct/geometry geom_fib_1mm_dx6mm.xml
 
 #input
 /lmon/input/type gun

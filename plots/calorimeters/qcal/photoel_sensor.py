@@ -77,8 +77,7 @@ def run_single(inp=None):
 
     draw = False
     if inp is None:
-        #inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal2cx2/en_1/lmon.root"
-        inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3cx2/en_9/lmon.root"
+        inp = "/home/jaroslav/sim/lmon2-data/qcal/qcal3hx3/en_9/lmon.root"
         draw = True
 
     xbin = 8

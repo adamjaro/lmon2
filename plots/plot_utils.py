@@ -618,7 +618,7 @@ def table_fit_parameters(r1):
     arg = arglist.at(idx)
     while arg != None:
         result += "$" + arg.GetName() + "$ & "
-        result += "{0:.3f}".format(arg.getVal()) + " $\pm$ "
+        result += "{0:.3f}".format(arg.getVal()) + r" $\pm$ "
         result += "{0:.3f}".format(arg.getError()) + " \\\\"
         result += "\n"
         #move to next
@@ -697,7 +697,7 @@ def invert_col(pad, bgcol=rt.kBlack):
 
    next = TIter(pad.GetListOfPrimitives())
    obj = next()
-   while obj != None:
+   while obj:
       #H1
       if obj.InheritsFrom(TH1.Class()) == True:
          if obj.GetLineColor() == rt.kBlack:

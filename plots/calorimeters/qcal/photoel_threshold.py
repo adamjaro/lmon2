@@ -87,8 +87,8 @@ def run_single(inp=None, thres=10):
     xmin = 0
     #xmax = 24
     #xmax = 38
-    #xmax = 8
-    xmax = 18
+    xmax = 12
+    #xmax = 18
 
     df = RDataFrame("DetectorTree", inp)
 

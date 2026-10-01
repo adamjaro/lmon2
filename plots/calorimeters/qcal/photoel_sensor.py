@@ -32,17 +32,17 @@ def run_all():
     #inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3cx3/en_","/lmon.root"]
     inp = ["/home/jaroslav/sim/lmon2-data/qcal/qcal3hx3/en_","/lmon.root"]
 
-    #energy = [1, 5, 9, 14, 18] # , 14
-    energy = [1, 9, 18]
+    energy = [1, 5, 9, 14, 18] # , 14
+    #energy = [1, 9, 18]
 
     hx = {}
     for i in energy:
         hx[i] = run_single(inp[0]+str(i)+inp[1])
 
     hx[1].SetLineColor(rt.kViolet)
-    #hx[5].SetLineColor(rt.kCyan+1)
+    hx[5].SetLineColor(rt.kCyan+1)
     hx[9].SetLineColor(rt.kRed)
-    #hx[14].SetLineColor(rt.kBlue)
+    hx[14].SetLineColor(rt.kBlue)
     hx[18].SetLineColor(rt.kGreen+1)
 
     can = ut.box_canvas()
@@ -69,7 +69,7 @@ def run_all():
     gPad.SetLogy()
     #gPad.SetLogx()
 
-    ut.invert_col(rt.gPad)
+    #ut.invert_col(rt.gPad)
     can.SaveAs("01fig.pdf")
 
 #_____________________________________________________________________________
@@ -86,7 +86,7 @@ def run_single(inp=None):
     #xmax = 100
     #xmax = 950
     #xmax = 690
-    xmax = 820
+    xmax = 840
 
     df = RDataFrame("DetectorTree", inp)
     rt.RDF.Experimental.AddProgressBar(df)

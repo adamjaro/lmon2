@@ -6,7 +6,8 @@
 #detectors and components
 #/lmon/construct/geometry view_side.xml
 #/lmon/construct/geometry view_front.xml
-/lmon/construct/geometry view_top.xml
+#/lmon/construct/geometry view_top.xml
+/lmon/construct/geometry view_cell.xml
 
 # Initialize kernel
 /run/initialize
@@ -27,12 +28,12 @@
 #/vis/viewer/set/lightsThetaPhi 90 45 deg
 
 #side view
-#/vis/viewer/set/viewpointThetaPhi -90 0 deg
-#/vis/viewer/set/lightsThetaPhi -45 -45 deg
+/vis/viewer/set/viewpointThetaPhi -90 0 deg
+/vis/viewer/set/lightsThetaPhi -45 -45 deg
 
 #top view -90 -90
-/vis/viewer/set/viewpointThetaPhi -90 -89.999999 deg
-/vis/viewer/set/lightsThetaPhi 90 45 deg
+#/vis/viewer/set/viewpointThetaPhi -90 -89.999999 deg
+#/vis/viewer/set/lightsThetaPhi 90 45 deg
 
 #/vis/viewer/set/targetPoint 0 100 -250 mm
 #/vis/viewer/set/targetPoint 0 0 0 mm
